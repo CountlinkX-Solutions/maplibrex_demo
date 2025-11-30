@@ -1,0 +1,28 @@
+defmodule MaplibrexDemoWeb.Router do
+  use MaplibrexDemoWeb, :router
+
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :put_root_layout, html: {MaplibrexDemoWeb.Layouts, :root}
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
+  scope "/", MaplibrexDemoWeb do
+    pipe_through :browser
+
+    get "/", PageController, :home
+    live "/map", MapLive
+  end
+
+  # Other scopes may use custom stacks.
+  # scope "/api", MaplibrexDemoWeb do
+  #   pipe_through :api
+  # end
+end
