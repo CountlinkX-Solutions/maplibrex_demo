@@ -61,6 +61,30 @@ defmodule MaplibrexDemoWeb.MapLive do
         class="w-full h-96 rounded-lg shadow-lg"
       />
 
+      <%!-- Controles Nativos del Mapa --%>
+      <.navigation_control
+        id="nav-control"
+        map_id="demo-map"
+        position="top-right"
+        show_compass={true}
+        show_zoom={true}
+        visualize_pitch={false}
+      />
+
+      <.scale_control
+        id="scale-control"
+        map_id="demo-map"
+        position="bottom-left"
+        max_width={150}
+        unit="metric"
+      />
+
+      <.fullscreen_control
+        id="fullscreen-control"
+        map_id="demo-map"
+        position="top-left"
+      />
+
       <%!-- Marcadores --%>
       <%= for marker <- @markers do %>
         <.marker
