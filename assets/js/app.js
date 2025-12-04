@@ -35,6 +35,20 @@ topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 
+// Handle fly_to_marker event from LiveView
+window.addEventListener("phx:fly_to_marker", (e) => {
+  const mapElement = document.getElementById("demo-map")
+  if (mapElement) {
+    mapElement.dispatchEvent(new CustomEvent("maplibrex:fly_to", {
+      detail: {
+        center: [e.detail.lng, e.detail.lat],
+        zoom: 13,
+        duration: 1000
+      }
+    }))
+  }
+})
+
 // connect if there are any LiveViews on the page
 liveSocket.connect()
 

@@ -41,7 +41,8 @@ defmodule MaplibrexDemoWeb.MapLive do
         <label class="font-semibold text-gray-700">Estilo del Mapa:</label>
         <%= for style <- @map_styles do %>
           <button
-            phx-click="change_style"
+            onclick={"document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:set_style', {detail: {style: '#{style.url}'}}))"}
+            phx-click="update_style"
             phx-value-url={style.url}
             class={"px-4 py-2 rounded transition-colors #{if @current_style == style.url, do: "bg-purple-600 text-white", else: "bg-gray-200 hover:bg-gray-300"}"}
           >
@@ -153,7 +154,7 @@ defmodule MaplibrexDemoWeb.MapLive do
           lng_lat={marker.lng_lat}
           color={marker.color}
           draggable={marker.draggable}
-          popup_text={"Marker #{marker.id} - #{marker.color}"}
+          popup_text={if @show_popups, do: "Marker #{marker.id} - #{marker.color}", else: nil}
         />
       <% end %>
 
@@ -169,13 +170,8 @@ defmodule MaplibrexDemoWeb.MapLive do
   end
 
   @impl true
-  def handle_event("change_style", %{"url" => url}, socket) do
-    socket =
-      socket
-      |> assign(:current_style, url)
-      |> push_event("set_style", %{map_id: "demo-map", style: url})
-
-    {:noreply, socket}
+  def handle_event("update_style", %{"url" => url}, socket) do
+    {:noreply, assign(socket, :current_style, url)}
   end
 
   @impl true
@@ -195,7 +191,12 @@ defmodule MaplibrexDemoWeb.MapLive do
       draggable: true
     }
 
-    {:noreply, assign(socket, :markers, socket.assigns.markers ++ [new_marker])}
+    socket =
+      socket
+      |> assign(:markers, socket.assigns.markers ++ [new_marker])
+      |> push_event("fly_to_marker", %{lng: new_lng, lat: new_lat})
+
+    {:noreply, socket}
   end
 
   @impl true
