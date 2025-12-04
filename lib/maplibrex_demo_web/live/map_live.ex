@@ -8,11 +8,18 @@ defmodule MaplibrexDemoWeb.MapLive do
       socket
       |> assign(:center, [-74.5, 40])
       |> assign(:zoom, 9)
+      |> assign(:current_style, "https://demotiles.maplibre.org/style.json")
       |> assign(:markers, [
         %{id: "marker-1", lng_lat: [-74.5, 40], color: "red", draggable: false},
         %{id: "marker-2", lng_lat: [-74.0, 40.5], color: "blue", draggable: true},
         %{id: "marker-3", lng_lat: [-73.5, 40.2], color: "green", draggable: false}
       ])
+      |> assign(:map_styles, [
+        %{name: "OpenStreetMap", url: "https://demotiles.maplibre.org/style.json"},
+        %{name: "Dark", url: "https://tiles.openfreemap.org/styles/dark"},
+        %{name: "Liberty", url: "https://tiles.openfreemap.org/styles/liberty"}
+      ])
+      |> assign(:show_popups, true)
 
     {:ok, socket}
   end
@@ -29,26 +36,79 @@ defmodule MaplibrexDemoWeb.MapLive do
         </p>
       </div>
 
+      <%!-- Selector de Estilos --%>
+      <div class="mb-4 flex items-center gap-4">
+        <label class="font-semibold text-gray-700">Estilo del Mapa:</label>
+        <%= for style <- @map_styles do %>
+          <button
+            phx-click="change_style"
+            phx-value-url={style.url}
+            class={"px-4 py-2 rounded transition-colors #{if @current_style == style.url, do: "bg-purple-600 text-white", else: "bg-gray-200 hover:bg-gray-300"}"}
+          >
+            <%= style.name %>
+          </button>
+        <% end %>
+      </div>
+
+      <%!-- Controles de Navegación --%>
       <div class="mb-4 space-x-2">
         <button
           onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-73.98, 40.75], zoom: 12, duration: 1000}}))"
           class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          Fly to NYC
+          🗽 Fly to NYC
+        </button>
+
+        <button
+          onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-118.24, 34.05], zoom: 12, duration: 1500}}))"
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          🌴 Fly to LA
         </button>
 
         <button
           onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:zoom_in'))"
           class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
         >
-          Zoom In
+          ➕ Zoom In
         </button>
 
         <button
           onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:zoom_out'))"
           class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
         >
-          Zoom Out
+          ➖ Zoom Out
+        </button>
+
+        <button
+          onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:reset_north'))"
+          class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+        >
+          🧭 Reset North
+        </button>
+      </div>
+
+      <%!-- Controles de Marcadores --%>
+      <div class="mb-4 space-x-2">
+        <button
+          phx-click="add_marker"
+          class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600"
+        >
+          📍 Agregar Marcador
+        </button>
+
+        <button
+          phx-click="clear_markers"
+          class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
+        >
+          🗑️ Limpiar Marcadores
+        </button>
+
+        <button
+          phx-click="toggle_popups"
+          class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
+        >
+          <%= if @show_popups, do: "👁️ Ocultar Popups", else: "👁️‍🗨️ Mostrar Popups" %>
         </button>
       </div>
 
@@ -109,6 +169,46 @@ defmodule MaplibrexDemoWeb.MapLive do
   end
 
   @impl true
+  def handle_event("change_style", %{"url" => url}, socket) do
+    socket =
+      socket
+      |> assign(:current_style, url)
+      |> push_event("set_style", %{map_id: "demo-map", style: url})
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("add_marker", _params, socket) do
+    # Generar posición aleatoria cerca del centro actual
+    [lng, lat] = socket.assigns.center
+    new_lng = lng + (:rand.uniform() - 0.5) * 2
+    new_lat = lat + (:rand.uniform() - 0.5) * 2
+
+    colors = ["red", "blue", "green", "purple", "orange", "yellow", "pink"]
+    random_color = Enum.random(colors)
+
+    new_marker = %{
+      id: "marker-#{System.unique_integer([:positive])}",
+      lng_lat: [new_lng, new_lat],
+      color: random_color,
+      draggable: true
+    }
+
+    {:noreply, assign(socket, :markers, socket.assigns.markers ++ [new_marker])}
+  end
+
+  @impl true
+  def handle_event("clear_markers", _params, socket) do
+    {:noreply, assign(socket, :markers, [])}
+  end
+
+  @impl true
+  def handle_event("toggle_popups", _params, socket) do
+    {:noreply, assign(socket, :show_popups, !socket.assigns.show_popups)}
+  end
+
+  @impl true
   def handle_event("map:loaded", _params, socket) do
     {:noreply, socket}
   end
@@ -127,6 +227,12 @@ defmodule MaplibrexDemoWeb.MapLive do
 
   @impl true
   def handle_event("map:zoom_out", _params, socket) do
+    # El comando JS ya se ejecutó en el cliente, solo ignoramos el evento del servidor
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("map:reset_north", _params, socket) do
     # El comando JS ya se ejecutó en el cliente, solo ignoramos el evento del servidor
     {:noreply, socket}
   end
