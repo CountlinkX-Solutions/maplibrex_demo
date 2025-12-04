@@ -1,6 +1,4 @@
 @import "tailwindcss";
-
-/* Import MaplibreX CSS */
-/* Note: MapLibre CSS is included via the npm package */
+@import "../../deps/maplibrex/assets/css/maplibrex.css";
 
 /* This file is for your main application CSS */

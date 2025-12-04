@@ -55,14 +55,27 @@ maplibrex_demo/
 defp deps do
   [
     # ...
-    {:maplibrex, path: "../maplibrex"}
+    {:maplibrex, github: "roger120981/maplibrex"}
   ]
 end
 ```
 
-### 2. JavaScript Hooks (assets/js/app.js)
+### 2. Instalar dependencias
+```bash
+# Instalar dependencias de Elixir
+mix deps.get
+mix deps.compile
+
+# Instalar dependencias npm de maplibrex
+cd deps/maplibrex/assets && npm install && cd ../../..
+
+# Construir assets
+mix assets.build
+```
+
+### 3. JavaScript Hooks (assets/js/app.js)
 ```javascript
-import { MapHooks } from "../../maplibrex/priv/static/assets/js/maplibrex"
+import {MapHooks} from "../../deps/maplibrex/assets/js/maplibrex"
 
 let liveSocket = new LiveSocket("/live", Socket, {
   hooks: MapHooks,
@@ -70,9 +83,9 @@ let liveSocket = new LiveSocket("/live", Socket, {
 })
 ```
 
-### 3. CSS (assets/css/app.css)
+### 4. CSS (assets/css/app.css)
 ```css
-@import "../../maplibrex/priv/static/assets/js/maplibrex.css";
+@import "../../deps/maplibrex/assets/css/maplibrex.css";
 ```
 
 ### 4. LiveView (lib/maplibrex_demo_web/live/map_live.ex)
@@ -108,19 +121,28 @@ defmodule MaplibrexDemoWeb.MapLive do
 end
 ```
 
-## Verificación
+## Estado del Demo
+
+✅ **Funcionalidades Operativas**
+- ✅ Mapa interactivo renderiza correctamente
+- ✅ Zoom con mouse wheel (sin re-renders)
+- ✅ Pan arrastrando el mapa
+- ✅ Marcadores con diferentes colores
+- ✅ Marcador draggable (azul) con eventos
+- ✅ Popups informativos
+- ✅ Eventos del mapa (map:moved, map:clicked, map:loaded, map:zoom_changed)
+- ✅ Sin crashes ni pantallas en blanco
+
+⚠️ **Limitaciones Conocidas**
+- ⚠️ Los botones de control programático (Fly to NYC, Zoom In, Zoom Out) no funcionan actualmente
+  - Esto parece ser una limitación en cómo maplibrex procesa comandos JS desde el servidor
+  - Los comandos se envían correctamente pero el hook no los procesa
+  - Requiere investigación adicional en el código TypeScript del hook
 
 ✅ **Compilación Exitosa**
 - Elixir: `Generated maplibrex_demo app`
 - TypeScript: Sin errores
-- Assets: Correctamente importados
-
-✅ **Funcionalidades**
-- Map component renderiza
-- Marker components funcionan
-- Eventos bidireccionales
-- Control programático
-- Drag & drop
+- Assets: Correctamente importados desde GitHub
 
 ## Próximos Pasos
 
@@ -133,6 +155,7 @@ Experimenta con:
 
 ## Notas
 
-- MaplibreX se importa como dependencia local desde `../maplibrex`
+- MaplibreX se importa como dependencia desde GitHub: `roger120981/maplibrex`
+- Las dependencias npm de maplibrex deben instalarse manualmente: `cd deps/maplibrex/assets && npm install`
 - Los hooks se cargan automáticamente desde los assets compilados
 - El CSS de MapLibre se incluye automáticamente

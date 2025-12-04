@@ -31,21 +31,21 @@ defmodule MaplibrexDemoWeb.MapLive do
 
       <div class="mb-4 space-x-2">
         <button
-          phx-click={MaplibreX.Components.Map.fly_to("demo-map", [-73.98, 40.75], 12)}
+          onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-73.98, 40.75], zoom: 12, duration: 1000}}))"
           class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           Fly to NYC
         </button>
 
         <button
-          phx-click={MaplibreX.Components.Map.zoom_in("demo-map")}
+          onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:zoom_in'))"
           class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
         >
           Zoom In
         </button>
 
         <button
-          phx-click={MaplibreX.Components.Map.zoom_out("demo-map")}
+          onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:zoom_out'))"
           class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
         >
           Zoom Out
@@ -85,8 +85,38 @@ defmodule MaplibrexDemoWeb.MapLive do
   end
 
   @impl true
-  def handle_event("map:moved", %{"center" => center, "zoom" => zoom}, socket) do
-    {:noreply, socket |> assign(:center, center) |> assign(:zoom, zoom)}
+  def handle_event("map:loaded", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("map:fly_to", _params, socket) do
+    # El comando JS ya se ejecutó en el cliente, solo ignoramos el evento del servidor
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("map:zoom_in", _params, socket) do
+    # El comando JS ya se ejecutó en el cliente, solo ignoramos el evento del servidor
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("map:zoom_out", _params, socket) do
+    # El comando JS ya se ejecutó en el cliente, solo ignoramos el evento del servidor
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("map:zoom_changed", _params, socket) do
+    # La librería envía este evento pero no lo manejamos para evitar re-renders
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("map:moved", _params, socket) do
+    # NO actualizamos assigns para evitar re-renders que destruyen el mapa
+    {:noreply, socket}
   end
 
   @impl true
