@@ -106,10 +106,10 @@ defmodule MaplibrexDemoWeb.MapLive do
         </button>
 
         <button
-          phx-click="toggle_popups"
+          onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-74.5, 40], zoom: 9, duration: 1500}}))"
           class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
         >
-          <%= if @show_popups, do: "👁️ Ocultar Popups", else: "👁️‍🗨️ Mostrar Popups" %>
+          🏠 Reset View
         </button>
       </div>
 
