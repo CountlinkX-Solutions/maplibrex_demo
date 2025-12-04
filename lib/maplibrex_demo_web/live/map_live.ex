@@ -20,6 +20,28 @@ defmodule MaplibrexDemoWeb.MapLive do
         %{name: "Liberty", url: "https://tiles.openfreemap.org/styles/liberty"}
       ])
       |> assign(:show_popups, true)
+      |> assign(:show_geojson, true)
+      |> assign(:demo_geojson, %{
+        type: "FeatureCollection",
+        features: [
+          %{
+            type: "Feature",
+            properties: %{name: "NYC Area", description: "Demo GeoJSON Layer"},
+            geometry: %{
+              type: "Polygon",
+              coordinates: [
+                [
+                  [-74.25, 40.9],
+                  [-73.7, 40.9],
+                  [-73.7, 40.5],
+                  [-74.25, 40.5],
+                  [-74.25, 40.9]
+                ]
+              ]
+            }
+          }
+        ]
+      })
 
     {:ok, socket}
   end
@@ -106,6 +128,13 @@ defmodule MaplibrexDemoWeb.MapLive do
         </button>
 
         <button
+          phx-click="toggle_geojson"
+          class={"px-4 py-2 rounded transition-colors #{if @show_geojson, do: "bg-purple-600 text-white hover:bg-purple-700", else: "bg-gray-400 text-white hover:bg-gray-500"}"}
+        >
+          <%= if @show_geojson, do: "🗺️ GeoJSON: ON", else: "🗺️ GeoJSON: OFF" %>
+        </button>
+
+        <button
           onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-74.5, 40], zoom: 9, duration: 1500}}))"
           class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
         >
@@ -145,6 +174,21 @@ defmodule MaplibrexDemoWeb.MapLive do
         map_id="demo-map"
         position="top-left"
       />
+
+      <%!-- GeoJSON Layer --%>
+      <%= if @show_geojson do %>
+        <.geojson_layer
+          id="nyc-area"
+          map_id="demo-map"
+          data={@demo_geojson}
+          type="fill"
+          paint={%{
+            "fill-color" => "#088",
+            "fill-opacity" => 0.3,
+            "fill-outline-color" => "#000"
+          }}
+        />
+      <% end %>
 
       <%!-- Marcadores --%>
       <%= for marker <- @markers do %>
@@ -202,6 +246,11 @@ defmodule MaplibrexDemoWeb.MapLive do
   @impl true
   def handle_event("clear_markers", _params, socket) do
     {:noreply, assign(socket, :markers, [])}
+  end
+
+  @impl true
+  def handle_event("toggle_geojson", _params, socket) do
+    {:noreply, assign(socket, :show_geojson, !socket.assigns.show_geojson)}
   end
 
   @impl true
