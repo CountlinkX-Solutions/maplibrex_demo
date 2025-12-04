@@ -128,6 +128,7 @@ defmodule MaplibrexDemoWeb.MapLive do
         </button>
 
         <button
+          onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-73.975, 40.7], zoom: 10, duration: 1200}}))"
           phx-click="toggle_geojson"
           class={"px-4 py-2 rounded transition-colors #{if @show_geojson, do: "bg-purple-600 text-white hover:bg-purple-700", else: "bg-gray-400 text-white hover:bg-gray-500"}"}
         >
