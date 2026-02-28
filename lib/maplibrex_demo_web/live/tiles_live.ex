@@ -42,13 +42,8 @@ defmodule MaplibrexDemoWeb.TilesLive do
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
           <%= for style <- @available_styles do %>
             <button
-              phx-click={
-                JS.dispatch("maplibrex:set_style",
-                  to: "#tiles-map",
-                  detail: %{style: "#{@server_url}/styles/#{style.id}.json"}
-                )
-                |> JS.push("change_style", value: %{style: style.id})
-              }
+              phx-click="change_style"
+              phx-value-style={style.id}
               class={[
                 "p-4 rounded-lg border-2 transition-all text-left",
                 if(@current_style == style.id,
@@ -198,7 +193,7 @@ defmodule MaplibrexDemoWeb.TilesLive do
     socket =
       socket
       |> assign(:current_style, style_id)
-      |> assign(:current_style_url, style_url)
+      |> push_event("map:set_style", %{map_id: "tiles-map", style: style_url})
 
     {:noreply, socket}
   end
