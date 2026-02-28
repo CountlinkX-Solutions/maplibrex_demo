@@ -313,6 +313,21 @@ defmodule MaplibrexDemoWeb.MapLive do
   end
 
   @impl true
+  def handle_event("marker:drag_start", %{"markerId" => marker_id, "lngLat" => lng_lat}, socket) do
+    # Evento cuando se comienza a arrastrar un marcador
+    IO.inspect({marker_id, lng_lat}, label: "Marker drag started")
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("marker:dragging", %{"markerId" => marker_id, "lngLat" => lng_lat}, socket) do
+    # Evento continuo mientras se arrastra el marcador
+    # NO actualizamos el estado aquí para evitar re-renders constantes
+    IO.inspect({marker_id, lng_lat}, label: "Marker dragging")
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("marker:drag_end", %{"markerId" => marker_id, "lngLat" => lng_lat}, socket) do
     IO.inspect({marker_id, lng_lat}, label: "Marker dragged to")
 
@@ -327,5 +342,26 @@ defmodule MaplibrexDemoWeb.MapLive do
       end)
 
     {:noreply, assign(socket, :markers, markers)}
+  end
+
+  @impl true
+  def handle_event("layer:feature_mouseenter", %{"layerId" => layer_id, "feature" => feature}, socket) do
+    # Evento cuando el mouse entra sobre una feature de la capa GeoJSON
+    IO.inspect({layer_id, feature["properties"]}, label: "Feature mouseenter")
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("layer:feature_mouseleave", %{"layerId" => layer_id}, socket) do
+    # Evento cuando el mouse sale de una feature de la capa GeoJSON
+    IO.inspect(layer_id, label: "Feature mouseleave")
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("layer:feature_click", %{"layerId" => layer_id, "feature" => feature}, socket) do
+    # Evento cuando se hace click en una feature de la capa GeoJSON
+    IO.inspect({layer_id, feature["properties"]}, label: "Feature clicked")
+    {:noreply, socket}
   end
 end
