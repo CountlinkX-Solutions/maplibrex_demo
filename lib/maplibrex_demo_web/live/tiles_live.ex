@@ -42,6 +42,7 @@ defmodule MaplibrexDemoWeb.TilesLive do
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
           <%= for style <- @available_styles do %>
             <button
+              onclick={"document.getElementById('tiles-map').dispatchEvent(new CustomEvent('maplibrex:set_style', {detail: {style: '#{@server_url}/styles/#{style.id}.json'}}))"}
               phx-click="change_style"
               phx-value-style={style.id}
               class={[
