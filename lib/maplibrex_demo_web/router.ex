@@ -20,6 +20,7 @@ defmodule MaplibrexDemoWeb.Router do
     get "/", PageController, :home
     live "/map", MapLive
     live "/tiles", TilesLive
+    live "/ogc", OgcFeaturesLive
   end
 
   # Other scopes may use custom stacks.

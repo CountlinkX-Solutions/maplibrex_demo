@@ -58,7 +58,8 @@ defmodule MaplibrexDemo.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
-      {:maplibrex, github: "roger120981/maplibrex"}
+      {:maplibrex, github: "roger120981/maplibrex"},
+      {:req, "~> 0.4"}
     ]
   end
 
