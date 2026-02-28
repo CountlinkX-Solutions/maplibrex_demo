@@ -232,6 +232,21 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_event("layer:feature_mouseenter", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("layer:feature_mouseleave", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("layer:feature_click", _params, socket) do
+    {:noreply, socket}
+  end
+
   # Private functions
 
   defp fetch_features do
