@@ -8,6 +8,8 @@ defmodule MaplibrexDemoWeb.MapLive do
       socket
       |> assign(:center, [-74.5, 40])
       |> assign(:zoom, 9)
+      |> assign(:current_center, [-74.5, 40])
+      |> assign(:current_zoom, 9)
       |> assign(:current_style, "https://demotiles.maplibre.org/style.json")
       |> assign(:markers, [
         %{id: "marker-1", lng_lat: [-74.5, 40], color: "red", draggable: false},
@@ -205,9 +207,9 @@ defmodule MaplibrexDemoWeb.MapLive do
 
       <%!-- Estado --%>
       <div class="mt-4 p-4 bg-gray-100 rounded">
-        <h3 class="font-bold mb-2">Estado del Mapa:</h3>
-        <p><strong>Centro:</strong> <%= inspect(@center) %></p>
-        <p><strong>Zoom:</strong> <%= @zoom %></p>
+        <h3 class="font-bold mb-2">Estado del Mapa (en tiempo real):</h3>
+        <p><strong>Centro:</strong> [<%= Float.round(Enum.at(@current_center, 0) * 1.0, 4) %>, <%= Float.round(Enum.at(@current_center, 1) * 1.0, 4) %>]</p>
+        <p><strong>Zoom:</strong> <%= Float.round(@current_zoom * 1.0, 2) %></p>
         <p><strong>Marcadores:</strong> <%= length(@markers) %></p>
       </div>
     </div>
@@ -289,14 +291,19 @@ defmodule MaplibrexDemoWeb.MapLive do
   end
 
   @impl true
-  def handle_event("map:zoom_changed", _params, socket) do
-    # La librería envía este evento pero no lo manejamos para evitar re-renders
-    {:noreply, socket}
+  def handle_event("map:zoom_changed", %{"zoom" => zoom}, socket) do
+    # Actualizar el zoom mostrado en el estado (sin re-renderizar el mapa)
+    {:noreply, assign(socket, :current_zoom, zoom)}
   end
 
   @impl true
-  def handle_event("map:moved", _params, socket) do
-    # NO actualizamos assigns para evitar re-renders que destruyen el mapa
+  def handle_event("map:moved", %{"center" => center, "zoom" => zoom}, socket) do
+    # Actualizar centro y zoom mostrados en el estado (sin re-renderizar el mapa)
+    socket =
+      socket
+      |> assign(:current_center, center)
+      |> assign(:current_zoom, zoom)
+
     {:noreply, socket}
   end
 
