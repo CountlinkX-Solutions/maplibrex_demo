@@ -217,6 +217,11 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
   end
 
   @impl true
+  def handle_event("map:zoom_changed", %{"zoom" => zoom}, socket) do
+    {:noreply, assign(socket, :current_zoom, zoom)}
+  end
+
+  @impl true
   def handle_event("map:loaded", _params, socket) do
     {:noreply, socket}
   end
