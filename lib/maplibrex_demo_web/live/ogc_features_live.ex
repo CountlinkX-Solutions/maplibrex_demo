@@ -243,7 +243,7 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
   end
 
   @impl true
-  def handle_event("layer:feature_click", _params, socket) do
+  def handle_event("layer:feature_clicked", _params, socket) do
     {:noreply, socket}
   end
 
