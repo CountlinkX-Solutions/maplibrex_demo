@@ -34,14 +34,14 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative h-screen">
+    <div class="relative h-screen w-full">
       <%!-- Mapa --%>
       <.map
         id="ogc-map"
         center={[0, 20]}
         zoom={2}
         style="https://demotiles.maplibre.org/style.json"
-        class="absolute inset-0"
+        class="absolute top-0 left-0 w-full h-full"
       />
 
       <.navigation_control
