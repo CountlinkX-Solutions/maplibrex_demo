@@ -223,4 +223,10 @@ defmodule MaplibrexDemoWeb.TilesLive do
     IO.inspect(lng_lat, label: "Map clicked at")
     {:noreply, socket}
   end
+
+  @impl true
+  def handle_event("map:error", %{"error" => error}, socket) do
+    IO.inspect(error, label: "Map error")
+    {:noreply, socket}
+  end
 end
