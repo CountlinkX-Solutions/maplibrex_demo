@@ -36,9 +36,16 @@ defmodule MaplibrexDemoWeb.TerrainLive do
         show_zoom={true}
       />
 
-      <%!-- RasterDEM Source para terreno --%>
+      <%!-- RasterDEM Source para terreno 3D --%>
       <.raster_dem_source
         id="terrain-source"
+        map_id="terrain-map"
+        url="https://tiles.mapterhorn.com/tilejson.json"
+      />
+
+      <%!-- RasterDEM Source separado para hillshade (mejor calidad) --%>
+      <.raster_dem_source
+        id="hillshade-source"
         map_id="terrain-map"
         url="https://tiles.mapterhorn.com/tilejson.json"
       />
@@ -47,7 +54,7 @@ defmodule MaplibrexDemoWeb.TerrainLive do
       <.hillshade_layer
         id="hillshade"
         map_id="terrain-map"
-        source_id="terrain-source"
+        source_id="hillshade-source"
         paint={%{
           "hillshade-exaggeration" => 0.7,
           "hillshade-shadow-color" => "#004050",
