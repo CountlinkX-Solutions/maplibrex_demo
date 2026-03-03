@@ -190,6 +190,16 @@ defmodule MaplibrexDemoWeb.TerrainLive do
   end
 
   @impl true
+  def handle_event("map:zoom_changed", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("map:clicked", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("map:error", %{"error" => error}, socket) do
     IO.inspect(error, label: "Map error")
     {:noreply, socket}
