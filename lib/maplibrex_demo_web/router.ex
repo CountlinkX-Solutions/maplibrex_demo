@@ -21,7 +21,7 @@ defmodule MaplibrexDemoWeb.Router do
     live "/map", MapLive
     live "/tiles", TilesLive
     live "/ogc", OgcFeaturesLive
-    live "/deckgl", DeckglLive
+    # live "/deckgl", DeckglLive  # TODO: Bug en deck.gl - reportar a maplibrex
     live "/terrain", TerrainLive
   end
 
