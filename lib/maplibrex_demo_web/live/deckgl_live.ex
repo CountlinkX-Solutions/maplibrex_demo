@@ -203,8 +203,25 @@ defmodule MaplibrexDemoWeb.DeckglLive do
   end
 
   @impl true
+  def handle_event("deckgl:layer_loaded", %{"layerId" => layer_id}, socket) do
+    IO.inspect(layer_id, label: "DeckGL layer loaded")
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("deckgl:click", %{"object" => object}, socket) do
     IO.inspect(object, label: "DeckGL object clicked")
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("deckgl:hover", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("deckgl:error", %{"error" => error}, socket) do
+    IO.inspect(error, label: "DeckGL error")
     {:noreply, socket}
   end
 
