@@ -225,6 +225,21 @@ defmodule MaplibrexDemoWeb.DeckglLive do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_event("deckgl:drag_start", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("deckgl:drag", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("deckgl:drag_end", _params, socket) do
+    {:noreply, socket}
+  end
+
   # Datos de ejemplo
 
   defp generate_flight_data do
