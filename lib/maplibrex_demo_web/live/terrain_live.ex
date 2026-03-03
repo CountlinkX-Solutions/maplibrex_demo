@@ -204,4 +204,14 @@ defmodule MaplibrexDemoWeb.TerrainLive do
     IO.inspect(error, label: "Map error")
     {:noreply, socket}
   end
+
+  @impl true
+  def handle_event("source:added", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("source:removed", _params, socket) do
+    {:noreply, socket}
+  end
 end
