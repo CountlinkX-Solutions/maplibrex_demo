@@ -26,6 +26,7 @@ defmodule MaplibrexDemoWeb.Router do
     live "/heatmap", HeatmapLive
     live "/buildings", BuildingsLive
     live "/markers", MarkersLive
+    live "/particles", ParticlesLive
   end
 
   # Other scopes may use custom stacks.
