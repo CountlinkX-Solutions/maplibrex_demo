@@ -214,4 +214,30 @@ defmodule MaplibrexDemoWeb.TerrainLive do
   def handle_event("source:removed", _params, socket) do
     {:noreply, socket}
   end
+
+  @impl true
+  def handle_event("source:error", %{"error" => error}, socket) do
+    IO.inspect(error, label: "Source error")
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("terrain:enabled", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("terrain:disabled", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("sky:added", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("sky:removed", _params, socket) do
+    {:noreply, socket}
+  end
 end
