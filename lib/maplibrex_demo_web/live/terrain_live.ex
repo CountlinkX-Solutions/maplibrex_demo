@@ -43,6 +43,19 @@ defmodule MaplibrexDemoWeb.TerrainLive do
         url="https://tiles.mapterhorn.com/tilejson.json"
       />
 
+      <%!-- Hillshade Layer para visualización 3D --%>
+      <.hillshade_layer
+        id="hillshade"
+        map_id="terrain-map"
+        source_id="terrain-source"
+        paint={%{
+          "hillshade-exaggeration" => 0.7,
+          "hillshade-shadow-color" => "#004050",
+          "hillshade-highlight-color" => "#ffffff",
+          "hillshade-illumination-anchor" => "map"
+        }}
+      />
+
       <%!-- Terreno 3D --%>
       <%= if @terrain_enabled do %>
         <.terrain
@@ -138,7 +151,12 @@ defmodule MaplibrexDemoWeb.TerrainLive do
 
   @impl true
   def handle_event("update_exaggeration", %{"value" => value}, socket) do
-    exaggeration = String.to_float(value)
+    exaggeration =
+      case Float.parse(value) do
+        {float_value, _} -> float_value
+        :error -> 1.0
+      end
+
     {:noreply, assign(socket, :exaggeration, exaggeration)}
   end
 
@@ -206,6 +224,16 @@ defmodule MaplibrexDemoWeb.TerrainLive do
 
   @impl true
   def handle_event("sky:removed", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("layer:added", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("layer:removed", _params, socket) do
     {:noreply, socket}
   end
 end
