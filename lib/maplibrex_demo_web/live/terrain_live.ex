@@ -41,9 +41,9 @@ defmodule MaplibrexDemoWeb.TerrainLive do
       <.raster_dem_source
         id="terrain-source"
         map_id="terrain-map"
-        url="https://demotiles.maplibre.org/terrain/{z}/{x}/{y}.png"
+        url="https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
         encoding="terrarium"
-        max_zoom={14}
+        max_zoom={15}
         tile_size={256}
       />
 
