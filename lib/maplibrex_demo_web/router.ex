@@ -21,6 +21,7 @@ defmodule MaplibrexDemoWeb.Router do
     live "/map", MapLive
     live "/tiles", TilesLive
     live "/ogc", OgcFeaturesLive
+    live "/deckgl", DeckglLive
   end
 
   # Other scopes may use custom stacks.
