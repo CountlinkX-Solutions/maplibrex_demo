@@ -124,13 +124,13 @@ defmodule MaplibrexDemoWeb.DeckglLive do
           map_id="deckgl-map"
           layer_type="ArcLayer"
           data={@flight_data}
+          pickable={true}
           props={%{
-            "getSourcePosition" => ["get", "from"],
-            "getTargetPosition" => ["get", "to"],
+            "getSourcePosition" => "from",
+            "getTargetPosition" => "to",
             "getSourceColor" => [255, 140, 0],
             "getTargetColor" => [255, 200, 0],
-            "getWidth" => 2,
-            "pickable" => true
+            "getWidth" => 2
           }}
         />
       <% end %>
@@ -141,14 +141,13 @@ defmodule MaplibrexDemoWeb.DeckglLive do
           map_id="deckgl-map"
           layer_type="HexagonLayer"
           data={@earthquake_data}
+          auto_highlight={true}
           props={%{
-            "getPosition" => ["get", "coordinates"],
+            "getPosition" => "coordinates",
             "elevationScale" => 50,
             "radius" => 50000,
             "coverage" => 0.9,
             "extruded" => true,
-            "pickable" => true,
-            "autoHighlight" => true,
             "colorRange" => [
               [1, 152, 189],
               [73, 227, 206],
@@ -167,11 +166,11 @@ defmodule MaplibrexDemoWeb.DeckglLive do
           map_id="deckgl-map"
           layer_type="ScatterplotLayer"
           data={@city_data}
+          pickable={true}
           props={%{
-            "getPosition" => ["get", "coordinates"],
+            "getPosition" => "coordinates",
             "getRadius" => 10000,
             "getFillColor" => [255, 140, 0],
-            "pickable" => true,
             "radiusScale" => 6,
             "radiusMinPixels" => 2,
             "radiusMaxPixels" => 30
@@ -236,23 +235,16 @@ defmodule MaplibrexDemoWeb.DeckglLive do
       {"Las Vegas", [-115.1, 36.2]}
     ]
 
-    # Generar conexiones entre ciudades
+    # Generar conexiones entre ciudades (formato simple para deck.gl)
     for {from_name, from_coords} <- cities,
         {to_name, to_coords} <- cities,
         from_name != to_name,
         :rand.uniform() > 0.7 do
       %{
-        "type" => "Feature",
-        "properties" => %{
-          "from_city" => from_name,
-          "to_city" => to_name
-        },
-        "geometry" => %{
-          "type" => "LineString",
-          "coordinates" => [from_coords, to_coords]
-        },
         "from" => from_coords,
-        "to" => to_coords
+        "to" => to_coords,
+        "from_city" => from_name,
+        "to_city" => to_name
       }
     end
   end
@@ -265,15 +257,8 @@ defmodule MaplibrexDemoWeb.DeckglLive do
       magnitude = 2.0 + :rand.uniform() * 5
 
       %{
-        "type" => "Feature",
-        "properties" => %{
-          "magnitude" => magnitude
-        },
-        "geometry" => %{
-          "type" => "Point",
-          "coordinates" => [lng, lat]
-        },
-        "coordinates" => [lng, lat]
+        "coordinates" => [lng, lat],
+        "magnitude" => magnitude
       }
     end
   end
@@ -286,15 +271,8 @@ defmodule MaplibrexDemoWeb.DeckglLive do
       population = 10000 + :rand.uniform(1000000)
 
       %{
-        "type" => "Feature",
-        "properties" => %{
-          "population" => population
-        },
-        "geometry" => %{
-          "type" => "Point",
-          "coordinates" => [lng, lat]
-        },
-        "coordinates" => [lng, lat]
+        "coordinates" => [lng, lat],
+        "population" => population
       }
     end
   end
