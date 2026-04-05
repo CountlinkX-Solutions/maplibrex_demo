@@ -127,7 +127,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
       />
 
       <%!-- Back nav pill --%>
-      <div class="absolute top-14 left-4 z-20">
+      <div class="absolute top-[110px] left-4 z-20">
         <a
           href="/"
           class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 no-underline"
