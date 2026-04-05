@@ -53,19 +53,15 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
         show_zoom={true}
       />
 
-      <%!-- GeoJSON Layer for Features --%>
-      <%= if length(@features) > 0 do %>
-        <.geojson_layer
-          id="cities-layer"
+      <%!-- Markers con popup por cada feature cargada --%>
+      <%= for feature <- @features do %>
+        <.marker
+          id={"city-#{:erlang.phash2(feature["properties"]["name"])}"}
           map_id="ogc-map"
-          data={%{type: "FeatureCollection", features: @features}}
-          type="circle"
-          paint={%{
-            "circle-radius" => 8,
-            "circle-color" => "#3b82f6",
-            "circle-stroke-width" => 2,
-            "circle-stroke-color" => "#ffffff"
-          }}
+          lng_lat={feature["geometry"]["coordinates"]}
+          color="#3b82f6"
+          draggable={false}
+          popup_text={feature["properties"]["name"]}
         />
       <% end %>
 
@@ -131,15 +127,13 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
                 Reload Features
               </button>
               <button
-                phx-click="fly_to_city"
-                phx-value-city="Tokyo"
+                onclick="document.getElementById('ogc-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [139.74, 35.68], zoom: 10, duration: 1200}}))"
                 class="w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
               >
                 Fly to Tokyo
               </button>
               <button
-                phx-click="fly_to_city"
-                phx-value-city="New York"
+                onclick="document.getElementById('ogc-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-73.99, 40.72], zoom: 10, duration: 1200}}))"
                 class="w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
               >
                 Fly to New York
@@ -186,8 +180,7 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
                       </div>
                     </div>
                     <button
-                      phx-click="fly_to_city"
-                      phx-value-city={city.name}
+                      onclick={"document.getElementById('ogc-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [#{Enum.at(city.coords, 0)}, #{Enum.at(city.coords, 1)}], zoom: 10, duration: 1200}}))"}
                       class="w-full text-left px-2 py-1.5 rounded-lg text-[10px] text-white/50 hover:text-white/80 bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.05] hover:border-white/[0.10] transition-all duration-300"
                     >
                       Fly to {city.name}
