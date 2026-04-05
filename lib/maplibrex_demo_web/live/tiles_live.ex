@@ -28,158 +28,171 @@ defmodule MaplibrexDemoWeb.TilesLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="p-8">
-      <div class="mb-6">
-        <h1 class="text-3xl font-bold mb-2">🗺️ Vector Tiles Server Demo</h1>
-        <p class="text-gray-600">
-          Conectado a servidor local de tiles vectoriales en <code class="bg-gray-100 px-2 py-1 rounded"><%= @server_url %></code>
-        </p>
+    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
+      <%!-- Map fills full screen --%>
+      <.map
+        id="tiles-map"
+        center={[-74.5, 40]}
+        zoom={2}
+        style={@current_style_url}
+        class="absolute inset-0 w-full h-full"
+      />
+
+      <%!-- Map controls --%>
+      <.navigation_control
+        id="nav-control"
+        map_id="tiles-map"
+        position="top-left"
+        show_compass={true}
+        show_zoom={true}
+        visualize_pitch={false}
+      />
+
+      <.scale_control
+        id="scale-control"
+        map_id="tiles-map"
+        position="bottom-left"
+        max_width={150}
+        unit="metric"
+      />
+
+      <.fullscreen_control
+        id="fullscreen-control"
+        map_id="tiles-map"
+        position="top-left"
+      />
+
+      <%!-- Back navigation pill --%>
+      <div class="absolute top-4 left-4 z-20">
+        <a
+          href="/"
+          class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/75 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+        >
+          ← MaplibreX Demos
+        </a>
       </div>
 
-      <%!-- Selector de Estilos --%>
-      <div class="mb-4">
-        <h3 class="font-semibold text-gray-700 mb-3">Estilos Disponibles:</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <%= for style <- @available_styles do %>
-            <button
-              phx-click="change_style"
-              phx-value-style={style.id}
-              class={[
-                "p-4 rounded-lg border-2 transition-all text-left",
-                if(@current_style == style.id,
-                  do: "border-blue-500 bg-blue-50 shadow-lg",
-                  else: "border-gray-200 hover:border-blue-300 hover:shadow"
-                )
-              ]}
-            >
-              <div class="font-bold text-lg mb-1"><%= style.name %></div>
-              <div class="text-sm text-gray-600"><%= style.description %></div>
-              <%= if @current_style == style.id do %>
-                <div class="mt-2 text-blue-600 text-sm font-semibold">✓ Activo</div>
+      <%!-- Control Panel --%>
+      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
+        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
+          <%!-- Title --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">
+              MaplibreX
+            </p>
+            <h2 class="text-base font-semibold text-white">Vector Tiles Server</h2>
+            <p class="text-xs text-white/50 mt-1">
+              Live tile rendering from localhost:4000
+            </p>
+          </div>
+
+          <div class="border-t border-white/[0.06]" />
+
+          <%!-- Style selector --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Style
+            </p>
+            <div class="space-y-1">
+              <%= for style <- @available_styles do %>
+                <button
+                  phx-click="change_style"
+                  phx-value-style={style.id}
+                  class={
+                    if @current_style == style.id,
+                      do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                      else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/[0.07] border border-transparent hover:border-white/[0.08] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+                  }
+                >
+                  <span class="font-medium">{style.name}</span>
+                  <span class="block text-xs text-white/40 mt-0.5">{style.description}</span>
+                </button>
               <% end %>
-            </button>
-          <% end %>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      <%!-- Mapa con Vector Tiles --%>
-      <div class="mb-4">
-        <.map
-          id="tiles-map"
-          center={[-74.5, 40]}
-          zoom={2}
-          style={@current_style_url}
-          class="w-full h-[600px] rounded-lg shadow-lg border-2 border-gray-300"
-        />
+          <div class="border-t border-white/[0.06]" />
 
-        <.navigation_control
-          id="nav-control"
-          map_id="tiles-map"
-          position="top-right"
-          show_compass={true}
-          show_zoom={true}
-          visualize_pitch={false}
-        />
-
-        <.scale_control
-          id="scale-control"
-          map_id="tiles-map"
-          position="bottom-left"
-          max_width={150}
-          unit="metric"
-        />
-
-        <.fullscreen_control
-          id="fullscreen-control"
-          map_id="tiles-map"
-          position="top-left"
-        />
-      </div>
-
-      <%!-- Panel de Información --%>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <%!-- Estado del Mapa --%>
-        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <h3 class="font-bold mb-3 text-lg">📍 Estado del Mapa</h3>
-          <div class="space-y-2 text-sm">
-            <div>
-              <strong>Centro:</strong>
-              <span class="font-mono">
-                [<%= Float.round(Enum.at(@current_center, 0) * 1.0, 4) %>,
-                <%= Float.round(Enum.at(@current_center, 1) * 1.0, 4) %>]
+          <%!-- Vector Layers --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Vector Layers
+            </p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="inline-flex px-2 py-1 rounded text-[10px] bg-white/[0.05] border border-white/[0.07] text-white/60">
+                cities
+              </span>
+              <span class="inline-flex px-2 py-1 rounded text-[10px] bg-white/[0.05] border border-white/[0.07] text-white/60">
+                countries
+              </span>
+              <span class="inline-flex px-2 py-1 rounded text-[10px] bg-white/[0.05] border border-white/[0.07] text-white/60">
+                demo
+              </span>
+              <span class="inline-flex px-2 py-1 rounded text-[10px] bg-white/[0.05] border border-white/[0.07] text-white/60">
+                world
               </span>
             </div>
-            <div>
-              <strong>Zoom:</strong>
-              <span class="font-mono"><%= Float.round(@current_zoom * 1.0, 2) %></span>
-            </div>
           </div>
-        </div>
 
-        <%!-- Información del Servidor --%>
-        <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h3 class="font-bold mb-3 text-lg">🖥️ Servidor de Tiles</h3>
-          <div class="space-y-2 text-sm">
-            <div>
-              <strong>URL Base:</strong>
-              <code class="bg-white px-2 py-1 rounded"><%= @server_url %></code>
-            </div>
-            <div>
-              <strong>Estilo Actual:</strong>
-              <span class="font-semibold text-blue-600"><%= @current_style %></span>
-            </div>
-            <div>
-              <strong>URL del Estilo:</strong>
-              <code class="bg-white px-2 py-1 rounded text-xs break-all"><%= @current_style_url %></code>
-            </div>
-          </div>
-        </div>
-      </div>
+          <div class="border-t border-white/[0.06]" />
 
-      <%!-- Información de Capas --%>
-      <div class="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
-        <h3 class="font-bold mb-2 text-lg">🗂️ Capas Vectoriales Disponibles</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
-          <div class="p-2 bg-white rounded border border-green-300">
-            <strong>cities</strong>
-            <div class="text-xs text-gray-600">Ciudades (PostgreSQL)</div>
-          </div>
-          <div class="p-2 bg-white rounded border border-green-300">
-            <strong>countries</strong>
-            <div class="text-xs text-gray-600">Países (PostgreSQL)</div>
-          </div>
-          <div class="p-2 bg-white rounded border border-green-300">
-            <strong>demo</strong>
-            <div class="text-xs text-gray-600">Demo (MBTiles)</div>
-          </div>
-          <div class="p-2 bg-white rounded border border-green-300">
-            <strong>world</strong>
-            <div class="text-xs text-gray-600">Mundo (MBTiles)</div>
+          <%!-- Server Links --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Server Links
+            </p>
+            <div class="space-y-1">
+              <a
+                href={"#{@server_url}/styles/#{@current_style}.json"}
+                target="_blank"
+                class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-xs text-white/60 hover:text-white bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] transition-all duration-300"
+              >
+                <span>Style JSON</span>
+                <span class="text-white/30">→</span>
+              </a>
+              <a
+                href={"#{@server_url}/cities.json"}
+                target="_blank"
+                class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-xs text-white/60 hover:text-white bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] transition-all duration-300"
+              >
+                <span>TileJSON: cities</span>
+                <span class="text-white/30">→</span>
+              </a>
+              <a
+                href={"#{@server_url}/countries.json"}
+                target="_blank"
+                class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-xs text-white/60 hover:text-white bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] transition-all duration-300"
+              >
+                <span>TileJSON: countries</span>
+                <span class="text-white/30">→</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
-      <%!-- Enlaces útiles --%>
-      <div class="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
-        <h3 class="font-bold mb-2">🔗 Enlaces del Servidor</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
-          <a
-            href={"#{@server_url}/styles/#{@current_style}.json"}
-            target="_blank"
-            class="text-blue-600 hover:underline"
-          >
-            📄 Ver JSON del estilo actual
-          </a>
-          <a href={"#{@server_url}/cities.json"} target="_blank" class="text-blue-600 hover:underline">
-            📊 TileJSON: cities
-          </a>
-          <a
-            href={"#{@server_url}/countries.json"}
-            target="_blank"
-            class="text-blue-600 hover:underline"
-          >
-            📊 TileJSON: countries
-          </a>
+      <%!-- Telemetry panel --%>
+      <div class="absolute bottom-4 left-4 z-20">
+        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Center</p>
+            <p class="font-mono text-xs text-cyan-300">
+              {Float.round(Enum.at(@current_center, 0) * 1.0, 3)},
+              {Float.round(Enum.at(@current_center, 1) * 1.0, 3)}
+            </p>
+          </div>
+          <div class="w-px h-6 bg-white/10" />
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Zoom</p>
+            <p class="font-mono text-xs text-cyan-300">
+              {Float.round(@current_zoom * 1.0, 1)}
+            </p>
+          </div>
+          <div class="w-px h-6 bg-white/10" />
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Style</p>
+            <p class="font-mono text-xs text-cyan-300 capitalize">{@current_style}</p>
+          </div>
         </div>
       </div>
     </div>

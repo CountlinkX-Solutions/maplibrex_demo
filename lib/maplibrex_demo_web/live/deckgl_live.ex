@@ -17,8 +17,8 @@ defmodule MaplibrexDemoWeb.DeckglLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative h-screen w-full bg-gray-900">
-      <%!-- Mapa con estilo oscuro --%>
+    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
+      <%!-- Map full-screen --%>
       <.map
         id="deckgl-map"
         center={[-95, 40]}
@@ -26,9 +26,10 @@ defmodule MaplibrexDemoWeb.DeckglLive do
         pitch={45}
         bearing={0}
         style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-        class="absolute top-0 left-0 w-full h-full"
+        class="absolute inset-0 w-full h-full"
       />
 
+      <%!-- Navigation Control --%>
       <.navigation_control
         id="nav-control"
         map_id="deckgl-map"
@@ -37,83 +38,98 @@ defmodule MaplibrexDemoWeb.DeckglLive do
         show_zoom={true}
       />
 
-      <%!-- Panel de Control --%>
-      <div class="absolute top-4 right-4 bg-gray-800 text-white rounded-lg shadow-2xl p-6 max-w-sm z-10">
-        <h2 class="text-2xl font-bold mb-4 border-b border-gray-600 pb-2">
-          🚀 deck.gl Visualizations
-        </h2>
+      <%!-- Back nav --%>
+      <div class="absolute top-14 left-4 z-20">
+        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
+          &larr; Demos
+        </a>
+      </div>
 
-        <div class="mb-4">
-          <p class="text-sm text-gray-400 mb-3">Select visualization:</p>
+      <%!-- Control Panel --%>
+      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
+        <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
+          <%!-- Header --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">MaplibreX</p>
+            <h2 class="text-base font-semibold text-white/95">Deck.GL Layers</h2>
+            <p class="text-xs text-white/50 mt-1 leading-relaxed">3D ArcLayer, HexagonLayer, and ScatterplotLayer visualizations</p>
+          </div>
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Visualization selector --%>
           <div class="space-y-2">
-            <button
-              phx-click="change_viz"
-              phx-value-viz="arcs"
-              class={[
-                "w-full text-left px-4 py-3 rounded-lg transition-all",
-                if(@current_viz == "arcs",
-                  do: "bg-blue-600 text-white shadow-lg",
-                  else: "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                )
-              ]}
-            >
-              <div class="font-semibold">✈️ Flight Connections</div>
-              <div class="text-xs opacity-75">ArcLayer - <%= length(@flight_data) %> routes</div>
-            </button>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">Visualization</p>
+            <div class="space-y-1.5">
+              <button
+                phx-click="change_viz"
+                phx-value-viz="arcs"
+                class={if @current_viz == "arcs",
+                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
+              >
+                <div class="font-medium">Flight Connections</div>
+                <div class="text-[10px] opacity-60 mt-0.5">ArcLayer &mdash; {length(@flight_data)} routes</div>
+              </button>
+              <button
+                phx-click="change_viz"
+                phx-value-viz="hexagons"
+                class={if @current_viz == "hexagons",
+                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
+              >
+                <div class="font-medium">Earthquake Density</div>
+                <div class="text-[10px] opacity-60 mt-0.5">HexagonLayer &mdash; {length(@earthquake_data)} events</div>
+              </button>
+              <button
+                phx-click="change_viz"
+                phx-value-viz="scatter"
+                class={if @current_viz == "scatter",
+                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
+              >
+                <div class="font-medium">City Points</div>
+                <div class="text-[10px] opacity-60 mt-0.5">ScatterplotLayer &mdash; {length(@city_data)} cities</div>
+              </button>
+            </div>
+          </div>
 
-            <button
-              phx-click="change_viz"
-              phx-value-viz="hexagons"
-              class={[
-                "w-full text-left px-4 py-3 rounded-lg transition-all",
-                if(@current_viz == "hexagons",
-                  do: "bg-blue-600 text-white shadow-lg",
-                  else: "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                )
-              ]}
-            >
-              <div class="font-semibold">🌍 Earthquake Density</div>
-              <div class="text-xs opacity-75">
-                HexagonLayer - <%= length(@earthquake_data) %> events
-              </div>
-            </button>
+          <div class="h-px bg-white/[0.06]"></div>
 
-            <button
-              phx-click="change_viz"
-              phx-value-viz="scatter"
-              class={[
-                "w-full text-left px-4 py-3 rounded-lg transition-all",
-                if(@current_viz == "scatter",
-                  do: "bg-blue-600 text-white shadow-lg",
-                  else: "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                )
-              ]}
-            >
-              <div class="font-semibold">🏙️ City Points</div>
-              <div class="text-xs opacity-75">
-                ScatterplotLayer - <%= length(@city_data) %> cities
-              </div>
-            </button>
+          <%!-- Description for current visualization --%>
+          <div class="space-y-1.5">
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">About</p>
+            <%= if @current_viz == "arcs" do %>
+              <p class="text-xs text-white/50 leading-relaxed">ArcLayer renders animated arcs connecting source and target positions. Ideal for visualizing flight routes, migrations, or connections between locations.</p>
+            <% end %>
+            <%= if @current_viz == "hexagons" do %>
+              <p class="text-xs text-white/50 leading-relaxed">HexagonLayer aggregates points into hexagonal bins with 3D elevation. Perfect for showing density and spatial distribution patterns.</p>
+            <% end %>
+            <%= if @current_viz == "scatter" do %>
+              <p class="text-xs text-white/50 leading-relaxed">ScatterplotLayer efficiently renders thousands of points with customizable size and color. Ideal for showing individual geographic locations.</p>
+            <% end %>
           </div>
         </div>
+      </div>
 
-        <%!-- Descripción de la visualización actual --%>
-        <div class="mt-6 p-4 bg-gray-900 rounded-lg border border-gray-700">
-          <h3 class="font-semibold mb-2 text-sm text-gray-300">About this visualization:</h3>
-          <p class="text-xs text-gray-400">
-            <%= case @current_viz do %>
-              <% "arcs" -> %>
-                ArcLayer renders animated arcs connecting source and target positions. Great for visualizing flights, migrations, or connections between locations.
-              <% "hexagons" -> %>
-                HexagonLayer aggregates points into hexagonal bins with 3D elevation. Perfect for showing density and distribution patterns.
-              <% "scatter" -> %>
-                ScatterplotLayer efficiently renders thousands of points with customizable size and color. Ideal for showing individual locations.
-            <% end %>
-          </p>
-        </div>
-
-        <div class="mt-4 pt-4 border-t border-gray-700 text-xs text-gray-500">
-          Powered by deck.gl + MapLibre GL JS
+      <%!-- Telemetry bar --%>
+      <div class="absolute bottom-4 left-4 z-20">
+        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Layer</p>
+            <p class="font-mono text-xs text-cyan-300/90">
+              <%= case @current_viz do %>
+                <% "arcs" -> %>ArcLayer
+                <% "hexagons" -> %>HexagonLayer
+                <% "scatter" -> %>ScatterplotLayer
+                <% _ -> %>Unknown
+              <% end %>
+            </p>
+          </div>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Render</p>
+            <p class="font-mono text-xs text-cyan-300/90">3D</p>
+          </div>
         </div>
       </div>
 

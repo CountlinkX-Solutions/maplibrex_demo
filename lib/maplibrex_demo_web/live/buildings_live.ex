@@ -17,8 +17,8 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative h-screen w-full">
-      <%!-- Mapa base --%>
+    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
+      <%!-- Map full-screen --%>
       <.map
         id="buildings-map"
         center={[-74.006, 40.7128]}
@@ -26,7 +26,7 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
         pitch={60}
         bearing={-17.6}
         style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-        class="absolute top-0 left-0 w-full h-full"
+        class="absolute inset-0 w-full h-full"
       />
 
       <%!-- Navigation Control --%>
@@ -47,126 +47,132 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
         paint={get_paint_properties(assigns)}
       />
 
-      <%!-- Panel de Control --%>
-      <div class="absolute top-4 right-4 bg-white rounded-lg shadow-2xl p-6 max-w-sm z-10">
-        <h2 class="text-2xl font-bold mb-4 border-b border-gray-300 pb-2">
-          🏢 3D Buildings
-        </h2>
+      <%!-- Back nav --%>
+      <div class="absolute top-14 left-4 z-20">
+        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
+          &larr; Demos
+        </a>
+      </div>
 
-        <%!-- Control de Exageración de Altura --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Height Exaggeration: <%= Float.round(@height_exaggeration, 1) %>x
-          </label>
-          <form phx-change="update_height">
-            <input
-              type="range"
-              min="0.5"
-              max="3.0"
-              step="0.1"
-              value={@height_exaggeration}
-              name="value"
-              class="w-full"
-            />
-          </form>
-          <div class="flex justify-between text-xs text-gray-500 mt-1">
-            <span>0.5x</span>
-            <span>3.0x</span>
+      <%!-- Control Panel --%>
+      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
+        <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
+          <%!-- Header --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">MaplibreX</p>
+            <h2 class="text-base font-semibold text-white/95">3D Buildings</h2>
+            <p class="text-xs text-white/50 mt-1 leading-relaxed">Extruded NYC building geometry with real-time height and color controls</p>
           </div>
-        </div>
+          <div class="h-px bg-white/[0.06]"></div>
 
-        <%!-- Control de Opacidad --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Opacity: <%= trunc(@opacity * 100) %>%
-          </label>
-          <form phx-change="update_opacity">
-            <input
-              type="range"
-              min="0.3"
-              max="1"
-              step="0.1"
-              value={@opacity}
-              name="value"
-              class="w-full"
-            />
-          </form>
-          <div class="flex justify-between text-xs text-gray-500 mt-1">
-            <span>30%</span>
-            <span>100%</span>
-          </div>
-        </div>
-
-        <%!-- Selector de Esquema de Color --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Color Scheme:
-          </label>
+          <%!-- Color Scheme --%>
           <div class="space-y-2">
-            <button
-              phx-click="set_color_scheme"
-              phx-value-scheme="height"
-              class={[
-                "w-full px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                if(@color_scheme == "height",
-                  do: "bg-blue-500 text-white",
-                  else: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                )
-              ]}
-            >
-              By Height (Gradient)
-            </button>
-            <button
-              phx-click="set_color_scheme"
-              phx-value-scheme="uniform"
-              class={[
-                "w-full px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                if(@color_scheme == "uniform",
-                  do: "bg-blue-500 text-white",
-                  else: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                )
-              ]}
-            >
-              Uniform Blue
-            </button>
-            <button
-              phx-click="set_color_scheme"
-              phx-value-scheme="type"
-              class={[
-                "w-full px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                if(@color_scheme == "type",
-                  do: "bg-blue-500 text-white",
-                  else: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                )
-              ]}
-            >
-              By Type
-            </button>
-          </div>
-        </div>
-
-        <%!-- Color Legend --%>
-        <%= if @color_scheme == "height" do %>
-          <div class="mb-4 p-3 bg-gray-50 rounded">
-            <p class="text-xs font-semibold text-gray-700 mb-2">Height Legend:</p>
-            <div class="h-4 rounded" style="background: linear-gradient(to right, #fbb03b, #223b53, #e55e5e);"></div>
-            <div class="flex justify-between text-xs text-gray-500 mt-1">
-              <span>Low</span>
-              <span>High</span>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">Color Scheme</p>
+            <div class="space-y-1.5">
+              <button
+                phx-click="set_color_scheme"
+                phx-value-scheme="height"
+                class={if @color_scheme == "height",
+                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
+              >
+                By Height
+              </button>
+              <button
+                phx-click="set_color_scheme"
+                phx-value-scheme="uniform"
+                class={if @color_scheme == "uniform",
+                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
+              >
+                Uniform Blue
+              </button>
+              <button
+                phx-click="set_color_scheme"
+                phx-value-scheme="type"
+                class={if @color_scheme == "type",
+                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
+              >
+                By Type
+              </button>
             </div>
           </div>
-        <% end %>
 
-        <%!-- Info --%>
-        <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h3 class="font-semibold mb-2 text-sm text-blue-900">About:</h3>
-          <p class="text-xs text-blue-800">
-            This demo shows 3D extruded buildings. Rotate the camera with right-click drag
-            and adjust controls to see different visualizations.
-          </p>
-          <p class="text-xs text-blue-600 mt-2">
-            Buildings: <%= length(@buildings_data["features"]) %> structures
-          </p>
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Height Exaggeration slider --%>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Height Exaggeration</p>
+              <span class="font-mono text-xs text-cyan-300/80">{Float.round(@height_exaggeration * 1.0, 1)}x</span>
+            </div>
+            <form phx-change="update_height">
+              <input
+                type="range"
+                min="0.5"
+                max="3.0"
+                step="0.1"
+                value={@height_exaggeration}
+                name="value"
+                class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+              />
+            </form>
+            <div class="flex justify-between text-[9px] text-white/25">
+              <span>0.5x</span>
+              <span>3.0x</span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Opacity slider --%>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Opacity</p>
+              <span class="font-mono text-xs text-cyan-300/80">{trunc(@opacity * 100)}%</span>
+            </div>
+            <form phx-change="update_opacity">
+              <input
+                type="range"
+                min="0.3"
+                max="1.0"
+                step="0.05"
+                value={@opacity}
+                name="value"
+                class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+              />
+            </form>
+            <div class="flex justify-between text-[9px] text-white/25">
+              <span>30%</span>
+              <span>100%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%!-- Telemetry bar --%>
+      <div class="absolute bottom-4 left-4 z-20">
+        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Location</p>
+            <p class="font-mono text-xs text-cyan-300/90">40.71, -74.01</p>
+          </div>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Zoom</p>
+            <p class="font-mono text-xs text-cyan-300/90">14</p>
+          </div>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Height</p>
+            <p class="font-mono text-xs text-cyan-300/90">{Float.round(@height_exaggeration * 1.0, 1)}x</p>
+          </div>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Opacity</p>
+            <p class="font-mono text-xs text-cyan-300/90">{trunc(@opacity * 100)}%</p>
+          </div>
         </div>
       </div>
     </div>

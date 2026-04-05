@@ -17,8 +17,8 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative h-screen w-full">
-      <%!-- Mapa base --%>
+    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
+      <%!-- Map full-screen --%>
       <.map
         id="heatmap-map"
         center={[-98.5, 39.8]}
@@ -26,7 +26,7 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
         pitch={0}
         bearing={0}
         style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-        class="absolute top-0 left-0 w-full h-full"
+        class="absolute inset-0 w-full h-full"
       />
 
       <%!-- Navigation Control --%>
@@ -38,7 +38,7 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
         show_zoom={true}
       />
 
-      <%!-- Heatmap Layer usando GeoJSON --%>
+      <%!-- Heatmap Layer --%>
       <.geojson_layer
         id="earthquake-heatmap"
         map_id="heatmap-map"
@@ -93,98 +93,128 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
         }}
       />
 
-      <%!-- Panel de Control --%>
-      <div class="absolute top-4 right-4 bg-white rounded-lg shadow-2xl p-6 max-w-sm z-10">
-        <h2 class="text-2xl font-bold mb-4 border-b border-gray-300 pb-2">
-          🔥 Earthquake Heatmap
-        </h2>
+      <%!-- Back nav --%>
+      <div class="absolute top-14 left-4 z-20">
+        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
+          &larr; Demos
+        </a>
+      </div>
 
-        <%!-- Control de Radio --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Radius: <%= @radius %>px
-          </label>
-          <form phx-change="update_radius">
-            <input
-              type="range"
-              min="10"
-              max="50"
-              step="5"
-              value={@radius}
-              name="value"
-              class="w-full"
-            />
-          </form>
-          <div class="flex justify-between text-xs text-gray-500 mt-1">
-            <span>10px</span>
-            <span>50px</span>
+      <%!-- Control Panel --%>
+      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
+        <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
+          <%!-- Header --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">MaplibreX</p>
+            <h2 class="text-base font-semibold text-white/95">Heatmap</h2>
+            <p class="text-xs text-white/50 mt-1 leading-relaxed">500-point earthquake density visualization across the US</p>
+          </div>
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Radius slider --%>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Radius</p>
+              <span class="font-mono text-xs text-cyan-300/80">{@radius}px</span>
+            </div>
+            <form phx-change="update_radius">
+              <input
+                type="range"
+                min="10"
+                max="50"
+                step="1"
+                value={@radius}
+                name="value"
+                class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+              />
+            </form>
+            <div class="flex justify-between text-[9px] text-white/25">
+              <span>10px</span>
+              <span>50px</span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Intensity slider --%>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Intensity</p>
+              <span class="font-mono text-xs text-cyan-300/80">{Float.round(@intensity * 1.0, 1)}x</span>
+            </div>
+            <form phx-change="update_intensity">
+              <input
+                type="range"
+                min="0.5"
+                max="3.0"
+                step="0.1"
+                value={@intensity}
+                name="value"
+                class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+              />
+            </form>
+            <div class="flex justify-between text-[9px] text-white/25">
+              <span>0.5x</span>
+              <span>3.0x</span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Opacity slider --%>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Opacity</p>
+              <span class="font-mono text-xs text-cyan-300/80">{trunc(@opacity * 100)}%</span>
+            </div>
+            <form phx-change="update_opacity">
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={@opacity}
+                name="value"
+                class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+              />
+            </form>
+            <div class="flex justify-between text-[9px] text-white/25">
+              <span>0%</span>
+              <span>100%</span>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Gradient legend --%>
+          <div class="space-y-2">
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Gradient</p>
+            <div class="h-2 rounded-full" style="background: linear-gradient(to right, rgba(33,102,172,0), rgb(103,169,207), rgb(209,229,240), rgb(253,219,199), rgb(239,138,98), rgb(178,24,43));"></div>
+            <div class="flex justify-between text-[9px] text-white/25">
+              <span>Low</span>
+              <span>High</span>
+            </div>
           </div>
         </div>
+      </div>
 
-        <%!-- Control de Intensidad --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Intensity: <%= Float.round(@intensity, 2) %>x
-          </label>
-          <form phx-change="update_intensity">
-            <input
-              type="range"
-              min="0.5"
-              max="3.0"
-              step="0.1"
-              value={@intensity}
-              name="value"
-              class="w-full"
-            />
-          </form>
-          <div class="flex justify-between text-xs text-gray-500 mt-1">
-            <span>0.5x</span>
-            <span>3.0x</span>
+      <%!-- Telemetry bar --%>
+      <div class="absolute bottom-4 left-4 z-20">
+        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Points</p>
+            <p class="font-mono text-xs text-cyan-300/90">500 points</p>
           </div>
-        </div>
-
-        <%!-- Control de Opacidad --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Opacity: <%= trunc(@opacity * 100) %>%
-          </label>
-          <form phx-change="update_opacity">
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={@opacity}
-              name="value"
-              class="w-full"
-            />
-          </form>
-          <div class="flex justify-between text-xs text-gray-500 mt-1">
-            <span>0%</span>
-            <span>100%</span>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Radius</p>
+            <p class="font-mono text-xs text-cyan-300/90">{@radius}px</p>
           </div>
-        </div>
-
-        <%!-- Gradient Legend --%>
-        <div class="mb-4 p-3 bg-gray-50 rounded">
-          <p class="text-xs font-semibold text-gray-700 mb-2">Density Gradient:</p>
-          <div class="h-4 rounded" style="background: linear-gradient(to right, rgba(33,102,172,0), rgb(103,169,207), rgb(209,229,240), rgb(253,219,199), rgb(239,138,98), rgb(178,24,43));"></div>
-          <div class="flex justify-between text-xs text-gray-500 mt-1">
-            <span>Low</span>
-            <span>High</span>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Intensity</p>
+            <p class="font-mono text-xs text-cyan-300/90">{Float.round(@intensity * 1.0, 1)}x</p>
           </div>
-        </div>
-
-        <%!-- Info --%>
-        <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h3 class="font-semibold mb-2 text-sm text-blue-900">About:</h3>
-          <p class="text-xs text-blue-800">
-            This demo shows earthquake density using a heatmap visualization.
-            Adjust the controls to see how radius, intensity, and opacity affect the visualization.
-          </p>
-          <p class="text-xs text-blue-600 mt-2">
-            Data: <%= length(@earthquake_data["features"]) %> earthquake events
-          </p>
         </div>
       </div>
     </div>

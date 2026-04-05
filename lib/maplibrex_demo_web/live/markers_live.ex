@@ -16,8 +16,8 @@ defmodule MaplibrexDemoWeb.MarkersLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative h-screen w-full">
-      <%!-- Mapa base --%>
+    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
+      <%!-- Map full-screen --%>
       <.map
         id="markers-map"
         center={[-73.985, 40.758]}
@@ -25,7 +25,7 @@ defmodule MaplibrexDemoWeb.MarkersLive do
         pitch={0}
         bearing={0}
         style="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
-        class="absolute top-0 left-0 w-full h-full"
+        class="absolute inset-0 w-full h-full"
       />
 
       <%!-- Navigation Control --%>
@@ -45,10 +45,10 @@ defmodule MaplibrexDemoWeb.MarkersLive do
         color="#FF6B6B"
         scale={1.3}
         draggable={true}
-        popup_text="Drag me around! 🎯"
+        popup_text="Drag me around!"
       />
 
-      <%!-- Static Markers (filtrados) --%>
+      <%!-- Static Markers (filtered) --%>
       <%= for marker <- filtered_markers(assigns) do %>
         <.marker
           id={marker.id}
@@ -60,117 +60,188 @@ defmodule MaplibrexDemoWeb.MarkersLive do
         />
       <% end %>
 
-      <%!-- Panel de Control --%>
-      <div class="absolute top-4 right-4 bg-white rounded-lg shadow-2xl p-6 max-w-sm z-10">
-        <h2 class="text-2xl font-bold mb-4 border-b border-gray-300 pb-2">
-          📍 Interactive Markers
-        </h2>
+      <%!-- Back nav pill --%>
+      <div class="absolute top-14 left-4 z-20">
+        <a
+          href="/"
+          class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 no-underline"
+        >
+          &larr; Demos
+        </a>
+      </div>
 
-        <%!-- Draggable Marker Info --%>
-        <div class="mb-4 p-3 bg-red-50 rounded border border-red-200">
-          <h3 class="font-semibold text-sm text-red-900 mb-2">Draggable Marker:</h3>
-          <p class="text-xs text-red-800">
-            Lng: <%= Float.round(Enum.at(@draggable_marker, 0), 4) %>
-          </p>
-          <p class="text-xs text-red-800">
-            Lat: <%= Float.round(Enum.at(@draggable_marker, 1), 4) %>
-          </p>
-        </div>
-
-        <%!-- Category Filter --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Filter by Category:
-          </label>
-          <div class="space-y-2">
-            <button
-              phx-click="set_filter"
-              phx-value-category="all"
-              class={[
-                "w-full px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                if(@filter_category == "all",
-                  do: "bg-blue-500 text-white",
-                  else: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                )
-              ]}
-            >
-              All (<%= length(@markers) %>)
-            </button>
-            <button
-              phx-click="set_filter"
-              phx-value-category="restaurant"
-              class={[
-                "w-full px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                if(@filter_category == "restaurant",
-                  do: "bg-orange-500 text-white",
-                  else: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                )
-              ]}
-            >
-              🍽️ Restaurants (<%= count_by_category(@markers, "restaurant") %>)
-            </button>
-            <button
-              phx-click="set_filter"
-              phx-value-category="park"
-              class={[
-                "w-full px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                if(@filter_category == "park",
-                  do: "bg-green-500 text-white",
-                  else: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                )
-              ]}
-            >
-              🌳 Parks (<%= count_by_category(@markers, "park") %>)
-            </button>
-            <button
-              phx-click="set_filter"
-              phx-value-category="museum"
-              class={[
-                "w-full px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                if(@filter_category == "museum",
-                  do: "bg-purple-500 text-white",
-                  else: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                )
-              ]}
-            >
-              🏛️ Museums (<%= count_by_category(@markers, "museum") %>)
-            </button>
+      <%!-- Control Panel --%>
+      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
+        <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
+          <%!-- Header --%>
+          <div>
+            <h2 class="text-sm font-semibold text-white tracking-wide">Markers &amp; Filters</h2>
+            <p class="text-[11px] text-white/40 mt-0.5 leading-relaxed">
+              Category-based marker management with drag-to-update positioning
+            </p>
           </div>
-        </div>
 
-        <%!-- Legend --%>
-        <div class="mb-4 p-3 bg-gray-50 rounded">
-          <p class="text-xs font-semibold text-gray-700 mb-2">Legend:</p>
-          <div class="space-y-1">
-            <div class="flex items-center text-xs">
-              <div class="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
-              <span>Restaurants</span>
-            </div>
-            <div class="flex items-center text-xs">
-              <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-              <span>Parks</span>
-            </div>
-            <div class="flex items-center text-xs">
-              <div class="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
-              <span>Museums</span>
-            </div>
-            <div class="flex items-center text-xs">
-              <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-              <span>Draggable</span>
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Draggable Marker Position --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Draggable Marker
+            </p>
+            <div class="bg-white/[0.04] border border-white/[0.07] rounded-xl p-3 space-y-1.5">
+              <p class="text-[9px] uppercase tracking-widest text-white/35">Current Position</p>
+              <div class="flex gap-3">
+                <div>
+                  <p class="text-[9px] text-white/40">LNG</p>
+                  <p class="font-mono text-xs text-cyan-300">
+                    {Float.round(Enum.at(@draggable_marker, 0), 4)}
+                  </p>
+                </div>
+                <div class="w-px bg-white/10"></div>
+                <div>
+                  <p class="text-[9px] text-white/40">LAT</p>
+                  <p class="font-mono text-xs text-cyan-300">
+                    {Float.round(Enum.at(@draggable_marker, 1), 4)}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <%!-- Info --%>
-        <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h3 class="font-semibold mb-2 text-sm text-blue-900">About:</h3>
-          <p class="text-xs text-blue-800">
-            Click markers to see details. Drag the red marker to move it around the map.
-            Use the filter buttons to show/hide marker categories.
-          </p>
-          <p class="text-xs text-blue-600 mt-2">
-            Showing: <%= length(filtered_markers(assigns)) %> of <%= length(@markers) + 1 %> markers
-          </p>
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Filter Category --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Filter Category
+            </p>
+            <div class="space-y-1.5">
+              <button
+                phx-click="set_filter"
+                phx-value-category="all"
+                class={
+                  if @filter_category == "all",
+                    do:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                    else:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
+                }
+              >
+                <span class="flex items-center justify-between">
+                  <span>All</span>
+                  <span class="font-mono text-[11px] opacity-60">{length(@markers)}</span>
+                </span>
+              </button>
+              <button
+                phx-click="set_filter"
+                phx-value-category="restaurant"
+                class={
+                  if @filter_category == "restaurant",
+                    do:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                    else:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
+                }
+              >
+                <span class="flex items-center justify-between">
+                  <span>Restaurants</span>
+                  <span class="font-mono text-[11px] opacity-60">
+                    {count_by_category(@markers, "restaurant")}
+                  </span>
+                </span>
+              </button>
+              <button
+                phx-click="set_filter"
+                phx-value-category="park"
+                class={
+                  if @filter_category == "park",
+                    do:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                    else:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
+                }
+              >
+                <span class="flex items-center justify-between">
+                  <span>Parks</span>
+                  <span class="font-mono text-[11px] opacity-60">
+                    {count_by_category(@markers, "park")}
+                  </span>
+                </span>
+              </button>
+              <button
+                phx-click="set_filter"
+                phx-value-category="museum"
+                class={
+                  if @filter_category == "museum",
+                    do:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                    else:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
+                }
+              >
+                <span class="flex items-center justify-between">
+                  <span>Museums</span>
+                  <span class="font-mono text-[11px] opacity-60">
+                    {count_by_category(@markers, "museum")}
+                  </span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Legend --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Legend
+            </p>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-2.5 h-2.5 rounded-full bg-[#FF6B6B] flex-shrink-0"></div>
+                <span class="text-xs text-white/55">Draggable</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <div class="w-2.5 h-2.5 rounded-full bg-[#FF9F43] flex-shrink-0"></div>
+                <span class="text-xs text-white/55">Restaurants</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <div class="w-2.5 h-2.5 rounded-full bg-[#48C774] flex-shrink-0"></div>
+                <span class="text-xs text-white/55">Parks</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <div class="w-2.5 h-2.5 rounded-full bg-[#8E44AD] flex-shrink-0"></div>
+                <span class="text-xs text-white/55">Museums</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%!-- Telemetry --%>
+      <div class="absolute bottom-4 left-4 z-20">
+        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">City</p>
+            <p class="font-mono text-xs text-cyan-300/90">NYC</p>
+          </div>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Zoom</p>
+            <p class="font-mono text-xs text-cyan-300/90">12</p>
+          </div>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Filter</p>
+            <p class="font-mono text-xs text-cyan-300/90">{@filter_category}</p>
+          </div>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Showing</p>
+            <p class="font-mono text-xs text-cyan-300/90">
+              {length(filtered_markers(assigns))} / {length(@markers) + 1}
+            </p>
+          </div>
         </div>
       </div>
     </div>

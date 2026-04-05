@@ -34,16 +34,17 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative h-screen w-full">
-      <%!-- Mapa --%>
+    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
+      <%!-- Map full-screen --%>
       <.map
         id="ogc-map"
         center={[0, 20]}
         zoom={2}
         style="https://demotiles.maplibre.org/style.json"
-        class="absolute top-0 left-0 w-full h-full"
+        class="absolute inset-0 w-full h-full"
       />
 
+      <%!-- Navigation Control --%>
       <.navigation_control
         id="nav-control"
         map_id="ogc-map"
@@ -51,84 +52,6 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
         show_compass={true}
         show_zoom={true}
       />
-
-      <%!-- Panel Lateral --%>
-      <div class="absolute top-2 right-2 bg-white rounded-lg shadow-xl max-w-md max-h-[90vh] overflow-y-auto z-10">
-        <div class="p-5">
-          <h2 class="text-xl font-bold mb-3 pb-2 border-b-2 border-blue-500 text-gray-800">
-            🧪 OGC Features Test
-          </h2>
-
-          <%!-- Info Box --%>
-          <div class="bg-yellow-50 border border-yellow-400 p-3 rounded-md mb-4 text-sm text-yellow-900">
-            <strong class="block mb-1">Test Purpose:</strong>
-            Verify that the server sends coordinates in the correct order [lon, lat] and that they display correctly on the map.
-          </div>
-
-          <%!-- Status --%>
-          <%= if @loading do %>
-            <div class="bg-blue-50 text-blue-900 p-3 rounded-md mb-4 text-sm">
-              Loading features...
-            </div>
-          <% end %>
-
-          <%= if @error do %>
-            <div class="bg-red-50 text-red-900 p-3 rounded-md mb-4 text-sm">
-              ❌ Error: <%= @error %>
-            </div>
-          <% end %>
-
-          <%= if !@loading and is_nil(@error) do %>
-            <div class="bg-green-50 text-green-900 p-3 rounded-md mb-4 text-sm">
-              ✅ Loaded <%= @feature_count %> features<br />
-              <span class="text-xs">Check if cities appear in correct locations!</span>
-            </div>
-          <% end %>
-
-          <%!-- Test Cities --%>
-          <%= if length(@test_cities) > 0 do %>
-            <h3 class="text-sm font-semibold text-gray-600 mt-4 mb-2">Test Cities:</h3>
-            <%= for city <- @test_cities do %>
-              <div class={"p-2 rounded mb-2 text-sm border-l-4 #{if city.correct, do: "bg-gray-50 border-green-500", else: "bg-red-50 border-red-500"}"}>
-                <strong class="text-gray-900">
-                  <%= if city.correct, do: "✅", else: "❌" %> <%= city.name %>
-                </strong>
-                <div class="text-blue-600 font-mono text-xs mt-1">
-                  Server: [<%= Float.round(Enum.at(city.coords, 0), 2) %>, <%= Float.round(Enum.at(city.coords, 1), 2) %>]
-                </div>
-                <div class="text-gray-600 text-xs italic mt-1">
-                  Expected: [<%= Float.round(city.expected.lon, 2) %>, <%= Float.round(city.expected.lat, 2) %>]<br />
-                  Location: <%= city.expected.region %>
-                </div>
-              </div>
-            <% end %>
-          <% end %>
-
-          <%!-- Buttons --%>
-          <div class="space-y-2 mt-4">
-            <button
-              phx-click="reload_features"
-              class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 font-medium"
-            >
-              🔄 Reload Features
-            </button>
-            <button
-              phx-click="fly_to_city"
-              phx-value-city="Tokyo"
-              class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 font-medium"
-            >
-              📍 Fly to Tokyo
-            </button>
-            <button
-              phx-click="fly_to_city"
-              phx-value-city="New York"
-              class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 font-medium"
-            >
-              📍 Fly to New York
-            </button>
-          </div>
-        </div>
-      </div>
 
       <%!-- GeoJSON Layer for Features --%>
       <%= if length(@features) > 0 do %>
@@ -145,6 +68,168 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
           }}
         />
       <% end %>
+
+      <%!-- Back nav pill --%>
+      <div class="absolute top-14 left-4 z-20">
+        <a
+          href="/"
+          class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 no-underline"
+        >
+          &larr; Demos
+        </a>
+      </div>
+
+      <%!-- Control Panel --%>
+      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
+        <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
+          <%!-- Header --%>
+          <div>
+            <h2 class="text-sm font-semibold text-white tracking-wide">OGC Features</h2>
+            <p class="text-[11px] text-white/40 mt-0.5 leading-relaxed">
+              OGC API Features conformance test against localhost:4000
+            </p>
+          </div>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Status --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Status
+            </p>
+            <%= if @loading do %>
+              <div class="flex items-center gap-2 text-sm text-white/60">
+                <div class="w-3 h-3 rounded-full border border-cyan-400/50 border-t-cyan-400 animate-spin">
+                </div>
+                Loading features...
+              </div>
+            <% end %>
+            <%= if @error do %>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-red-500/10 border border-red-400/25 text-red-300">
+                Error: {@error}
+              </span>
+            <% end %>
+            <%= if !@loading and is_nil(@error) do %>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500/10 border border-emerald-400/25 text-emerald-300">
+                {@feature_count} features loaded
+              </span>
+            <% end %>
+          </div>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Actions --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Actions
+            </p>
+            <div class="space-y-1.5">
+              <button
+                phx-click="reload_features"
+                class="w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
+              >
+                Reload Features
+              </button>
+              <button
+                phx-click="fly_to_city"
+                phx-value-city="Tokyo"
+                class="w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
+              >
+                Fly to Tokyo
+              </button>
+              <button
+                phx-click="fly_to_city"
+                phx-value-city="New York"
+                class="w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
+              >
+                Fly to New York
+              </button>
+            </div>
+          </div>
+
+          <%!-- Test Results --%>
+          <%= if length(@test_cities) > 0 do %>
+            <div class="h-px bg-white/[0.06]"></div>
+            <div>
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+                Test Results
+              </p>
+              <div class="space-y-2">
+                <%= for city <- @test_cities do %>
+                  <div class="bg-white/[0.04] border border-white/[0.07] rounded-xl p-3 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs text-white/80 font-medium">{city.name}</span>
+                      <%= if city.correct do %>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500/10 border border-emerald-400/25 text-emerald-300">
+                          Pass
+                        </span>
+                      <% else %>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-red-500/10 border border-red-400/25 text-red-300">
+                          Fail
+                        </span>
+                      <% end %>
+                    </div>
+                    <div class="flex gap-3 text-[9px]">
+                      <div>
+                        <p class="text-white/30 uppercase tracking-widest">Server</p>
+                        <p class="font-mono text-white/55">
+                          [{Float.round(Enum.at(city.coords, 0), 2)}, {Float.round(
+                            Enum.at(city.coords, 1),
+                            2
+                          )}]
+                        </p>
+                      </div>
+                      <div class="w-px bg-white/10"></div>
+                      <div>
+                        <p class="text-white/30 uppercase tracking-widest">Region</p>
+                        <p class="font-mono text-white/55">{city.expected.region}</p>
+                      </div>
+                    </div>
+                    <button
+                      phx-click="fly_to_city"
+                      phx-value-city={city.name}
+                      class="w-full text-left px-2 py-1.5 rounded-lg text-[10px] text-white/50 hover:text-white/80 bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.05] hover:border-white/[0.10] transition-all duration-300"
+                    >
+                      Fly to {city.name}
+                    </button>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Server --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Server
+            </p>
+            <p class="font-mono text-[10px] text-white/50 break-all">{@server_url}</p>
+          </div>
+        </div>
+      </div>
+
+      <%!-- Telemetry --%>
+      <div class="absolute bottom-4 left-4 z-20">
+        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Features</p>
+            <p class="font-mono text-xs text-cyan-300/90">{@feature_count}</p>
+          </div>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Status</p>
+            <p class="font-mono text-xs text-cyan-300/90">
+              {cond do
+                @loading -> "loading"
+                @error -> "error"
+                true -> "ready"
+              end}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
     """
   end

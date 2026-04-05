@@ -15,8 +15,8 @@ defmodule MaplibrexDemoWeb.TerrainLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative h-screen w-full">
-      <%!-- Mapa con terreno 3D --%>
+    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
+      <%!-- Map fills full screen --%>
       <.map
         id="terrain-map"
         center={[11.39085, 47.3]}
@@ -24,7 +24,7 @@ defmodule MaplibrexDemoWeb.TerrainLive do
         pitch={72}
         bearing={0}
         style="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
-        class="absolute top-0 left-0 w-full h-full"
+        class="absolute inset-0 w-full h-full"
       />
 
       <%!-- Navigation Control --%>
@@ -36,21 +36,21 @@ defmodule MaplibrexDemoWeb.TerrainLive do
         show_zoom={true}
       />
 
-      <%!-- RasterDEM Source para terreno 3D --%>
+      <%!-- RasterDEM Source for 3D terrain --%>
       <.raster_dem_source
         id="terrain-source"
         map_id="terrain-map"
         url="https://tiles.mapterhorn.com/tilejson.json"
       />
 
-      <%!-- RasterDEM Source separado para hillshade (mejor calidad) --%>
+      <%!-- Separate RasterDEM Source for hillshade --%>
       <.raster_dem_source
         id="hillshade-source"
         map_id="terrain-map"
         url="https://tiles.mapterhorn.com/tilejson.json"
       />
 
-      <%!-- Hillshade Layer para visualización 3D --%>
+      <%!-- Hillshade Layer --%>
       <.hillshade_layer
         id="hillshade"
         map_id="terrain-map"
@@ -63,7 +63,7 @@ defmodule MaplibrexDemoWeb.TerrainLive do
         }}
       />
 
-      <%!-- Terreno 3D --%>
+      <%!-- 3D Terrain --%>
       <%= if @terrain_enabled do %>
         <.terrain
           map_id="terrain-map"
@@ -72,78 +72,127 @@ defmodule MaplibrexDemoWeb.TerrainLive do
         />
       <% end %>
 
-      <%!-- Panel de Control --%>
-      <div class="absolute top-4 right-4 bg-white rounded-lg shadow-2xl p-6 max-w-sm z-10">
-        <h2 class="text-2xl font-bold mb-4 border-b border-gray-300 pb-2">
-          🏔️ 3D Terrain Demo
-        </h2>
+      <%!-- Back navigation pill --%>
+      <div class="absolute top-4 left-4 z-20">
+        <a
+          href="/"
+          class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/75 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+        >
+          ← MaplibreX Demos
+        </a>
+      </div>
 
-        <%!-- Toggle Terrain --%>
-        <div class="mb-4 p-4 bg-gray-50 rounded-lg">
-          <div class="flex items-center justify-between mb-2">
-            <span class="font-semibold">Terrain 3D</span>
+      <%!-- Control Panel --%>
+      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
+        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
+          <%!-- Title --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">
+              MaplibreX
+            </p>
+            <h2 class="text-base font-semibold text-white">3D Terrain</h2>
+            <p class="text-xs text-white/50 mt-1">
+              Elevation rendering with DEM sources
+            </p>
+          </div>
+
+          <div class="border-t border-white/[0.06]" />
+
+          <%!-- Terrain toggle --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Terrain
+            </p>
             <button
               phx-click="toggle_terrain"
-              class={[
-                "px-4 py-2 rounded-lg font-medium transition-all",
-                if(@terrain_enabled,
-                  do: "bg-green-500 text-white hover:bg-green-600",
-                  else: "bg-gray-300 text-gray-700 hover:bg-gray-400"
-                )
-              ]}
+              class={
+                if @terrain_enabled,
+                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm bg-cyan-500/10 border border-cyan-400/25 text-cyan-300 transition-all duration-300",
+                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm bg-white/[0.05] border border-white/[0.07] text-white/60 transition-all duration-300"
+              }
             >
-              <%= if @terrain_enabled, do: "ON", else: "OFF" %>
+              <span class="font-medium">3D Terrain</span>
+              <span class="ml-2 text-xs opacity-70">
+                {if @terrain_enabled, do: "Enabled", else: "Disabled"}
+              </span>
             </button>
           </div>
 
-          <%= if @terrain_enabled do %>
-            <div class="mt-3">
-              <label class="block text-sm text-gray-600 mb-1">
-                Exaggeration: <%= @exaggeration %>x
-              </label>
-              <form phx-change="update_exaggeration">
-                <input
-                  type="range"
-                  min="0.5"
-                  max="3.0"
-                  step="0.1"
-                  value={@exaggeration}
-                  name="value"
-                  class="w-full"
-                />
-              </form>
-              <div class="flex justify-between text-xs text-gray-500 mt-1">
-                <span>0.5x</span>
-                <span>3.0x</span>
-              </div>
-            </div>
-          <% end %>
-        </div>
+          <div class="border-t border-white/[0.06]" />
 
-        <%!-- Info --%>
-        <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h3 class="font-semibold mb-2 text-sm text-blue-900">About:</h3>
-          <p class="text-xs text-blue-800">
-            This demo shows MapLibre's 3D terrain rendering with digital elevation models (DEM).
-            Adjust the exaggeration to see dramatic terrain effects on this view of the Alps.
-          </p>
-        </div>
+          <%!-- Exaggeration slider --%>
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">
+                Exaggeration
+              </p>
+              <span class="font-mono text-xs text-cyan-300">
+                {Float.round(@exaggeration * 1.0, 1)}x
+              </span>
+            </div>
+            <form phx-change="update_exaggeration">
+              <input
+                type="range"
+                min="0.5"
+                max="3.0"
+                step="0.1"
+                value={@exaggeration}
+                name="value"
+                class="w-full accent-cyan-400"
+              />
+            </form>
+            <div class="flex justify-between text-[10px] text-white/25 mt-1">
+              <span>0.5x</span>
+              <span>3.0x</span>
+            </div>
+          </div>
 
-        <%!-- Camera Info --%>
-        <div class="mt-4 pt-4 border-t border-gray-300 text-xs text-gray-600">
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <span class="font-semibold">Pitch:</span> 72°
+          <div class="border-t border-white/[0.06]" />
+
+          <%!-- Location buttons --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Location
+            </p>
+            <div class="flex gap-2">
+              <button
+                onclick="document.getElementById('terrain-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [11.39085, 47.3], zoom: 12, pitch: 72, bearing: 0, duration: 1500}}))"
+                class="flex-1 px-3 py-2 rounded-lg text-xs text-white/70 bg-white/[0.05] hover:bg-white/[0.10] border border-white/[0.07] transition-all duration-300 text-center"
+              >
+                Alps
+              </button>
+              <button
+                onclick="document.getElementById('terrain-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [7.6586, 45.9763], zoom: 13, pitch: 72, bearing: 0, duration: 1500}}))"
+                class="flex-1 px-3 py-2 rounded-lg text-xs text-white/70 bg-white/[0.05] hover:bg-white/[0.10] border border-white/[0.07] transition-all duration-300 text-center"
+              >
+                Matterhorn
+              </button>
             </div>
-            <div>
-              <span class="font-semibold">Bearing:</span> 0°
-            </div>
-            <div>
-              <span class="font-semibold">Zoom:</span> 12
-            </div>
-            <div>
-              <span class="font-semibold">Location:</span> Alps
-            </div>
+          </div>
+        </div>
+      </div>
+
+      <%!-- Telemetry panel --%>
+      <div class="absolute bottom-4 left-4 z-20">
+        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Pitch</p>
+            <p class="font-mono text-xs text-cyan-300">72°</p>
+          </div>
+          <div class="w-px h-6 bg-white/10" />
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Bearing</p>
+            <p class="font-mono text-xs text-cyan-300">0°</p>
+          </div>
+          <div class="w-px h-6 bg-white/10" />
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Zoom</p>
+            <p class="font-mono text-xs text-cyan-300">12</p>
+          </div>
+          <div class="w-px h-6 bg-white/10" />
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Exaggeration</p>
+            <p class="font-mono text-xs text-cyan-300">{Float.round(@exaggeration * 1.0, 1)}x</p>
           </div>
         </div>
       </div>

@@ -88,8 +88,8 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
     assigns = assign(assigns, :fragment_shader, @fragment_shader)
 
     ~H"""
-    <div class="relative h-screen w-full">
-      <%!-- Mapa base --%>
+    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
+      <%!-- Map full-screen --%>
       <.map
         id="particles-map"
         center={[0, 20]}
@@ -97,7 +97,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
         pitch={0}
         bearing={0}
         style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-        class="absolute top-0 left-0 w-full h-full"
+        class="absolute inset-0 w-full h-full"
       />
 
       <%!-- Navigation Control --%>
@@ -126,224 +126,299 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
         }}
       />
 
-      <%!-- FPS Counter --%>
-      <div class="absolute top-4 left-20 bg-black bg-opacity-70 text-white px-3 py-2 rounded text-sm font-mono">
-        FPS: <%= @fps %> | Particles: 1000 | Time: <%= Float.round(@time, 1) %>s
+      <%!-- Back nav pill --%>
+      <div class="absolute top-14 left-4 z-20">
+        <a
+          href="/"
+          class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 no-underline"
+        >
+          &larr; Demos
+        </a>
       </div>
 
       <%!-- Control Panel --%>
-      <div class="absolute top-4 right-4 bg-white rounded-lg shadow-2xl p-6 max-w-sm z-10 max-h-[90vh] overflow-y-auto">
-        <h2 class="text-2xl font-bold mb-4 border-b border-gray-300 pb-2">
-          ✨ Animated Particles
-        </h2>
-
-        <%!-- Preset Selector --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Preset:
-          </label>
-          <div class="space-y-2">
-            <button
-              phx-click="set_preset"
-              phx-value-preset="ocean_currents"
-              class={[
-                "w-full px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                if(@preset == "ocean_currents",
-                  do: "bg-blue-500 text-white",
-                  else: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                )
-              ]}
-            >
-              🌊 Ocean Currents
-            </button>
-            <button
-              phx-click="set_preset"
-              phx-value-preset="wind_flow"
-              class={[
-                "w-full px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                if(@preset == "wind_flow",
-                  do: "bg-gray-500 text-white",
-                  else: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                )
-              ]}
-            >
-              💨 Wind Flow
-            </button>
-            <button
-              phx-click="set_preset"
-              phx-value-preset="lava_flow"
-              class={[
-                "w-full px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                if(@preset == "lava_flow",
-                  do: "bg-red-500 text-white",
-                  else: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                )
-              ]}
-            >
-              🌋 Lava Flow
-            </button>
-          </div>
-        </div>
-
-        <%!-- Color Controls --%>
-        <div class="mb-4 p-3 bg-gray-50 rounded">
-          <p class="text-sm font-semibold text-gray-700 mb-2">Color (RGB):</p>
-
-          <div class="mb-2">
-            <label class="text-xs text-gray-600">R: <%= Float.round(Enum.at(@color, 0), 2) %></label>
-            <form phx-change="update_color_r">
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={Enum.at(@color, 0)}
-                name="value"
-                class="w-full"
-              />
-            </form>
-          </div>
-
-          <div class="mb-2">
-            <label class="text-xs text-gray-600">G: <%= Float.round(Enum.at(@color, 1), 2) %></label>
-            <form phx-change="update_color_g">
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={Enum.at(@color, 1)}
-                name="value"
-                class="w-full"
-              />
-            </form>
-          </div>
-
+      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
+        <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
+          <%!-- Header --%>
           <div>
-            <label class="text-xs text-gray-600">B: <%= Float.round(Enum.at(@color, 2), 2) %></label>
-            <form phx-change="update_color_b">
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={Enum.at(@color, 2)}
-                name="value"
-                class="w-full"
-              />
-            </form>
+            <h2 class="text-sm font-semibold text-white tracking-wide">WebGL Particles</h2>
+            <p class="text-[11px] text-white/40 mt-0.5 leading-relaxed">
+              1,000 particles animated via custom GLSL vertex &amp; fragment shaders
+            </p>
           </div>
 
-          <div
-            class="mt-2 h-8 rounded"
-            style={"background-color: rgb(#{trunc(Enum.at(@color, 0) * 255)}, #{trunc(Enum.at(@color, 1) * 255)}, #{trunc(Enum.at(@color, 2) * 255)});"}
-          >
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Preset --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
+              Preset
+            </p>
+            <div class="space-y-1.5">
+              <button
+                phx-click="set_preset"
+                phx-value-preset="ocean_currents"
+                class={
+                  if @preset == "ocean_currents",
+                    do:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                    else:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
+                }
+              >
+                Ocean Currents
+              </button>
+              <button
+                phx-click="set_preset"
+                phx-value-preset="wind_flow"
+                class={
+                  if @preset == "wind_flow",
+                    do:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                    else:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
+                }
+              >
+                Wind Flow
+              </button>
+              <button
+                phx-click="set_preset"
+                phx-value-preset="lava_flow"
+                class={
+                  if @preset == "lava_flow",
+                    do:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
+                    else:
+                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
+                }
+              >
+                Lava Flow
+              </button>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- FPS Counter --%>
+          <div class="bg-white/[0.04] border border-white/[0.07] rounded-xl p-3 flex items-center justify-between">
+            <p class="text-[9px] uppercase tracking-widest text-white/35">FPS</p>
+            <p class="font-mono text-sm text-cyan-300 font-semibold">{@fps}</p>
+          </div>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Particle Color --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-3">
+              Particle Color
+            </p>
+            <%!-- Color preview swatch --%>
+            <div
+              class="h-6 rounded-lg mb-3 border border-white/[0.07]"
+              style={"background-color: rgb(#{trunc(Enum.at(@color, 0) * 255)}, #{trunc(Enum.at(@color, 1) * 255)}, #{trunc(Enum.at(@color, 2) * 255)});"}
+            >
+            </div>
+            <div class="space-y-3">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">R</p>
+                  <p class="font-mono text-[10px] text-white/50">
+                    {Float.round(Enum.at(@color, 0), 2)}
+                  </p>
+                </div>
+                <form phx-change="update_color_r">
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={Enum.at(@color, 0)}
+                    name="value"
+                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+                  />
+                </form>
+              </div>
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">G</p>
+                  <p class="font-mono text-[10px] text-white/50">
+                    {Float.round(Enum.at(@color, 1), 2)}
+                  </p>
+                </div>
+                <form phx-change="update_color_g">
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={Enum.at(@color, 1)}
+                    name="value"
+                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+                  />
+                </form>
+              </div>
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">B</p>
+                  <p class="font-mono text-[10px] text-white/50">
+                    {Float.round(Enum.at(@color, 2), 2)}
+                  </p>
+                </div>
+                <form phx-change="update_color_b">
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={Enum.at(@color, 2)}
+                    name="value"
+                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+                  />
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Flow Parameters --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-3">
+              Flow Parameters
+            </p>
+            <div class="space-y-3">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">Speed</p>
+                  <p class="font-mono text-[10px] text-white/50">{Float.round(@speed, 1)}x</p>
+                </div>
+                <form phx-change="update_speed">
+                  <input
+                    type="range"
+                    min="0"
+                    max="5"
+                    step="0.1"
+                    value={@speed}
+                    name="value"
+                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+                  />
+                </form>
+              </div>
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">Turbulence</p>
+                  <p class="font-mono text-[10px] text-white/50">{Float.round(@turbulence, 2)}</p>
+                </div>
+                <form phx-change="update_turbulence">
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value={@turbulence}
+                    name="value"
+                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+                  />
+                </form>
+              </div>
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">Direction</p>
+                  <p class="font-mono text-[10px] text-white/50">
+                    {trunc(atan2(@flow_direction) * 180 / :math.pi())}deg
+                  </p>
+                </div>
+                <form phx-change="update_direction">
+                  <input
+                    type="range"
+                    min="0"
+                    max="360"
+                    step="15"
+                    value={trunc(atan2(@flow_direction) * 180 / :math.pi())}
+                    name="value"
+                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+                  />
+                </form>
+                <div class="flex justify-between text-[9px] text-white/25 mt-1">
+                  <span>N</span><span>E</span><span>S</span><span>W</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="h-px bg-white/[0.06]"></div>
+
+          <%!-- Render --%>
+          <div>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-3">
+              Render
+            </p>
+            <div class="space-y-3">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">Opacity</p>
+                  <p class="font-mono text-[10px] text-white/50">{trunc(@opacity * 100)}%</p>
+                </div>
+                <form phx-change="update_opacity">
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value={@opacity}
+                    name="value"
+                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+                  />
+                </form>
+              </div>
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">Size</p>
+                  <p class="font-mono text-[10px] text-white/50">
+                    {Float.round(@point_size, 1)}px
+                  </p>
+                </div>
+                <form phx-change="update_point_size">
+                  <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    step="0.5"
+                    value={@point_size}
+                    name="value"
+                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
+                  />
+                </form>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
 
-        <%!-- Opacity --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Opacity: <%= trunc(@opacity * 100) %>%
-          </label>
-          <form phx-change="update_opacity">
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={@opacity}
-              name="value"
-              class="w-full"
-            />
-          </form>
-        </div>
-
-        <%!-- Point Size --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Point Size: <%= Float.round(@point_size, 1) %>px
-          </label>
-          <form phx-change="update_point_size">
-            <input
-              type="range"
-              min="1"
-              max="10"
-              step="0.5"
-              value={@point_size}
-              name="value"
-              class="w-full"
-            />
-          </form>
-        </div>
-
-        <%!-- Speed --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Flow Speed: <%= Float.round(@speed, 1) %>x
-          </label>
-          <form phx-change="update_speed">
-            <input
-              type="range"
-              min="0"
-              max="5"
-              step="0.1"
-              value={@speed}
-              name="value"
-              class="w-full"
-            />
-          </form>
-        </div>
-
-        <%!-- Turbulence --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Turbulence: <%= Float.round(@turbulence, 2) %>
-          </label>
-          <form phx-change="update_turbulence">
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={@turbulence}
-              name="value"
-              class="w-full"
-            />
-          </form>
-        </div>
-
-        <%!-- Flow Direction --%>
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Flow Direction: <%= trunc(atan2(@flow_direction) * 180 / :math.pi()) %>°
-          </label>
-          <form phx-change="update_direction">
-            <input
-              type="range"
-              min="0"
-              max="360"
-              step="15"
-              value={trunc(atan2(@flow_direction) * 180 / :math.pi())}
-              name="value"
-              class="w-full"
-            />
-          </form>
-          <div class="flex justify-between text-xs text-gray-500 mt-1">
-            <span>N</span>
-            <span>E</span>
-            <span>S</span>
-            <span>W</span>
+      <%!-- Telemetry --%>
+      <div class="absolute bottom-4 left-4 z-20">
+        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">FPS</p>
+            <p class="font-mono text-xs text-cyan-300/90">{@fps}</p>
           </div>
-        </div>
-
-        <%!-- Info --%>
-        <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h3 class="font-semibold mb-2 text-sm text-blue-900">About:</h3>
-          <p class="text-xs text-blue-800">
-            Custom WebGL particle system with 1000 animated particles rendered at 60fps using GLSL shaders.
-            Adjust flow speed, direction, and turbulence to see different patterns.
-          </p>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Preset</p>
+            <p class="font-mono text-xs text-cyan-300/90">
+              {case @preset do
+                "ocean_currents" -> "Ocean"
+                "wind_flow" -> "Wind"
+                "lava_flow" -> "Lava"
+                other -> other
+              end}
+            </p>
+          </div>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">Particles</p>
+            <p class="font-mono text-xs text-cyan-300/90">1,000</p>
+          </div>
         </div>
       </div>
     </div>
