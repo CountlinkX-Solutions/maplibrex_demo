@@ -290,6 +290,21 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_event("layer:feature_mouseenter", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("layer:feature_mouseleave", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("layer:feature_click", _params, socket) do
+    {:noreply, socket}
+  end
+
   # Helper Functions
 
   defp generate_buildings_data do
