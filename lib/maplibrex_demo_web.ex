@@ -38,7 +38,9 @@ defmodule MaplibrexDemoWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, formats: [:html, :json]
+      use Phoenix.Controller,
+        formats: [:html, :json],
+        layouts: [html: {MaplibrexDemoWeb.Layouts, :app}]
 
       use Gettext, backend: MaplibrexDemoWeb.Gettext
 
