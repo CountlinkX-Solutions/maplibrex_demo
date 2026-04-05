@@ -80,3 +80,51 @@ input[type="range"]::-moz-range-thumb {
 
 /* Map container removes maplibre attribution */
 .maplibregl-ctrl-attrib { display: none !important; }
+
+/* MapLibre popup — dark glass style matching the UI */
+.maplibregl-popup-content {
+  background: rgba(8, 12, 28, 0.92) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 10px !important;
+  padding: 10px 14px !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+  min-width: 100px;
+}
+
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+  border-top-color: rgba(8, 12, 28, 0.92) !important;
+}
+
+.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+  border-bottom-color: rgba(8, 12, 28, 0.92) !important;
+}
+
+.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: rgba(8, 12, 28, 0.92) !important;
+}
+
+.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: rgba(8, 12, 28, 0.92) !important;
+}
+
+.maplibregl-popup-close-button {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-size: 16px;
+  right: 4px;
+  top: 2px;
+}
+
+.maplibregl-popup-close-button:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+  background: transparent !important;
+}
