@@ -1,472 +1,163 @@
 <style>
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(28px); }
+    from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
   }
   @keyframes orbPulse {
-    0%, 100% { opacity: 0.55; transform: scale(1); }
-    50%       { opacity: 0.75; transform: scale(1.06); }
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50%       { opacity: 0.7; transform: scale(1.05); }
   }
-  @keyframes pillFloat {
-    0%, 100% { transform: translateY(0px); }
-    50%       { transform: translateY(-4px); }
-  }
-  @keyframes borderShimmer {
-    0%   { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
-  }
-
-  .anim-fade-up { animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both; }
-  .delay-100 { animation-delay: 0.10s; }
-  .delay-200 { animation-delay: 0.20s; }
-  .delay-300 { animation-delay: 0.30s; }
-  .delay-400 { animation-delay: 0.40s; }
-  .delay-500 { animation-delay: 0.50s; }
-  .delay-600 { animation-delay: 0.60s; }
+  .anim-1 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.05s both; }
+  .anim-2 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.15s both; }
+  .anim-3 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.25s both; }
+  .anim-4 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.35s both; }
 
   .demo-card {
-    transition: transform 0.28s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s ease;
+    display: block;
+    text-decoration: none;
+    transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s ease;
   }
   .demo-card:hover {
-    transform: translateY(-4px) scale(1.012);
-    box-shadow: 0 0 0 1px rgba(34,211,238,0.35), 0 8px 40px rgba(34,211,238,0.08);
+    transform: translateY(-3px);
+    box-shadow: 0 0 0 1px rgba(34,211,238,0.3), 0 12px 40px rgba(0,0,0,0.4);
   }
-  .demo-card:hover .card-inner {
-    border-color: rgba(34,211,238,0.18);
+  .demo-card:hover .card-border {
+    border-color: rgba(34,211,238,0.2);
   }
-  .cta-primary {
-    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  .demo-card:hover .card-arrow {
+    transform: translate(2px, -2px);
+    color: rgba(34,211,238,0.9);
   }
-  .cta-primary:hover {
-    box-shadow: 0 0 28px rgba(34,211,238,0.35);
-    transform: translateY(-1px);
+  .card-arrow {
+    transition: transform 0.2s ease, color 0.2s ease;
   }
-  .cta-ghost {
-    transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
-  }
-  .cta-ghost:hover {
-    background: rgba(34,211,238,0.06);
-    border-color: rgba(34,211,238,0.45);
-    transform: translateY(-1px);
-  }
-  .feature-pill {
-    animation: pillFloat 3.5s ease-in-out infinite;
-  }
-  .feature-pill:nth-child(2) { animation-delay: 0.4s; }
-  .feature-pill:nth-child(3) { animation-delay: 0.8s; }
-  .feature-pill:nth-child(4) { animation-delay: 1.2s; }
-
-  html { scroll-behavior: smooth; }
 </style>
 
 <Layouts.flash_group flash={@flash} />
 
-<%# ── Ambient background orbs ──────────────────────────────────────────────── %>
-<div
-  aria-hidden="true"
-  style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;"
->
-  <div style="position:absolute;top:-18%;left:-12%;width:680px;height:680px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,0.13) 0%,transparent 70%);animation:orbPulse 7s ease-in-out infinite;"></div>
-  <div style="position:absolute;bottom:-22%;right:-10%;width:780px;height:780px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.12) 0%,transparent 70%);animation:orbPulse 9s ease-in-out infinite 1.5s;"></div>
-  <div style="position:absolute;top:42%;left:38%;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,0.05) 0%,transparent 70%);animation:orbPulse 11s ease-in-out infinite 3s;"></div>
+<%# ── Ambient orbs ── %>
+<div aria-hidden="true" style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;">
+  <div style="position:absolute;top:-15%;left:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,0.10) 0%,transparent 70%);animation:orbPulse 8s ease-in-out infinite;"></div>
+  <div style="position:absolute;bottom:-20%;right:-8%;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.10) 0%,transparent 70%);animation:orbPulse 10s ease-in-out infinite 2s;"></div>
 </div>
 
-<%# ── Hero ──────────────────────────────────────────────────────────────────── %>
-<section style="position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 1.5rem 4rem;">
+<div style="position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;">
 
-  <%# Eyebrow badge %>
-  <div class="anim-fade-up" style="margin-bottom:2rem;">
-    <span style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.35rem 1rem;border-radius:9999px;border:1px solid rgba(34,211,238,0.35);background:rgba(34,211,238,0.06);font-family:'JetBrains Mono',monospace;font-size:0.72rem;font-weight:500;letter-spacing:0.08em;color:rgba(34,211,238,0.9);">
-      <span style="width:6px;height:6px;border-radius:50%;background:#22d3ee;flex-shrink:0;"></span>
-      Phoenix LiveView &times; MapLibre GL
+  <%# ── Navbar ── %>
+  <nav style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid rgba(255,255,255,0.06);">
+    <span style="font-size:1.05rem;font-weight:700;letter-spacing:-0.01em;color:rgba(255,255,255,0.95);">
+      Maplibre<span style="color:#22d3ee;">X</span>
     </span>
-  </div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);letter-spacing:0.08em;">
+      Phoenix LiveView × MapLibre GL
+    </span>
+  </nav>
 
-  <%# Headline %>
-  <h1
-    class="anim-fade-up delay-100"
-    style="max-width:760px;text-align:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(2.4rem,5.5vw,4.2rem);font-weight:800;line-height:1.08;letter-spacing:-0.03em;color:rgba(255,255,255,0.95);margin-bottom:1.5rem;"
-  >
-    Build Interactive Maps<br/>
-    <span style="background:linear-gradient(135deg,#22d3ee 0%,#818cf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">with Phoenix LiveView</span>
-  </h1>
+  <%# ── Hero ── %>
+  <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:5rem 1.5rem 3rem;">
 
-  <%# Subheadline %>
-  <p
-    class="anim-fade-up delay-200"
-    style="max-width:540px;text-align:center;font-size:1.1rem;line-height:1.7;color:rgba(255,255,255,0.55);margin-bottom:2.8rem;"
-  >
-    MaplibreX is a powerful, real-time map component library. Bring geospatial data to life with zero JavaScript.
-  </p>
-
-  <%# CTAs %>
-  <div class="anim-fade-up delay-300" style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;">
-    <a
-      href="#demos"
-      class="cta-primary"
-      style="display:inline-flex;align-items:center;gap:0.65rem;padding:0.85rem 2rem;border-radius:9999px;background:linear-gradient(135deg,#22d3ee,#6366f1);color:#050810;font-weight:700;font-size:0.95rem;text-decoration:none;letter-spacing:0.01em;"
-    >
-      Explore Demos
-      <span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(5,8,16,0.22);">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-          <path d="M2 5h6M5.5 2.5L8 5l-2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+    <div class="anim-1" style="margin-bottom:1.25rem;">
+      <span style="display:inline-block;padding:0.3rem 0.9rem;border-radius:9999px;border:1px solid rgba(34,211,238,0.3);background:rgba(34,211,238,0.06);font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(34,211,238,0.85);">
+        Component Library · v0.1
       </span>
-    </a>
-
-    <a
-      href="#"
-      class="cta-ghost"
-      style="display:inline-flex;align-items:center;gap:0.65rem;padding:0.85rem 2rem;border-radius:9999px;border:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.8);font-weight:600;font-size:0.95rem;text-decoration:none;"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 0C5.37 0 0 5.506 0 12.303c0 5.445 3.435 10.043 8.205 11.674.6.107.825-.262.825-.585 0-.292-.015-1.261-.015-2.291C6 21.67 5.22 20.346 4.98 19.654c-.135-.354-.72-1.446-1.23-1.738-.42-.23-1.02-.8-.015-.815.945-.015 1.62.892 1.845 1.261 1.08 1.86 2.805 1.338 3.495 1.015.105-.8.42-1.338.765-1.645-2.67-.308-5.46-1.37-5.46-6.075 0-1.338.465-2.446 1.23-3.307-.12-.308-.54-1.569.12-3.26 0 0 1.005-.323 3.3 1.26.96-.276 1.98-.415 3-.415s2.04.139 3 .416c2.295-1.6 3.3-1.261 3.3-1.261.66 1.691.24 2.952.12 3.26.765.861 1.23 1.953 1.23 3.307 0 4.721-2.805 5.767-5.475 6.075.435.384.81 1.122.81 2.276 0 1.645-.015 2.968-.015 3.383 0 .323.225.707.825.585a12.047 12.047 0 0 0 5.919-4.489A12.536 12.536 0 0 0 24 12.304C24 5.505 18.63 0 12 0Z"/>
-      </svg>
-      View on GitHub
-    </a>
-  </div>
-
-  <%# Scroll hint %>
-  <div class="anim-fade-up delay-500" style="margin-top:4.5rem;display:flex;flex-direction:column;align-items:center;gap:0.5rem;opacity:0.35;">
-    <span style="font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.6);">Scroll</span>
-    <svg width="16" height="20" viewBox="0 0 16 20" fill="none" aria-hidden="true">
-      <rect x="0.75" y="0.75" width="14.5" height="18.5" rx="7.25" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-      <circle cx="8" cy="6" r="2" fill="rgba(255,255,255,0.5)" style="animation:fadeUp 1.2s ease-in-out infinite alternate;"/>
-    </svg>
-  </div>
-</section>
-
-<%# ── Feature Pills ──────────────────────────────────────────────────────────── %>
-<section style="position:relative;z-index:1;padding:0 1.5rem 5rem;">
-  <div style="display:flex;flex-wrap:wrap;gap:0.85rem;justify-content:center;max-width:720px;margin:0 auto;">
-
-    <div class="feature-pill" style="display:inline-flex;align-items:center;gap:0.6rem;padding:0.55rem 1.25rem;border-radius:9999px;background:rgba(8,12,28,0.82);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.09);color:rgba(255,255,255,0.75);font-size:0.82rem;font-weight:500;">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <circle cx="7" cy="7" r="6" stroke="#22d3ee" stroke-width="1.5"/>
-        <path d="M4 7l2 2 4-4" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      LiveView Native
     </div>
 
-    <div class="feature-pill" style="display:inline-flex;align-items:center;gap:0.6rem;padding:0.55rem 1.25rem;border-radius:9999px;background:rgba(8,12,28,0.82);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.09);color:rgba(255,255,255,0.75);font-size:0.82rem;font-weight:500;">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <path d="M2 7h10M7 2l5 5-5 5" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Zero JS Required
-    </div>
+    <h1 class="anim-2" style="font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.1;letter-spacing:-0.03em;color:rgba(255,255,255,0.95);max-width:700px;margin:0 0 1.25rem;">
+      Interactive Maps<br>
+      <span style="background:linear-gradient(135deg,#22d3ee,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+        for Phoenix LiveView
+      </span>
+    </h1>
 
-    <div class="feature-pill" style="display:inline-flex;align-items:center;gap:0.6rem;padding:0.55rem 1.25rem;border-radius:9999px;background:rgba(8,12,28,0.82);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.09);color:rgba(255,255,255,0.75);font-size:0.82rem;font-weight:500;">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <path d="M7 1v2M7 11v2M1 7h2M11 7h2" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="7" cy="7" r="3" stroke="#22d3ee" stroke-width="1.5"/>
-      </svg>
-      Real-time Updates
-    </div>
+    <p class="anim-3" style="font-size:1.05rem;color:rgba(255,255,255,0.5);max-width:520px;line-height:1.65;margin:0 0 2.5rem;">
+      MaplibreX wraps MapLibre GL JS as native LiveView components.
+      Real-time maps, zero custom JavaScript.
+    </p>
 
-    <div class="feature-pill" style="display:inline-flex;align-items:center;gap:0.6rem;padding:0.55rem 1.25rem;border-radius:9999px;background:rgba(8,12,28,0.82);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.09);color:rgba(255,255,255,0.75);font-size:0.82rem;font-weight:500;">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <rect x="1" y="1" width="12" height="12" rx="2" stroke="#22d3ee" stroke-width="1.5"/>
-        <path d="M4 4h6M4 7h4M4 10h5" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      OGC Standards
-    </div>
-
-  </div>
-</section>
-
-<%# ── Demos Grid ─────────────────────────────────────────────────────────────── %>
-<section id="demos" style="position:relative;z-index:1;padding:0 1.5rem 7rem;">
-  <div style="max-width:1100px;margin:0 auto;">
-
-    <%# Section title %>
-    <div style="text-align:center;margin-bottom:3.5rem;">
-      <p style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:#22d3ee;margin-bottom:0.75rem;">Showcase</p>
-      <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-0.025em;color:rgba(255,255,255,0.93);line-height:1.12;">Interactive Demos</h2>
-      <p style="margin-top:0.85rem;color:rgba(255,255,255,0.45);font-size:0.97rem;max-width:460px;margin-left:auto;margin-right:auto;line-height:1.65;">Nine live examples demonstrating the full power of MaplibreX — from vector tiles to WebGL shaders.</p>
-    </div>
-
-    <%# Grid %>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:1.25rem;">
-
-      <%# Card 1: Interactive Map %>
-      <a href={~p"/map"} style="text-decoration:none;" class="demo-card anim-fade-up delay-100">
-        <div style="padding:1px;border-radius:1rem;background:rgba(255,255,255,0.05);">
-          <div class="card-inner" style="background:rgba(8,12,28,0.90);border-radius:calc(1rem - 1px);padding:1.5rem;border:1px solid rgba(255,255,255,0.06);height:100%;display:flex;flex-direction:column;gap:1rem;transition:border-color 0.28s ease;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;">
-              <div style="width:42px;height:42px;border-radius:10px;background:rgba(34,211,238,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <path d="M10 2C6.686 2 4 4.686 4 8c0 4.5 6 10 6 10s6-5.5 6-10c0-3.314-2.686-6-6-6Z" stroke="#22d3ee" stroke-width="1.5" stroke-linejoin="round"/>
-                  <circle cx="10" cy="8" r="2" fill="#22d3ee"/>
-                </svg>
-              </div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:rgba(34,211,238,0.1);color:#22d3ee;border:1px solid rgba(34,211,238,0.2);white-space:nowrap;">Core</span>
-            </div>
-            <div style="flex:1;">
-              <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,0.92);margin-bottom:0.45rem;">Interactive Map</h3>
-              <p style="font-size:0.85rem;color:rgba(255,255,255,0.45);line-height:1.6;">Markers, GeoJSON layers, draggable elements, style switching</p>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.35rem;font-size:0.82rem;font-weight:600;color:#22d3ee;">
-              Explore
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </div>
+    <div class="anim-4" style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;">
+      <a href="#demos" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.7rem 1.5rem;border-radius:9999px;background:linear-gradient(135deg,rgba(34,211,238,0.9),rgba(99,102,241,0.9));color:#050810;font-weight:700;font-size:0.875rem;text-decoration:none;transition:opacity 0.2s ease;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+        Explorar Demos
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
       </a>
-
-      <%# Card 2: Vector Tiles %>
-      <a href={~p"/tiles"} style="text-decoration:none;" class="demo-card anim-fade-up delay-200">
-        <div style="padding:1px;border-radius:1rem;background:rgba(255,255,255,0.05);">
-          <div class="card-inner" style="background:rgba(8,12,28,0.90);border-radius:calc(1rem - 1px);padding:1.5rem;border:1px solid rgba(255,255,255,0.06);height:100%;display:flex;flex-direction:column;gap:1rem;transition:border-color 0.28s ease;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;">
-              <div style="width:42px;height:42px;border-radius:10px;background:rgba(129,140,248,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <rect x="2" y="2" width="7" height="7" rx="1.5" stroke="#818cf8" stroke-width="1.5"/>
-                  <rect x="11" y="2" width="7" height="7" rx="1.5" stroke="#818cf8" stroke-width="1.5"/>
-                  <rect x="2" y="11" width="7" height="7" rx="1.5" stroke="#818cf8" stroke-width="1.5"/>
-                  <rect x="11" y="11" width="7" height="7" rx="1.5" stroke="#818cf8" stroke-width="1.5"/>
-                </svg>
-              </div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:rgba(129,140,248,0.1);color:#818cf8;border:1px solid rgba(129,140,248,0.2);white-space:nowrap;">Server</span>
-            </div>
-            <div style="flex:1;">
-              <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,0.92);margin-bottom:0.45rem;">Vector Tiles</h3>
-              <p style="font-size:0.85rem;color:rgba(255,255,255,0.45);line-height:1.6;">Live tile server integration with PostgreSQL and MBTiles</p>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.35rem;font-size:0.82rem;font-weight:600;color:#818cf8;">
-              Explore
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </a>
-
-      <%# Card 3: OGC Features %>
-      <a href={~p"/ogc"} style="text-decoration:none;" class="demo-card anim-fade-up delay-300">
-        <div style="padding:1px;border-radius:1rem;background:rgba(255,255,255,0.05);">
-          <div class="card-inner" style="background:rgba(8,12,28,0.90);border-radius:calc(1rem - 1px);padding:1.5rem;border:1px solid rgba(255,255,255,0.06);height:100%;display:flex;flex-direction:column;gap:1rem;transition:border-color 0.28s ease;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;">
-              <div style="width:42px;height:42px;border-radius:10px;background:rgba(52,211,153,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <circle cx="10" cy="10" r="8" stroke="#34d399" stroke-width="1.5"/>
-                  <path d="M2 10h16M10 2a14 14 0 0 1 0 16M10 2a14 14 0 0 0 0 16" stroke="#34d399" stroke-width="1.5"/>
-                </svg>
-              </div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:rgba(52,211,153,0.1);color:#34d399;border:1px solid rgba(52,211,153,0.2);white-space:nowrap;">Standards</span>
-            </div>
-            <div style="flex:1;">
-              <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,0.92);margin-bottom:0.45rem;">OGC Features</h3>
-              <p style="font-size:0.85rem;color:rgba(255,255,255,0.45);line-height:1.6;">OGC API Features conformance with real geographic data</p>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.35rem;font-size:0.82rem;font-weight:600;color:#34d399;">
-              Explore
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </a>
-
-      <%# Card 4: Deck.GL %>
-      <a href={~p"/deckgl"} style="text-decoration:none;" class="demo-card anim-fade-up delay-100">
-        <div style="padding:1px;border-radius:1rem;background:rgba(255,255,255,0.05);">
-          <div class="card-inner" style="background:rgba(8,12,28,0.90);border-radius:calc(1rem - 1px);padding:1.5rem;border:1px solid rgba(255,255,255,0.06);height:100%;display:flex;flex-direction:column;gap:1rem;transition:border-color 0.28s ease;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;">
-              <div style="width:42px;height:42px;border-radius:10px;background:rgba(251,146,60,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <path d="M10 3L3 7.5V13L10 17.5L17 13V7.5L10 3Z" stroke="#fb923c" stroke-width="1.5" stroke-linejoin="round"/>
-                  <path d="M10 3v14.5M3 7.5l7 4 7-4" stroke="#fb923c" stroke-width="1.5"/>
-                </svg>
-              </div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:rgba(251,146,60,0.1);color:#fb923c;border:1px solid rgba(251,146,60,0.2);white-space:nowrap;">Visualization</span>
-            </div>
-            <div style="flex:1;">
-              <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,0.92);margin-bottom:0.45rem;">Deck.GL Layers</h3>
-              <p style="font-size:0.85rem;color:rgba(255,255,255,0.45);line-height:1.6;">3D arcs, hexagons, and scatter plots using deck.gl</p>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.35rem;font-size:0.82rem;font-weight:600;color:#fb923c;">
-              Explore
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </a>
-
-      <%# Card 5: 3D Terrain %>
-      <a href={~p"/terrain"} style="text-decoration:none;" class="demo-card anim-fade-up delay-200">
-        <div style="padding:1px;border-radius:1rem;background:rgba(255,255,255,0.05);">
-          <div class="card-inner" style="background:rgba(8,12,28,0.90);border-radius:calc(1rem - 1px);padding:1.5rem;border:1px solid rgba(255,255,255,0.06);height:100%;display:flex;flex-direction:column;gap:1rem;transition:border-color 0.28s ease;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;">
-              <div style="width:42px;height:42px;border-radius:10px;background:rgba(251,146,60,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <path d="M2 16L7 8l4 5 3-4 4 7H2Z" stroke="#fb923c" stroke-width="1.5" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:rgba(251,146,60,0.1);color:#fb923c;border:1px solid rgba(251,146,60,0.2);white-space:nowrap;">Visualization</span>
-            </div>
-            <div style="flex:1;">
-              <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,0.92);margin-bottom:0.45rem;">3D Terrain</h3>
-              <p style="font-size:0.85rem;color:rgba(255,255,255,0.45);line-height:1.6;">Elevation rendering with DEM sources and hillshade</p>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.35rem;font-size:0.82rem;font-weight:600;color:#fb923c;">
-              Explore
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </a>
-
-      <%# Card 6: Heatmap %>
-      <a href={~p"/heatmap"} style="text-decoration:none;" class="demo-card anim-fade-up delay-300">
-        <div style="padding:1px;border-radius:1rem;background:rgba(255,255,255,0.05);">
-          <div class="card-inner" style="background:rgba(8,12,28,0.90);border-radius:calc(1rem - 1px);padding:1.5rem;border:1px solid rgba(255,255,255,0.06);height:100%;display:flex;flex-direction:column;gap:1rem;transition:border-color 0.28s ease;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;">
-              <div style="width:42px;height:42px;border-radius:10px;background:rgba(251,146,60,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <circle cx="10" cy="10" r="3" fill="#fb923c" fill-opacity="0.6"/>
-                  <circle cx="10" cy="10" r="6" stroke="#fb923c" stroke-width="1.5" stroke-opacity="0.4"/>
-                  <circle cx="10" cy="10" r="9" stroke="#fb923c" stroke-width="1" stroke-opacity="0.2"/>
-                </svg>
-              </div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:rgba(251,146,60,0.1);color:#fb923c;border:1px solid rgba(251,146,60,0.2);white-space:nowrap;">Visualization</span>
-            </div>
-            <div style="flex:1;">
-              <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,0.92);margin-bottom:0.45rem;">Heatmap</h3>
-              <p style="font-size:0.85rem;color:rgba(255,255,255,0.45);line-height:1.6;">Density visualization with adjustable radius and intensity</p>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.35rem;font-size:0.82rem;font-weight:600;color:#fb923c;">
-              Explore
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </a>
-
-      <%# Card 7: 3D Buildings %>
-      <a href={~p"/buildings"} style="text-decoration:none;" class="demo-card anim-fade-up delay-100">
-        <div style="padding:1px;border-radius:1rem;background:rgba(255,255,255,0.05);">
-          <div class="card-inner" style="background:rgba(8,12,28,0.90);border-radius:calc(1rem - 1px);padding:1.5rem;border:1px solid rgba(255,255,255,0.06);height:100%;display:flex;flex-direction:column;gap:1rem;transition:border-color 0.28s ease;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;">
-              <div style="width:42px;height:42px;border-radius:10px;background:rgba(251,146,60,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <rect x="3" y="7" width="6" height="10" stroke="#fb923c" stroke-width="1.5" stroke-linejoin="round"/>
-                  <rect x="11" y="4" width="6" height="13" stroke="#fb923c" stroke-width="1.5" stroke-linejoin="round"/>
-                  <path d="M2 17h16" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:rgba(251,146,60,0.1);color:#fb923c;border:1px solid rgba(251,146,60,0.2);white-space:nowrap;">Visualization</span>
-            </div>
-            <div style="flex:1;">
-              <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,0.92);margin-bottom:0.45rem;">3D Buildings</h3>
-              <p style="font-size:0.85rem;color:rgba(255,255,255,0.45);line-height:1.6;">Extruded building geometry with height and color controls</p>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.35rem;font-size:0.82rem;font-weight:600;color:#fb923c;">
-              Explore
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </a>
-
-      <%# Card 8: Markers & Filters %>
-      <a href={~p"/markers"} style="text-decoration:none;" class="demo-card anim-fade-up delay-200">
-        <div style="padding:1px;border-radius:1rem;background:rgba(255,255,255,0.05);">
-          <div class="card-inner" style="background:rgba(8,12,28,0.90);border-radius:calc(1rem - 1px);padding:1.5rem;border:1px solid rgba(255,255,255,0.06);height:100%;display:flex;flex-direction:column;gap:1rem;transition:border-color 0.28s ease;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;">
-              <div style="width:42px;height:42px;border-radius:10px;background:rgba(244,114,182,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <circle cx="5" cy="6" r="2" stroke="#f472b6" stroke-width="1.5"/>
-                  <circle cx="10" cy="11" r="2" stroke="#f472b6" stroke-width="1.5"/>
-                  <circle cx="15" cy="7" r="2" stroke="#f472b6" stroke-width="1.5"/>
-                  <path d="M3 14h14" stroke="#f472b6" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 2"/>
-                </svg>
-              </div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:rgba(244,114,182,0.1);color:#f472b6;border:1px solid rgba(244,114,182,0.2);white-space:nowrap;">Interactive</span>
-            </div>
-            <div style="flex:1;">
-              <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,0.92);margin-bottom:0.45rem;">Markers &amp; Filters</h3>
-              <p style="font-size:0.85rem;color:rgba(255,255,255,0.45);line-height:1.6;">Category-based marker management with real-time filtering</p>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.35rem;font-size:0.82rem;font-weight:600;color:#f472b6;">
-              Explore
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </a>
-
-      <%# Card 9: WebGL Particles %>
-      <a href={~p"/particles"} style="text-decoration:none;" class="demo-card anim-fade-up delay-300">
-        <div style="padding:1px;border-radius:1rem;background:rgba(255,255,255,0.05);">
-          <div class="card-inner" style="background:rgba(8,12,28,0.90);border-radius:calc(1rem - 1px);padding:1.5rem;border:1px solid rgba(255,255,255,0.06);height:100%;display:flex;flex-direction:column;gap:1rem;transition:border-color 0.28s ease;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;">
-              <div style="width:42px;height:42px;border-radius:10px;background:rgba(167,139,250,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <circle cx="4" cy="10" r="1.5" fill="#a78bfa"/>
-                  <circle cx="8" cy="5" r="1" fill="#a78bfa" fill-opacity="0.7"/>
-                  <circle cx="10" cy="14" r="1.5" fill="#a78bfa"/>
-                  <circle cx="14" cy="7" r="1" fill="#a78bfa" fill-opacity="0.7"/>
-                  <circle cx="16" cy="13" r="1.5" fill="#a78bfa"/>
-                  <circle cx="6" cy="16" r="1" fill="#a78bfa" fill-opacity="0.5"/>
-                  <circle cx="13" cy="3" r="0.75" fill="#a78bfa" fill-opacity="0.5"/>
-                </svg>
-              </div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.67rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:rgba(167,139,250,0.1);color:#a78bfa;border:1px solid rgba(167,139,250,0.2);white-space:nowrap;">Advanced</span>
-            </div>
-            <div style="flex:1;">
-              <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,0.92);margin-bottom:0.45rem;">WebGL Particles</h3>
-              <p style="font-size:0.85rem;color:rgba(255,255,255,0.45);line-height:1.6;">Custom vertex/fragment GLSL shader particle system</p>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.35rem;font-size:0.82rem;font-weight:600;color:#a78bfa;">
-              Explore
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </a>
-
-    </div>
-  </div>
-</section>
-
-<%# ── Footer ─────────────────────────────────────────────────────────────────── %>
-<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.06);padding:2.5rem 1.5rem;">
-  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1.5rem;">
-    <div style="display:flex;align-items:center;gap:0.6rem;">
-      <div style="width:20px;height:20px;border-radius:5px;background:linear-gradient(135deg,#22d3ee,#6366f1);display:flex;align-items:center;justify-content:center;">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-          <circle cx="6" cy="6" r="5" stroke="white" stroke-width="1.5"/>
-          <path d="M1 6h10M6 1a9 9 0 0 1 0 10M6 1a9 9 0 0 0 0 10" stroke="white" stroke-width="1"/>
-        </svg>
-      </div>
-      <span style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.6);">MaplibreX</span>
-      <span style="color:rgba(255,255,255,0.2);">&middot;</span>
-      <span style="font-size:0.82rem;color:rgba(255,255,255,0.35);">Built with Phoenix LiveView</span>
-    </div>
-
-    <div style="display:flex;align-items:center;gap:1.25rem;">
-      <a href={~p"/map"} style="font-size:0.82rem;color:rgba(255,255,255,0.35);text-decoration:none;transition:color 0.2s ease;" onmouseover="this.style.color='rgba(34,211,238,0.8)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">
-        Live Demo
-      </a>
-      <a href="#" style="font-size:0.82rem;color:rgba(255,255,255,0.35);text-decoration:none;transition:color 0.2s ease;" onmouseover="this.style.color='rgba(34,211,238,0.8)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">
+      <a href="https://github.com/roger120981/maplibrex" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.7rem 1.5rem;border-radius:9999px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.75);font-weight:500;font-size:0.875rem;text-decoration:none;transition:background 0.2s ease,border-color 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.08)';this.style.borderColor='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(255,255,255,0.12)'">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.506 0 12.303c0 5.445 3.435 10.043 8.205 11.674.6.107.825-.262.825-.585 0-.292-.015-1.261-.015-2.291C6 21.67 5.22 20.346 4.98 19.654c-.135-.354-.72-1.446-1.23-1.738-.42-.23-1.02-.8-.015-.815.945-.015 1.62.892 1.845 1.261 1.08 1.86 2.805 1.338 3.495 1.015.105-.8.42-1.338.765-1.645-2.67-.308-5.46-1.37-5.46-6.075 0-1.338.465-2.446 1.23-3.307-.12-.308-.54-1.569.12-3.26 0 0 1.005-.323 3.3 1.26.96-.276 1.98-.415 3-.415s2.04.139 3 .416c2.295-1.6 3.3-1.261 3.3-1.261.66 1.691.24 2.952.12 3.26.765.861 1.23 1.953 1.23 3.307 0 4.721-2.805 5.767-5.475 6.075.435.384.81 1.122.81 2.276 0 1.645-.015 2.968-.015 3.383 0 .323.225.707.825.585a12.047 12.047 0 0 0 5.919-4.489A12.536 12.536 0 0 0 24 12.304C24 5.505 18.63 0 12 0Z"/></svg>
         GitHub
       </a>
     </div>
   </div>
-</footer>
+
+  <%# ── Stats row ── %>
+  <div style="display:flex;justify-content:center;gap:0;margin-bottom:4rem;padding:0 1.5rem;">
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:1rem;display:flex;overflow:hidden;">
+      <%= for {label, value} <- [{"Componentes", "20+"}, {"Demos", "9"}, {"LiveView", "1.0"}, {"MapLibre GL", "4.x"}] do %>
+        <div style="padding:1rem 1.75rem;text-align:center;border-right:1px solid rgba(255,255,255,0.06);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:#22d3ee;line-height:1;"><%= value %></div>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.35);margin-top:0.3rem;letter-spacing:0.05em;"><%= label %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# ── Demos Grid ── %>
+  <div id="demos" style="padding:0 2rem 5rem;max-width:1100px;margin:0 auto;width:100%;">
+
+    <div style="margin-bottom:2.5rem;">
+      <p style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.3);margin-bottom:0.5rem;">Demos interactivos</p>
+      <h2 style="font-size:1.6rem;font-weight:700;color:rgba(255,255,255,0.92);letter-spacing:-0.02em;">Explora las capacidades</h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;">
+
+      <%# ── Card helper macro via inline ── %>
+      <%= for demo <- [
+        %{path: "/map",       label: "Core",           title: "Interactive Map",   desc: "Marcadores arrastrables, capas GeoJSON, cambio de estilos en tiempo real",            icon: "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"},
+        %{path: "/tiles",     label: "Server",         title: "Vector Tiles",      desc: "Renderizado de tiles vectoriales desde servidor local (localhost:4000) con PostgreSQL",  icon: "M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"},
+        %{path: "/ogc",       label: "Estándares",     title: "OGC Features",      desc: "Conformidad OGC API Features con datos geográficos reales desde el servidor propio",    icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"},
+        %{path: "/deckgl",    label: "Visualización",  title: "Deck.GL Layers",    desc: "ArcLayer 3D, HexagonLayer de densidad y ScatterplotLayer con deck.gl integrado",       icon: "M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"},
+        %{path: "/terrain",   label: "Visualización",  title: "3D Terrain",        desc: "Renderizado de elevación con fuentes DEM, hillshade y terreno extrudido hasta 3x",     icon: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"},
+        %{path: "/heatmap",   label: "Visualización",  title: "Heatmap",           desc: "500 puntos sísmicos en mapa de calor con radio, intensidad y opacidad ajustables",       icon: "M13 10V3L4 14h7v7l9-11h-7z"},
+        %{path: "/buildings", label: "Visualización",  title: "3D Buildings",      desc: "Edificios extrudados de Nueva York con esquemas de color y altura configurables",        icon: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"},
+        %{path: "/markers",   label: "Interactivo",    title: "Markers & Filters",  desc: "Marcadores por categoría con filtrado en tiempo real y arrastre para actualizar coords", icon: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"},
+        %{path: "/particles", label: "Avanzado",       title: "WebGL Particles",   desc: "Sistema de 1.000 partículas animadas con shaders GLSL propios (vertex + fragment)",    icon: "M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"}
+      ] do %>
+        <a href={demo.path} class="demo-card">
+          <div style="padding:1px;border-radius:1.125rem;background:rgba(255,255,255,0.04);">
+            <div class="card-border" style="background:rgba(8,12,28,0.9);border-radius:1rem;border:1px solid rgba(255,255,255,0.07);padding:1.5rem;height:100%;display:flex;flex-direction:column;gap:1rem;transition:border-color 0.25s ease;">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
+                <div style="width:40px;height:40px;flex-shrink:0;border-radius:0.625rem;background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.12);display:flex;align-items:center;justify-content:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(34,211,238,0.8)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d={demo.icon}/>
+                  </svg>
+                </div>
+                <span style="font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(34,211,238,0.6);background:rgba(34,211,238,0.06);border:1px solid rgba(34,211,238,0.12);border-radius:9999px;padding:0.2rem 0.6rem;white-space:nowrap;">
+                  <%= demo.label %>
+                </span>
+              </div>
+              <div style="flex:1;">
+                <h3 style="font-size:0.975rem;font-weight:700;color:rgba(255,255,255,0.92);margin:0 0 0.4rem;letter-spacing:-0.01em;"><%= demo.title %></h3>
+                <p style="font-size:0.8rem;color:rgba(255,255,255,0.45);line-height:1.55;margin:0;"><%= demo.desc %></p>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:flex-end;">
+                <span class="card-arrow" style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.3);letter-spacing:0.02em;">
+                  Abrir demo →
+                </span>
+              </div>
+            </div>
+          </div>
+        </a>
+      <% end %>
+
+    </div>
+  </div>
+
+  <%# ── Footer ── %>
+  <div style="margin-top:auto;padding:1.5rem 2rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:gap;">
+    <span style="font-size:0.75rem;color:rgba(255,255,255,0.25);">
+      MaplibreX &mdash; Built with Phoenix LiveView
+    </span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.2);">
+      localhost:4003
+    </span>
+  </div>
+
+</div>
