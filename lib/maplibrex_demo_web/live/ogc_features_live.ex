@@ -330,6 +330,11 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_event("marker:clicked", _params, socket) do
+    {:noreply, socket}
+  end
+
   # Private functions
 
   defp fetch_features do
