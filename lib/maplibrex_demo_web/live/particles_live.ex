@@ -460,48 +460,55 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
           socket
       end
 
-    {:noreply, socket}
+    {:noreply, push_uniforms(socket)}
   end
 
   @impl true
   def handle_event("update_color_r", %{"value" => value}, socket) do
     r = parse_float(value, 0.5)
     [_old_r, g, b] = socket.assigns.color
-    {:noreply, assign(socket, :color, [r, g, b])}
+    socket = assign(socket, :color, [r, g, b])
+    {:noreply, push_uniforms(socket)}
   end
 
   @impl true
   def handle_event("update_color_g", %{"value" => value}, socket) do
     g = parse_float(value, 0.5)
     [r, _old_g, b] = socket.assigns.color
-    {:noreply, assign(socket, :color, [r, g, b])}
+    socket = assign(socket, :color, [r, g, b])
+    {:noreply, push_uniforms(socket)}
   end
 
   @impl true
   def handle_event("update_color_b", %{"value" => value}, socket) do
     b = parse_float(value, 0.5)
     [r, g, _old_b] = socket.assigns.color
-    {:noreply, assign(socket, :color, [r, g, b])}
+    socket = assign(socket, :color, [r, g, b])
+    {:noreply, push_uniforms(socket)}
   end
 
   @impl true
   def handle_event("update_opacity", %{"value" => value}, socket) do
-    {:noreply, assign(socket, :opacity, parse_float(value, 0.8))}
+    socket = assign(socket, :opacity, parse_float(value, 0.8))
+    {:noreply, push_uniforms(socket)}
   end
 
   @impl true
   def handle_event("update_point_size", %{"value" => value}, socket) do
-    {:noreply, assign(socket, :point_size, parse_float(value, 3.0))}
+    socket = assign(socket, :point_size, parse_float(value, 3.0))
+    {:noreply, push_uniforms(socket)}
   end
 
   @impl true
   def handle_event("update_speed", %{"value" => value}, socket) do
-    {:noreply, assign(socket, :speed, parse_float(value, 1.0))}
+    socket = assign(socket, :speed, parse_float(value, 1.0))
+    {:noreply, push_uniforms(socket)}
   end
 
   @impl true
   def handle_event("update_turbulence", %{"value" => value}, socket) do
-    {:noreply, assign(socket, :turbulence, parse_float(value, 0.3))}
+    socket = assign(socket, :turbulence, parse_float(value, 0.3))
+    {:noreply, push_uniforms(socket)}
   end
 
   @impl true
@@ -509,7 +516,8 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
     angle_deg = parse_float(value, 0.0)
     angle_rad = angle_deg * :math.pi() / 180.0
     direction = [:math.cos(angle_rad), :math.sin(angle_rad)]
-    {:noreply, assign(socket, :flow_direction, direction)}
+    socket = assign(socket, :flow_direction, direction)
+    {:noreply, push_uniforms(socket)}
   end
 
   @impl true
@@ -549,6 +557,25 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
   end
 
   # Helper Functions
+
+  # Push current shader uniforms to the hook via Phoenix event channel.
+  # This is more reliable than relying on DOM-patching (updated() hook callback)
+  # because it uses the LiveView websocket directly.
+  defp push_uniforms(socket) do
+    a = socket.assigns
+
+    push_event(socket, "update_uniforms_particle-layer", %{
+      uniforms: %{
+        "u_color" => a.color,
+        "u_opacity" => a.opacity,
+        "u_point_size" => a.point_size,
+        "u_time" => 0.0,
+        "u_speed" => a.speed,
+        "u_flow_direction" => a.flow_direction,
+        "u_turbulence" => a.turbulence
+      }
+    })
+  end
 
   defp parse_float(value, default) do
     case Float.parse(value) do
