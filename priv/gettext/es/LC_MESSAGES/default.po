@@ -1,0 +1,443 @@
+## `msgid`s in this file come from POT (.pot) files.
+## Do not add, change, or remove `msgid`s manually.
+
+msgid ""
+msgstr ""
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+## -- Common --
+
+msgid "Back to Demos"
+msgstr "← Volver a Demos"
+
+msgid "Language"
+msgstr "Idioma"
+
+## -- Home page --
+
+msgid "Component Library · v0.1"
+msgstr "Librería de Componentes · v0.1"
+
+msgid "Interactive Maps for Phoenix LiveView"
+msgstr "Mapas Interactivos para Phoenix LiveView"
+
+msgid "MaplibreX wraps MapLibre GL JS as native LiveView components. Real-time maps, zero custom JavaScript."
+msgstr "MaplibreX envuelve MapLibre GL JS como componentes nativos de LiveView. Mapas en tiempo real, sin JavaScript personalizado."
+
+msgid "Explore Demos"
+msgstr "Explorar Demos"
+
+msgid "Components"
+msgstr "Componentes"
+
+msgid "Interactive demos"
+msgstr "Demos interactivos"
+
+msgid "Explore the capabilities"
+msgstr "Explora las capacidades"
+
+msgid "Open demo →"
+msgstr "Abrir demo →"
+
+msgid "Built with Phoenix LiveView"
+msgstr "Creado con Phoenix LiveView"
+
+## -- Demo card labels --
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Server"
+msgstr "Servidor"
+
+msgid "Standards"
+msgstr "Estándares"
+
+msgid "Visualization"
+msgstr "Visualización"
+
+msgid "Interactive"
+msgstr "Interactivo"
+
+msgid "Advanced"
+msgstr "Avanzado"
+
+## -- Demo card titles --
+
+msgid "Interactive Map"
+msgstr "Mapa Interactivo"
+
+msgid "Vector Tiles"
+msgstr "Tiles Vectoriales"
+
+msgid "OGC Features"
+msgstr "Características OGC"
+
+msgid "Deck.GL Layers"
+msgstr "Capas Deck.GL"
+
+msgid "3D Terrain"
+msgstr "Terreno 3D"
+
+msgid "Heatmap"
+msgstr "Mapa de Calor"
+
+msgid "3D Buildings"
+msgstr "Edificios 3D"
+
+msgid "Markers & Filters"
+msgstr "Marcadores y Filtros"
+
+msgid "WebGL Particles"
+msgstr "Partículas WebGL"
+
+## -- Demo card descriptions --
+
+msgid "Draggable markers, GeoJSON layers, real-time style switching"
+msgstr "Marcadores arrastrables, capas GeoJSON, cambio de estilos en tiempo real"
+
+msgid "Vector tile rendering from a local server (localhost:4000) with PostgreSQL"
+msgstr "Renderizado de tiles vectoriales desde servidor local (localhost:4000) con PostgreSQL"
+
+msgid "OGC API Features conformance with real geographic data from your own server"
+msgstr "Conformidad OGC API Features con datos geográficos reales desde el servidor propio"
+
+msgid "3D ArcLayer, HexagonLayer density and ScatterplotLayer with integrated deck.gl"
+msgstr "ArcLayer 3D, HexagonLayer de densidad y ScatterplotLayer con deck.gl integrado"
+
+msgid "Elevation rendering with DEM sources, hillshade and extruded terrain up to 3x"
+msgstr "Renderizado de elevación con fuentes DEM, hillshade y terreno extruido hasta 3x"
+
+msgid "500 seismic points on a heatmap with adjustable radius, intensity and opacity"
+msgstr "500 puntos sísmicos en mapa de calor con radio, intensidad y opacidad ajustables"
+
+msgid "Extruded New York buildings with configurable color schemes and height"
+msgstr "Edificios extruados de Nueva York con esquemas de color y altura configurables"
+
+msgid "Category markers with real-time filtering and drag to update coordinates"
+msgstr "Marcadores por categoría con filtrado en tiempo real y arrastre para actualizar coords"
+
+msgid "System of 1,000 animated particles with custom GLSL shaders (vertex + fragment)"
+msgstr "Sistema de 1.000 partículas animadas con shaders GLSL propios (vertex + fragment)"
+
+## -- Control panel common --
+
+msgid "Map Style"
+msgstr "Estilo de Mapa"
+
+msgid "Navigation"
+msgstr "Navegación"
+
+msgid "Layers"
+msgstr "Capas"
+
+msgid "Markers"
+msgstr "Marcadores"
+
+msgid "Add Marker"
+msgstr "Agregar Marcador"
+
+msgid "Clear All"
+msgstr "Limpiar Todo"
+
+msgid "GeoJSON Layer"
+msgstr "Capa GeoJSON"
+
+msgid "Visible"
+msgstr "Visible"
+
+msgid "Hidden"
+msgstr "Oculta"
+
+msgid "Reset"
+msgstr "Restablecer"
+
+msgid "Location"
+msgstr "Ubicación"
+
+msgid "Zoom"
+msgstr "Zoom"
+
+msgid "Center"
+msgstr "Centro"
+
+msgid "Opacity"
+msgstr "Opacidad"
+
+msgid "Style"
+msgstr "Estilo"
+
+## -- Buildings --
+
+msgid "Extruded NYC building geometry with real-time height and color controls"
+msgstr "Geometría de edificios de NYC extruida con controles de altura y color en tiempo real"
+
+msgid "Color Scheme"
+msgstr "Esquema de Color"
+
+msgid "By Height"
+msgstr "Por Altura"
+
+msgid "Uniform Blue"
+msgstr "Azul Uniforme"
+
+msgid "By Type"
+msgstr "Por Tipo"
+
+msgid "Height Exaggeration"
+msgstr "Exageración de Altura"
+
+msgid "Height"
+msgstr "Altura"
+
+## -- Deck.GL --
+
+msgid "3D ArcLayer, HexagonLayer, and ScatterplotLayer visualizations"
+msgstr "Visualizaciones ArcLayer 3D, HexagonLayer y ScatterplotLayer"
+
+msgid "Flight Connections"
+msgstr "Conexiones de Vuelo"
+
+msgid "Earthquake Density"
+msgstr "Densidad Sísmica"
+
+msgid "City Points"
+msgstr "Puntos de Ciudad"
+
+msgid "About"
+msgstr "Acerca de"
+
+msgid "ArcLayer renders animated arcs connecting source and target positions. Ideal for visualizing flight routes, migrations, or connections between locations."
+msgstr "ArcLayer renderiza arcos animados conectando posiciones de origen y destino. Ideal para visualizar rutas aéreas, migraciones o conexiones entre lugares."
+
+msgid "HexagonLayer aggregates points into hexagonal bins with 3D elevation. Perfect for showing density and spatial distribution patterns."
+msgstr "HexagonLayer agrega puntos en celdas hexagonales con elevación 3D. Perfecto para mostrar densidad y patrones de distribución espacial."
+
+msgid "ScatterplotLayer efficiently renders thousands of points with customizable size and color. Ideal for showing individual geographic locations."
+msgstr "ScatterplotLayer renderiza eficientemente miles de puntos con tamaño y color personalizables. Ideal para mostrar ubicaciones geográficas individuales."
+
+msgid "Layer"
+msgstr "Capa"
+
+msgid "Render"
+msgstr "Renderizado"
+
+## -- Heatmap --
+
+msgid "500-point earthquake density visualization across the US"
+msgstr "Visualización de densidad de 500 puntos sísmicos en EE.UU."
+
+msgid "Radius"
+msgstr "Radio"
+
+msgid "Intensity"
+msgstr "Intensidad"
+
+msgid "Gradient"
+msgstr "Gradiente"
+
+msgid "Low"
+msgstr "Bajo"
+
+msgid "High"
+msgstr "Alto"
+
+msgid "Points"
+msgstr "Puntos"
+
+msgid "500 points"
+msgstr "500 puntos"
+
+## -- Markers & Filters --
+
+msgid "Category-based marker management with drag-to-update positioning"
+msgstr "Gestión de marcadores por categoría con actualización de posición por arrastre"
+
+msgid "Draggable Marker"
+msgstr "Marcador Arrastrable"
+
+msgid "Current Position"
+msgstr "Posición Actual"
+
+msgid "Filter Category"
+msgstr "Filtrar Categoría"
+
+msgid "All"
+msgstr "Todos"
+
+msgid "Restaurants"
+msgstr "Restaurantes"
+
+msgid "Parks"
+msgstr "Parques"
+
+msgid "Museums"
+msgstr "Museos"
+
+msgid "Legend"
+msgstr "Leyenda"
+
+msgid "Draggable"
+msgstr "Arrastrable"
+
+msgid "City"
+msgstr "Ciudad"
+
+msgid "Filter"
+msgstr "Filtro"
+
+msgid "Showing"
+msgstr "Mostrando"
+
+## -- OGC Features --
+
+msgid "OGC API Features conformance test against localhost:4000"
+msgstr "Prueba de conformidad OGC API Features contra localhost:4000"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Actions"
+msgstr "Acciones"
+
+msgid "Test Results"
+msgstr "Resultados de Prueba"
+
+msgid "Loading features..."
+msgstr "Cargando características..."
+
+msgid "features loaded"
+msgstr "características cargadas"
+
+msgid "Reload Features"
+msgstr "Recargar Características"
+
+msgid "Fly to Tokyo"
+msgstr "Volar a Tokio"
+
+msgid "Fly to New York"
+msgstr "Volar a Nueva York"
+
+msgid "Fly to %{city}"
+msgstr "Volar a %{city}"
+
+msgid "Pass"
+msgstr "Correcto"
+
+msgid "Fail"
+msgstr "Fallo"
+
+msgid "Region"
+msgstr "Región"
+
+msgid "Features"
+msgstr "Características"
+
+msgid "loading"
+msgstr "cargando"
+
+msgid "error"
+msgstr "error"
+
+msgid "ready"
+msgstr "listo"
+
+## -- WebGL Particles --
+
+msgid "1,000 particles animated via custom GLSL vertex & fragment shaders"
+msgstr "1.000 partículas animadas con shaders GLSL personalizados (vertex y fragment)"
+
+msgid "Preset"
+msgstr "Preset"
+
+msgid "Ocean Currents"
+msgstr "Corrientes Oceánicas"
+
+msgid "Wind Flow"
+msgstr "Flujo de Viento"
+
+msgid "Lava Flow"
+msgstr "Flujo de Lava"
+
+msgid "FPS"
+msgstr "FPS"
+
+msgid "Particle Color"
+msgstr "Color de Partícula"
+
+msgid "Flow Parameters"
+msgstr "Parámetros de Flujo"
+
+msgid "Speed"
+msgstr "Velocidad"
+
+msgid "Turbulence"
+msgstr "Turbulencia"
+
+msgid "Direction"
+msgstr "Dirección"
+
+msgid "Size"
+msgstr "Tamaño"
+
+msgid "Particles"
+msgstr "Partículas"
+
+msgid "Ocean"
+msgstr "Océano"
+
+msgid "Wind"
+msgstr "Viento"
+
+msgid "Lava"
+msgstr "Lava"
+
+## -- Terrain --
+
+msgid "Elevation rendering with DEM sources"
+msgstr "Renderizado de elevación con fuentes DEM"
+
+msgid "Terrain"
+msgstr "Terreno"
+
+msgid "Enabled"
+msgstr "Habilitado"
+
+msgid "Disabled"
+msgstr "Deshabilitado"
+
+msgid "Exaggeration"
+msgstr "Exageración"
+
+msgid "Pitch"
+msgstr "Inclinación"
+
+msgid "Bearing"
+msgstr "Orientación"
+
+## -- Vector Tiles --
+
+msgid "Live tile rendering from localhost:4000"
+msgstr "Renderizado de tiles en vivo desde localhost:4000"
+
+msgid "Vector Layers"
+msgstr "Capas Vectoriales"
+
+msgid "Server Links"
+msgstr "Enlaces del Servidor"
+
+msgid "Style JSON"
+msgstr "Style JSON"
+
+msgid "Auto-generated with all sources"
+msgstr "Auto-generado con todas las fuentes"
+
+msgid "Dark theme with glow effects"
+msgstr "Tema oscuro con efectos de brillo"
+
+msgid "Minimal light theme"
+msgstr "Tema claro minimalista"
+
+msgid "With expressions and advanced styles"
+msgstr "Con expresiones y estilos avanzados"

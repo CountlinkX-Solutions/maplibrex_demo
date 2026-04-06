@@ -1,5 +1,6 @@
 defmodule MaplibrexDemoWeb.ParticlesLive do
   use MaplibrexDemoWeb, :live_view
+  on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
   import MaplibreX.Components
 
   # Animated Particle System Vertex Shader
@@ -127,13 +128,15 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
       />
 
       <%!-- Back nav pill --%>
-      <div class="absolute top-[110px] left-4 z-20">
-        <a
-          href="/"
-          class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 no-underline"
-        >
-          &larr; Demos
+      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
+        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
+          {gettext("Back to Demos")}
         </a>
+        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
+          <a href={"/locale?locale=en&return_to=/particles"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
+          <span class="text-white/20 text-[10px]">|</span>
+          <a href={"/locale?locale=es&return_to=/particles"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
+        </div>
       </div>
 
       <%!-- Control Panel --%>
@@ -141,9 +144,9 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
         <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
           <%!-- Header --%>
           <div>
-            <h2 class="text-sm font-semibold text-white tracking-wide">WebGL Particles</h2>
+            <h2 class="text-sm font-semibold text-white tracking-wide">{gettext("WebGL Particles")}</h2>
             <p class="text-[11px] text-white/40 mt-0.5 leading-relaxed">
-              1,000 particles animated via custom GLSL vertex &amp; fragment shaders
+              {gettext("1,000 particles animated via custom GLSL vertex & fragment shaders")}
             </p>
           </div>
 
@@ -152,7 +155,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
           <%!-- Preset --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Preset
+              {gettext("Preset")}
             </p>
             <div class="space-y-1.5">
               <button
@@ -166,7 +169,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
                       "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
                 }
               >
-                Ocean Currents
+                {gettext("Ocean Currents")}
               </button>
               <button
                 phx-click="set_preset"
@@ -179,7 +182,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
                       "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
                 }
               >
-                Wind Flow
+                {gettext("Wind Flow")}
               </button>
               <button
                 phx-click="set_preset"
@@ -192,7 +195,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
                       "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
                 }
               >
-                Lava Flow
+                {gettext("Lava Flow")}
               </button>
             </div>
           </div>
@@ -201,7 +204,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
 
           <%!-- FPS Counter --%>
           <div class="bg-white/[0.04] border border-white/[0.07] rounded-xl p-3 flex items-center justify-between">
-            <p class="text-[9px] uppercase tracking-widest text-white/35">FPS</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("FPS")}</p>
             <p class="font-mono text-sm text-cyan-300 font-semibold">{@fps}</p>
           </div>
 
@@ -210,7 +213,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
           <%!-- Particle Color --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-3">
-              Particle Color
+              {gettext("Particle Color")}
             </p>
             <%!-- Color preview swatch --%>
             <div
@@ -284,12 +287,12 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
           <%!-- Flow Parameters --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-3">
-              Flow Parameters
+              {gettext("Flow Parameters")}
             </p>
             <div class="space-y-3">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">Speed</p>
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Speed")}</p>
                   <p class="font-mono text-[10px] text-white/50">{Float.round(@speed, 1)}x</p>
                 </div>
                 <form phx-change="update_speed">
@@ -306,7 +309,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
               </div>
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">Turbulence</p>
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Turbulence")}</p>
                   <p class="font-mono text-[10px] text-white/50">{Float.round(@turbulence, 2)}</p>
                 </div>
                 <form phx-change="update_turbulence">
@@ -323,7 +326,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
               </div>
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">Direction</p>
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Direction")}</p>
                   <p class="font-mono text-[10px] text-white/50">
                     {trunc(atan2(@flow_direction) * 180 / :math.pi())}deg
                   </p>
@@ -351,12 +354,12 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
           <%!-- Render --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-3">
-              Render
+              {gettext("Render")}
             </p>
             <div class="space-y-3">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">Opacity</p>
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Opacity")}</p>
                   <p class="font-mono text-[10px] text-white/50">{trunc(@opacity * 100)}%</p>
                 </div>
                 <form phx-change="update_opacity">
@@ -373,7 +376,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
               </div>
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">Size</p>
+                  <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Size")}</p>
                   <p class="font-mono text-[10px] text-white/50">
                     {Float.round(@point_size, 1)}px
                   </p>
@@ -399,25 +402,25 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
       <div class="absolute bottom-4 left-4 z-20">
         <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">FPS</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("FPS")}</p>
             <p class="font-mono text-xs text-cyan-300/90">{@fps}</p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Preset</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Preset")}</p>
             <p class="font-mono text-xs text-cyan-300/90">
               {case @preset do
-                "ocean_currents" -> "Ocean"
-                "wind_flow" -> "Wind"
-                "lava_flow" -> "Lava"
+                "ocean_currents" -> gettext("Ocean")
+                "wind_flow" -> gettext("Wind")
+                "lava_flow" -> gettext("Lava")
                 other -> other
               end}
             </p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Particles</p>
-            <p class="font-mono text-xs text-cyan-300/90">1,000</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Particles")}</p>
+            <p class="font-mono text-xs text-cyan-300/90">{gettext("1,000")}</p>
           </div>
         </div>
       </div>

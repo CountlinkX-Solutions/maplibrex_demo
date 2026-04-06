@@ -1,5 +1,6 @@
 defmodule MaplibrexDemoWeb.BuildingsLive do
   use MaplibrexDemoWeb, :live_view
+  on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
   import MaplibreX.Components
 
   @impl true
@@ -48,10 +49,15 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
       />
 
       <%!-- Back nav --%>
-      <div class="absolute top-[110px] left-4 z-20">
+      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
         <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
-          &larr; Demos
+          {gettext("Back to Demos")}
         </a>
+        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
+          <a href={"/locale?locale=en&return_to=/buildings"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
+          <span class="text-white/20 text-[10px]">|</span>
+          <a href={"/locale?locale=es&return_to=/buildings"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
+        </div>
       </div>
 
       <%!-- Control Panel --%>
@@ -60,14 +66,14 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
           <%!-- Header --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">MaplibreX</p>
-            <h2 class="text-base font-semibold text-white/95">3D Buildings</h2>
-            <p class="text-xs text-white/50 mt-1 leading-relaxed">Extruded NYC building geometry with real-time height and color controls</p>
+            <h2 class="text-base font-semibold text-white/95">{gettext("3D Buildings")}</h2>
+            <p class="text-xs text-white/50 mt-1 leading-relaxed">{gettext("Extruded NYC building geometry with real-time height and color controls")}</p>
           </div>
           <div class="h-px bg-white/[0.06]"></div>
 
           <%!-- Color Scheme --%>
           <div class="space-y-2">
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">Color Scheme</p>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">{gettext("Color Scheme")}</p>
             <div class="space-y-1.5">
               <button
                 phx-click="set_color_scheme"
@@ -76,7 +82,7 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
                   do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
                   else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
               >
-                By Height
+                {gettext("By Height")}
               </button>
               <button
                 phx-click="set_color_scheme"
@@ -85,7 +91,7 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
                   do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
                   else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
               >
-                Uniform Blue
+                {gettext("Uniform Blue")}
               </button>
               <button
                 phx-click="set_color_scheme"
@@ -94,7 +100,7 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
                   do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
                   else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
               >
-                By Type
+                {gettext("By Type")}
               </button>
             </div>
           </div>
@@ -104,7 +110,7 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
           <%!-- Height Exaggeration slider --%>
           <div class="space-y-2">
             <div class="flex justify-between items-center">
-              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Height Exaggeration</p>
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Height Exaggeration")}</p>
               <span class="font-mono text-xs text-cyan-300/80">{Float.round(@height_exaggeration * 1.0, 1)}x</span>
             </div>
             <form phx-change="update_height">
@@ -129,7 +135,7 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
           <%!-- Opacity slider --%>
           <div class="space-y-2">
             <div class="flex justify-between items-center">
-              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Opacity</p>
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Opacity")}</p>
               <span class="font-mono text-xs text-cyan-300/80">{trunc(@opacity * 100)}%</span>
             </div>
             <form phx-change="update_opacity">
@@ -155,22 +161,22 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
       <div class="absolute bottom-4 left-4 z-20">
         <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Location</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Location")}</p>
             <p class="font-mono text-xs text-cyan-300/90">40.71, -74.01</p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Zoom</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Zoom")}</p>
             <p class="font-mono text-xs text-cyan-300/90">14</p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Height</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Height")}</p>
             <p class="font-mono text-xs text-cyan-300/90">{Float.round(@height_exaggeration * 1.0, 1)}x</p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Opacity</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Opacity")}</p>
             <p class="font-mono text-xs text-cyan-300/90">{trunc(@opacity * 100)}%</p>
           </div>
         </div>

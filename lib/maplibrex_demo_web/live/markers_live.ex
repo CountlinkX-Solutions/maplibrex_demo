@@ -1,5 +1,6 @@
 defmodule MaplibrexDemoWeb.MarkersLive do
   use MaplibrexDemoWeb, :live_view
+  on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
   import MaplibreX.Components
 
   @impl true
@@ -61,13 +62,15 @@ defmodule MaplibrexDemoWeb.MarkersLive do
       <% end %>
 
       <%!-- Back nav pill --%>
-      <div class="absolute top-[110px] left-4 z-20">
-        <a
-          href="/"
-          class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 no-underline"
-        >
-          &larr; Demos
+      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
+        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
+          {gettext("Back to Demos")}
         </a>
+        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
+          <a href={"/locale?locale=en&return_to=/markers"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
+          <span class="text-white/20 text-[10px]">|</span>
+          <a href={"/locale?locale=es&return_to=/markers"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
+        </div>
       </div>
 
       <%!-- Control Panel --%>
@@ -75,9 +78,9 @@ defmodule MaplibrexDemoWeb.MarkersLive do
         <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
           <%!-- Header --%>
           <div>
-            <h2 class="text-sm font-semibold text-white tracking-wide">Markers &amp; Filters</h2>
+            <h2 class="text-sm font-semibold text-white tracking-wide">{gettext("Markers & Filters")}</h2>
             <p class="text-[11px] text-white/40 mt-0.5 leading-relaxed">
-              Category-based marker management with drag-to-update positioning
+              {gettext("Category-based marker management with drag-to-update positioning")}
             </p>
           </div>
 
@@ -86,10 +89,10 @@ defmodule MaplibrexDemoWeb.MarkersLive do
           <%!-- Draggable Marker Position --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Draggable Marker
+              {gettext("Draggable Marker")}
             </p>
             <div class="bg-white/[0.04] border border-white/[0.07] rounded-xl p-3 space-y-1.5">
-              <p class="text-[9px] uppercase tracking-widest text-white/35">Current Position</p>
+              <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Current Position")}</p>
               <div class="flex gap-3">
                 <div>
                   <p class="text-[9px] text-white/40">LNG</p>
@@ -113,7 +116,7 @@ defmodule MaplibrexDemoWeb.MarkersLive do
           <%!-- Filter Category --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Filter Category
+              {gettext("Filter Category")}
             </p>
             <div class="space-y-1.5">
               <button
@@ -128,7 +131,7 @@ defmodule MaplibrexDemoWeb.MarkersLive do
                 }
               >
                 <span class="flex items-center justify-between">
-                  <span>All</span>
+                  <span>{gettext("All")}</span>
                   <span class="font-mono text-[11px] opacity-60">{length(@markers)}</span>
                 </span>
               </button>
@@ -144,7 +147,7 @@ defmodule MaplibrexDemoWeb.MarkersLive do
                 }
               >
                 <span class="flex items-center justify-between">
-                  <span>Restaurants</span>
+                  <span>{gettext("Restaurants")}</span>
                   <span class="font-mono text-[11px] opacity-60">
                     {count_by_category(@markers, "restaurant")}
                   </span>
@@ -162,7 +165,7 @@ defmodule MaplibrexDemoWeb.MarkersLive do
                 }
               >
                 <span class="flex items-center justify-between">
-                  <span>Parks</span>
+                  <span>{gettext("Parks")}</span>
                   <span class="font-mono text-[11px] opacity-60">
                     {count_by_category(@markers, "park")}
                   </span>
@@ -180,7 +183,7 @@ defmodule MaplibrexDemoWeb.MarkersLive do
                 }
               >
                 <span class="flex items-center justify-between">
-                  <span>Museums</span>
+                  <span>{gettext("Museums")}</span>
                   <span class="font-mono text-[11px] opacity-60">
                     {count_by_category(@markers, "museum")}
                   </span>
@@ -194,24 +197,24 @@ defmodule MaplibrexDemoWeb.MarkersLive do
           <%!-- Legend --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Legend
+              {gettext("Legend")}
             </p>
             <div class="space-y-2">
               <div class="flex items-center gap-2.5">
                 <div class="w-2.5 h-2.5 rounded-full bg-[#FF6B6B] flex-shrink-0"></div>
-                <span class="text-xs text-white/55">Draggable</span>
+                <span class="text-xs text-white/55">{gettext("Draggable")}</span>
               </div>
               <div class="flex items-center gap-2.5">
                 <div class="w-2.5 h-2.5 rounded-full bg-[#FF9F43] flex-shrink-0"></div>
-                <span class="text-xs text-white/55">Restaurants</span>
+                <span class="text-xs text-white/55">{gettext("Restaurants")}</span>
               </div>
               <div class="flex items-center gap-2.5">
                 <div class="w-2.5 h-2.5 rounded-full bg-[#48C774] flex-shrink-0"></div>
-                <span class="text-xs text-white/55">Parks</span>
+                <span class="text-xs text-white/55">{gettext("Parks")}</span>
               </div>
               <div class="flex items-center gap-2.5">
                 <div class="w-2.5 h-2.5 rounded-full bg-[#8E44AD] flex-shrink-0"></div>
-                <span class="text-xs text-white/55">Museums</span>
+                <span class="text-xs text-white/55">{gettext("Museums")}</span>
               </div>
             </div>
           </div>
@@ -222,22 +225,22 @@ defmodule MaplibrexDemoWeb.MarkersLive do
       <div class="absolute bottom-4 left-4 z-20">
         <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">City</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("City")}</p>
             <p class="font-mono text-xs text-cyan-300/90">NYC</p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Zoom</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Zoom")}</p>
             <p class="font-mono text-xs text-cyan-300/90">12</p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Filter</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Filter")}</p>
             <p class="font-mono text-xs text-cyan-300/90">{@filter_category}</p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Showing</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Showing")}</p>
             <p class="font-mono text-xs text-cyan-300/90">
               {length(filtered_markers(assigns))} / {length(@markers) + 1}
             </p>

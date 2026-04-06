@@ -1,5 +1,6 @@
 defmodule MaplibrexDemoWeb.TerrainLive do
   use MaplibrexDemoWeb, :live_view
+  on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
   import MaplibreX.Components
 
   @impl true
@@ -73,13 +74,15 @@ defmodule MaplibrexDemoWeb.TerrainLive do
       <% end %>
 
       <%!-- Back navigation pill --%>
-      <div class="absolute top-[110px] left-4 z-20">
-        <a
-          href="/"
-          class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/75 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
-        >
-          ← MaplibreX Demos
+      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
+        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
+          {gettext("Back to Demos")}
         </a>
+        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
+          <a href={"/locale?locale=en&return_to=/terrain"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
+          <span class="text-white/20 text-[10px]">|</span>
+          <a href={"/locale?locale=es&return_to=/terrain"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
+        </div>
       </div>
 
       <%!-- Control Panel --%>
@@ -90,9 +93,9 @@ defmodule MaplibrexDemoWeb.TerrainLive do
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">
               MaplibreX
             </p>
-            <h2 class="text-base font-semibold text-white">3D Terrain</h2>
+            <h2 class="text-base font-semibold text-white">{gettext("3D Terrain")}</h2>
             <p class="text-xs text-white/50 mt-1">
-              Elevation rendering with DEM sources
+              {gettext("Elevation rendering with DEM sources")}
             </p>
           </div>
 
@@ -101,7 +104,7 @@ defmodule MaplibrexDemoWeb.TerrainLive do
           <%!-- Terrain toggle --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Terrain
+              {gettext("Terrain")}
             </p>
             <button
               phx-click="toggle_terrain"
@@ -111,9 +114,9 @@ defmodule MaplibrexDemoWeb.TerrainLive do
                   else: "w-full text-left px-3 py-2.5 rounded-lg text-sm bg-white/[0.05] border border-white/[0.07] text-white/60 transition-all duration-300"
               }
             >
-              <span class="font-medium">3D Terrain</span>
+              <span class="font-medium">{gettext("3D Terrain")}</span>
               <span class="ml-2 text-xs opacity-70">
-                {if @terrain_enabled, do: "Enabled", else: "Disabled"}
+                {if @terrain_enabled, do: gettext("Enabled"), else: gettext("Disabled")}
               </span>
             </button>
           </div>
@@ -124,7 +127,7 @@ defmodule MaplibrexDemoWeb.TerrainLive do
           <div>
             <div class="flex items-center justify-between mb-2">
               <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">
-                Exaggeration
+                {gettext("Exaggeration")}
               </p>
               <span class="font-mono text-xs text-cyan-300">
                 {Float.round(@exaggeration * 1.0, 1)}x
@@ -152,7 +155,7 @@ defmodule MaplibrexDemoWeb.TerrainLive do
           <%!-- Location buttons --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Location
+              {gettext("Location")}
             </p>
             <div class="flex gap-2">
               <button
@@ -176,22 +179,22 @@ defmodule MaplibrexDemoWeb.TerrainLive do
       <div class="absolute bottom-4 left-4 z-20">
         <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Pitch</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Pitch")}</p>
             <p class="font-mono text-xs text-cyan-300">72°</p>
           </div>
           <div class="w-px h-6 bg-white/10" />
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Bearing</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Bearing")}</p>
             <p class="font-mono text-xs text-cyan-300">0°</p>
           </div>
           <div class="w-px h-6 bg-white/10" />
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Zoom</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Zoom")}</p>
             <p class="font-mono text-xs text-cyan-300">12</p>
           </div>
           <div class="w-px h-6 bg-white/10" />
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Exaggeration</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Exaggeration")}</p>
             <p class="font-mono text-xs text-cyan-300">{Float.round(@exaggeration * 1.0, 1)}x</p>
           </div>
         </div>

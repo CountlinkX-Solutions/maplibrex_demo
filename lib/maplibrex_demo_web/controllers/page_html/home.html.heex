@@ -48,9 +48,17 @@
     <span style="font-size:1.05rem;font-weight:700;letter-spacing:-0.01em;color:rgba(255,255,255,0.95);">
       Maplibre<span style="color:#22d3ee;">X</span>
     </span>
-    <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);letter-spacing:0.08em;">
-      Phoenix LiveView × MapLibre GL
-    </span>
+    <div style="display:flex;align-items:center;gap:1.5rem;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);letter-spacing:0.08em;">
+        Phoenix LiveView × MapLibre GL
+      </span>
+      <%# Language switcher %>
+      <div style="display:flex;align-items:center;gap:0.35rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:9999px;padding:0.25rem 0.65rem;">
+        <a href="/locale?locale=en&return_to=/" style={"font-size:0.65rem;font-weight:#{if @locale == "en", do: "700", else: "500"};color:#{if @locale == "en", do: "#22d3ee", else: "rgba(255,255,255,0.35)"};text-decoration:none;"}>EN</a>
+        <span style="color:rgba(255,255,255,0.15);font-size:0.65rem;">|</span>
+        <a href="/locale?locale=es&return_to=/" style={"font-size:0.65rem;font-weight:#{if @locale == "es", do: "700", else: "500"};color:#{if @locale == "es", do: "#22d3ee", else: "rgba(255,255,255,0.35)"};text-decoration:none;"}>ES</a>
+      </div>
+    </div>
   </nav>
 
   <%# ── Hero ── %>
@@ -58,25 +66,24 @@
 
     <div class="anim-1" style="margin-bottom:1.25rem;">
       <span style="display:inline-block;padding:0.3rem 0.9rem;border-radius:9999px;border:1px solid rgba(34,211,238,0.3);background:rgba(34,211,238,0.06);font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(34,211,238,0.85);">
-        Component Library · v0.1
+        <%= gettext("Component Library · v0.1") %>
       </span>
     </div>
 
     <h1 class="anim-2" style="font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.1;letter-spacing:-0.03em;color:rgba(255,255,255,0.95);max-width:700px;margin:0 0 1.25rem;">
-      Interactive Maps<br>
+      <%= gettext("Interactive Maps for Phoenix LiveView") |> String.split(" for ") |> List.first() %><br>
       <span style="background:linear-gradient(135deg,#22d3ee,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
         for Phoenix LiveView
       </span>
     </h1>
 
     <p class="anim-3" style="font-size:1.05rem;color:rgba(255,255,255,0.5);max-width:520px;line-height:1.65;margin:0 0 2.5rem;">
-      MaplibreX wraps MapLibre GL JS as native LiveView components.
-      Real-time maps, zero custom JavaScript.
+      <%= gettext("MaplibreX wraps MapLibre GL JS as native LiveView components. Real-time maps, zero custom JavaScript.") %>
     </p>
 
     <div class="anim-4" style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;">
       <a href="#demos" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.7rem 1.5rem;border-radius:9999px;background:linear-gradient(135deg,rgba(34,211,238,0.9),rgba(99,102,241,0.9));color:#050810;font-weight:700;font-size:0.875rem;text-decoration:none;transition:opacity 0.2s ease;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-        Explorar Demos
+        <%= gettext("Explore Demos") %>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
       </a>
       <a href="https://github.com/roger120981/maplibrex" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.7rem 1.5rem;border-radius:9999px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.75);font-weight:500;font-size:0.875rem;text-decoration:none;transition:background 0.2s ease,border-color 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.08)';this.style.borderColor='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(255,255,255,0.12)'">
@@ -89,7 +96,7 @@
   <%# ── Stats row ── %>
   <div style="display:flex;justify-content:center;gap:0;margin-bottom:4rem;padding:0 1.5rem;">
     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:1rem;display:flex;overflow:hidden;">
-      <%= for {label, value} <- [{"Componentes", "20+"}, {"Demos", "9"}, {"LiveView", "1.0"}, {"MapLibre GL", "4.x"}] do %>
+      <%= for {label, value} <- [{gettext("Components"), "20+"}, {"Demos", "9"}, {"LiveView", "1.0"}, {"MapLibre GL", "4.x"}] do %>
         <div style="padding:1rem 1.75rem;text-align:center;border-right:1px solid rgba(255,255,255,0.06);">
           <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:#22d3ee;line-height:1;"><%= value %></div>
           <div style="font-size:0.7rem;color:rgba(255,255,255,0.35);margin-top:0.3rem;letter-spacing:0.05em;"><%= label %></div>
@@ -102,23 +109,22 @@
   <div id="demos" style="padding:0 2rem 5rem;max-width:1100px;margin:0 auto;width:100%;">
 
     <div style="margin-bottom:2.5rem;">
-      <p style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.3);margin-bottom:0.5rem;">Demos interactivos</p>
-      <h2 style="font-size:1.6rem;font-weight:700;color:rgba(255,255,255,0.92);letter-spacing:-0.02em;">Explora las capacidades</h2>
+      <p style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.3);margin-bottom:0.5rem;"><%= gettext("Interactive demos") %></p>
+      <h2 style="font-size:1.6rem;font-weight:700;color:rgba(255,255,255,0.92);letter-spacing:-0.02em;"><%= gettext("Explore the capabilities") %></h2>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;">
 
-      <%# ── Card helper macro via inline ── %>
       <%= for demo <- [
-        %{path: "/map",       label: "Core",           title: "Interactive Map",   desc: "Marcadores arrastrables, capas GeoJSON, cambio de estilos en tiempo real",            icon: "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"},
-        %{path: "/tiles",     label: "Server",         title: "Vector Tiles",      desc: "Renderizado de tiles vectoriales desde servidor local (localhost:4000) con PostgreSQL",  icon: "M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"},
-        %{path: "/ogc",       label: "Estándares",     title: "OGC Features",      desc: "Conformidad OGC API Features con datos geográficos reales desde el servidor propio",    icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"},
-        %{path: "/deckgl",    label: "Visualización",  title: "Deck.GL Layers",    desc: "ArcLayer 3D, HexagonLayer de densidad y ScatterplotLayer con deck.gl integrado",       icon: "M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"},
-        %{path: "/terrain",   label: "Visualización",  title: "3D Terrain",        desc: "Renderizado de elevación con fuentes DEM, hillshade y terreno extrudido hasta 3x",     icon: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"},
-        %{path: "/heatmap",   label: "Visualización",  title: "Heatmap",           desc: "500 puntos sísmicos en mapa de calor con radio, intensidad y opacidad ajustables",       icon: "M13 10V3L4 14h7v7l9-11h-7z"},
-        %{path: "/buildings", label: "Visualización",  title: "3D Buildings",      desc: "Edificios extrudados de Nueva York con esquemas de color y altura configurables",        icon: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"},
-        %{path: "/markers",   label: "Interactivo",    title: "Markers & Filters",  desc: "Marcadores por categoría con filtrado en tiempo real y arrastre para actualizar coords", icon: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"},
-        %{path: "/particles", label: "Avanzado",       title: "WebGL Particles",   desc: "Sistema de 1.000 partículas animadas con shaders GLSL propios (vertex + fragment)",    icon: "M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"}
+        %{path: "/map",       label: gettext("Core"),          title: gettext("Interactive Map"),   desc: gettext("Draggable markers, GeoJSON layers, real-time style switching"),            icon: "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"},
+        %{path: "/tiles",     label: gettext("Server"),        title: gettext("Vector Tiles"),      desc: gettext("Vector tile rendering from a local server (localhost:4000) with PostgreSQL"),  icon: "M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"},
+        %{path: "/ogc",       label: gettext("Standards"),     title: gettext("OGC Features"),      desc: gettext("OGC API Features conformance with real geographic data from your own server"),    icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"},
+        %{path: "/deckgl",    label: gettext("Visualization"), title: gettext("Deck.GL Layers"),    desc: gettext("3D ArcLayer, HexagonLayer density and ScatterplotLayer with integrated deck.gl"),       icon: "M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"},
+        %{path: "/terrain",   label: gettext("Visualization"), title: gettext("3D Terrain"),        desc: gettext("Elevation rendering with DEM sources, hillshade and extruded terrain up to 3x"),     icon: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"},
+        %{path: "/heatmap",   label: gettext("Visualization"), title: gettext("Heatmap"),           desc: gettext("500 seismic points on a heatmap with adjustable radius, intensity and opacity"),       icon: "M13 10V3L4 14h7v7l9-11h-7z"},
+        %{path: "/buildings", label: gettext("Visualization"), title: gettext("3D Buildings"),      desc: gettext("Extruded New York buildings with configurable color schemes and height"),        icon: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"},
+        %{path: "/markers",   label: gettext("Interactive"),   title: gettext("Markers & Filters"),  desc: gettext("Category markers with real-time filtering and drag to update coordinates"), icon: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"},
+        %{path: "/particles", label: gettext("Advanced"),      title: gettext("WebGL Particles"),   desc: gettext("System of 1,000 animated particles with custom GLSL shaders (vertex + fragment)"),    icon: "M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"}
       ] do %>
         <a href={demo.path} class="demo-card">
           <div style="padding:1px;border-radius:1.125rem;background:rgba(255,255,255,0.04);">
@@ -139,7 +145,7 @@
               </div>
               <div style="display:flex;align-items:center;justify-content:flex-end;">
                 <span class="card-arrow" style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.3);letter-spacing:0.02em;">
-                  Abrir demo →
+                  <%= gettext("Open demo →") %>
                 </span>
               </div>
             </div>
@@ -153,7 +159,7 @@
   <%# ── Footer ── %>
   <div style="margin-top:auto;padding:1.5rem 2rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:gap;">
     <span style="font-size:0.75rem;color:rgba(255,255,255,0.25);">
-      MaplibreX &mdash; Built with Phoenix LiveView
+      MaplibreX &mdash; <%= gettext("Built with Phoenix LiveView") %>
     </span>
     <span style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.2);">
       localhost:4003

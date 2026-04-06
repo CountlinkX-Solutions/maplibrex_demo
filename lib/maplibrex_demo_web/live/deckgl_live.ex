@@ -1,5 +1,6 @@
 defmodule MaplibrexDemoWeb.DeckglLive do
   use MaplibrexDemoWeb, :live_view
+  on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
   import MaplibreX.Components
 
   @impl true
@@ -39,10 +40,15 @@ defmodule MaplibrexDemoWeb.DeckglLive do
       />
 
       <%!-- Back nav --%>
-      <div class="absolute top-[110px] left-4 z-20">
+      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
         <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
-          &larr; Demos
+          {gettext("Back to Demos")}
         </a>
+        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
+          <a href={"/locale?locale=en&return_to=/deckgl"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
+          <span class="text-white/20 text-[10px]">|</span>
+          <a href={"/locale?locale=es&return_to=/deckgl"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
+        </div>
       </div>
 
       <%!-- Control Panel --%>
@@ -51,14 +57,14 @@ defmodule MaplibrexDemoWeb.DeckglLive do
           <%!-- Header --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">MaplibreX</p>
-            <h2 class="text-base font-semibold text-white/95">Deck.GL Layers</h2>
-            <p class="text-xs text-white/50 mt-1 leading-relaxed">3D ArcLayer, HexagonLayer, and ScatterplotLayer visualizations</p>
+            <h2 class="text-base font-semibold text-white/95">{gettext("Deck.GL Layers")}</h2>
+            <p class="text-xs text-white/50 mt-1 leading-relaxed">{gettext("3D ArcLayer, HexagonLayer, and ScatterplotLayer visualizations")}</p>
           </div>
           <div class="h-px bg-white/[0.06]"></div>
 
           <%!-- Visualization selector --%>
           <div class="space-y-2">
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">Visualization</p>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">{gettext("Visualization")}</p>
             <div class="space-y-1.5">
               <button
                 phx-click="change_viz"
@@ -67,7 +73,7 @@ defmodule MaplibrexDemoWeb.DeckglLive do
                   do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
                   else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
               >
-                <div class="font-medium">Flight Connections</div>
+                <div class="font-medium">{gettext("Flight Connections")}</div>
                 <div class="text-[10px] opacity-60 mt-0.5">ArcLayer &mdash; {length(@flight_data)} routes</div>
               </button>
               <button
@@ -77,7 +83,7 @@ defmodule MaplibrexDemoWeb.DeckglLive do
                   do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
                   else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
               >
-                <div class="font-medium">Earthquake Density</div>
+                <div class="font-medium">{gettext("Earthquake Density")}</div>
                 <div class="text-[10px] opacity-60 mt-0.5">HexagonLayer &mdash; {length(@earthquake_data)} events</div>
               </button>
               <button
@@ -87,7 +93,7 @@ defmodule MaplibrexDemoWeb.DeckglLive do
                   do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
                   else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
               >
-                <div class="font-medium">City Points</div>
+                <div class="font-medium">{gettext("City Points")}</div>
                 <div class="text-[10px] opacity-60 mt-0.5">ScatterplotLayer &mdash; {length(@city_data)} cities</div>
               </button>
             </div>
@@ -97,15 +103,15 @@ defmodule MaplibrexDemoWeb.DeckglLive do
 
           <%!-- Description for current visualization --%>
           <div class="space-y-1.5">
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">About</p>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">{gettext("About")}</p>
             <%= if @current_viz == "arcs" do %>
-              <p class="text-xs text-white/50 leading-relaxed">ArcLayer renders animated arcs connecting source and target positions. Ideal for visualizing flight routes, migrations, or connections between locations.</p>
+              <p class="text-xs text-white/50 leading-relaxed">{gettext("ArcLayer renders animated arcs connecting source and target positions. Ideal for visualizing flight routes, migrations, or connections between locations.")}</p>
             <% end %>
             <%= if @current_viz == "hexagons" do %>
-              <p class="text-xs text-white/50 leading-relaxed">HexagonLayer aggregates points into hexagonal bins with 3D elevation. Perfect for showing density and spatial distribution patterns.</p>
+              <p class="text-xs text-white/50 leading-relaxed">{gettext("HexagonLayer aggregates points into hexagonal bins with 3D elevation. Perfect for showing density and spatial distribution patterns.")}</p>
             <% end %>
             <%= if @current_viz == "scatter" do %>
-              <p class="text-xs text-white/50 leading-relaxed">ScatterplotLayer efficiently renders thousands of points with customizable size and color. Ideal for showing individual geographic locations.</p>
+              <p class="text-xs text-white/50 leading-relaxed">{gettext("ScatterplotLayer efficiently renders thousands of points with customizable size and color. Ideal for showing individual geographic locations.")}</p>
             <% end %>
           </div>
         </div>
@@ -115,7 +121,7 @@ defmodule MaplibrexDemoWeb.DeckglLive do
       <div class="absolute bottom-4 left-4 z-20">
         <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Layer</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Layer")}</p>
             <p class="font-mono text-xs text-cyan-300/90">
               <%= case @current_viz do %>
                 <% "arcs" -> %>ArcLayer
@@ -127,7 +133,7 @@ defmodule MaplibrexDemoWeb.DeckglLive do
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Render</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Render")}</p>
             <p class="font-mono text-xs text-cyan-300/90">3D</p>
           </div>
         </div>

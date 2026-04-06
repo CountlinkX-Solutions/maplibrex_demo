@@ -1,5 +1,6 @@
 defmodule MaplibrexDemoWeb.OgcFeaturesLive do
   use MaplibrexDemoWeb, :live_view
+  on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
   import MaplibreX.Components
 
   @server_url "http://localhost:4000"
@@ -66,13 +67,15 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
       <% end %>
 
       <%!-- Back nav pill --%>
-      <div class="absolute top-[110px] left-4 z-20">
-        <a
-          href="/"
-          class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 no-underline"
-        >
-          &larr; Demos
+      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
+        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
+          {gettext("Back to Demos")}
         </a>
+        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
+          <a href={"/locale?locale=en&return_to=/ogc"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
+          <span class="text-white/20 text-[10px]">|</span>
+          <a href={"/locale?locale=es&return_to=/ogc"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
+        </div>
       </div>
 
       <%!-- Control Panel --%>
@@ -80,9 +83,9 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
         <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
           <%!-- Header --%>
           <div>
-            <h2 class="text-sm font-semibold text-white tracking-wide">OGC Features</h2>
+            <h2 class="text-sm font-semibold text-white tracking-wide">{gettext("OGC Features")}</h2>
             <p class="text-[11px] text-white/40 mt-0.5 leading-relaxed">
-              OGC API Features conformance test against localhost:4000
+              {gettext("OGC API Features conformance test against localhost:4000")}
             </p>
           </div>
 
@@ -91,13 +94,13 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
           <%!-- Status --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Status
+              {gettext("Status")}
             </p>
             <%= if @loading do %>
               <div class="flex items-center gap-2 text-sm text-white/60">
                 <div class="w-3 h-3 rounded-full border border-cyan-400/50 border-t-cyan-400 animate-spin">
                 </div>
-                Loading features...
+                {gettext("Loading features...")}
               </div>
             <% end %>
             <%= if @error do %>
@@ -107,7 +110,7 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
             <% end %>
             <%= if !@loading and is_nil(@error) do %>
               <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500/10 border border-emerald-400/25 text-emerald-300">
-                {@feature_count} features loaded
+                {@feature_count} {gettext("features loaded")}
               </span>
             <% end %>
           </div>
@@ -117,26 +120,26 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
           <%!-- Actions --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Actions
+              {gettext("Actions")}
             </p>
             <div class="space-y-1.5">
               <button
                 phx-click="reload_features"
                 class="w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
               >
-                Reload Features
+                {gettext("Reload Features")}
               </button>
               <button
                 onclick="document.getElementById('ogc-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [139.74, 35.68], zoom: 10, duration: 1200}}))"
                 class="w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
               >
-                Fly to Tokyo
+                {gettext("Fly to Tokyo")}
               </button>
               <button
                 onclick="document.getElementById('ogc-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-73.99, 40.72], zoom: 10, duration: 1200}}))"
                 class="w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
               >
-                Fly to New York
+                {gettext("Fly to New York")}
               </button>
             </div>
           </div>
@@ -146,7 +149,7 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
             <div class="h-px bg-white/[0.06]"></div>
             <div>
               <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-                Test Results
+                {gettext("Test Results")}
               </p>
               <div class="space-y-2">
                 <%= for city <- @test_cities do %>
@@ -155,17 +158,17 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
                       <span class="text-xs text-white/80 font-medium">{city.name}</span>
                       <%= if city.correct do %>
                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500/10 border border-emerald-400/25 text-emerald-300">
-                          Pass
+                          {gettext("Pass")}
                         </span>
                       <% else %>
                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-red-500/10 border border-red-400/25 text-red-300">
-                          Fail
+                          {gettext("Fail")}
                         </span>
                       <% end %>
                     </div>
                     <div class="flex gap-3 text-[9px]">
                       <div>
-                        <p class="text-white/30 uppercase tracking-widest">Server</p>
+                        <p class="text-white/30 uppercase tracking-widest">{gettext("Server")}</p>
                         <p class="font-mono text-white/55">
                           [{Float.round(Enum.at(city.coords, 0), 2)}, {Float.round(
                             Enum.at(city.coords, 1),
@@ -175,7 +178,7 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
                       </div>
                       <div class="w-px bg-white/10"></div>
                       <div>
-                        <p class="text-white/30 uppercase tracking-widest">Region</p>
+                        <p class="text-white/30 uppercase tracking-widest">{gettext("Region")}</p>
                         <p class="font-mono text-white/55">{city.expected.region}</p>
                       </div>
                     </div>
@@ -183,7 +186,7 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
                       onclick={"document.getElementById('ogc-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [#{Enum.at(city.coords, 0)}, #{Enum.at(city.coords, 1)}], zoom: 10, duration: 1200}}))"}
                       class="w-full text-left px-2 py-1.5 rounded-lg text-[10px] text-white/50 hover:text-white/80 bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.05] hover:border-white/[0.10] transition-all duration-300"
                     >
-                      Fly to {city.name}
+                      {gettext("Fly to %{city}", city: city.name)}
                     </button>
                   </div>
                 <% end %>
@@ -196,7 +199,7 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
           <%!-- Server --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Server
+              {gettext("Server")}
             </p>
             <p class="font-mono text-[10px] text-white/50 break-all">{@server_url}</p>
           </div>
@@ -207,17 +210,17 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
       <div class="absolute bottom-4 left-4 z-20">
         <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Features</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Features")}</p>
             <p class="font-mono text-xs text-cyan-300/90">{@feature_count}</p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Status</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Status")}</p>
             <p class="font-mono text-xs text-cyan-300/90">
               {cond do
-                @loading -> "loading"
-                @error -> "error"
-                true -> "ready"
+                @loading -> gettext("loading")
+                @error -> gettext("error")
+                true -> gettext("ready")
               end}
             </p>
           </div>

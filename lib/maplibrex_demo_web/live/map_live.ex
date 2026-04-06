@@ -1,5 +1,6 @@
 defmodule MaplibrexDemoWeb.MapLive do
   use MaplibrexDemoWeb, :live_view
+  on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
   import MaplibreX.Components
 
   @impl true
@@ -113,13 +114,18 @@ defmodule MaplibrexDemoWeb.MapLive do
       <% end %>
 
       <%!-- Back navigation pill --%>
-      <div class="absolute top-[110px] left-4 z-20">
+      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
         <a
           href="/"
           class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/75 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
         >
-          ← MaplibreX Demos
+          {gettext("Back to Demos")}
         </a>
+        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
+          <a href={"/locale?locale=en&return_to=/map"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
+          <span class="text-white/20 text-[10px]">|</span>
+          <a href={"/locale?locale=es&return_to=/map"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
+        </div>
       </div>
 
       <%!-- Control Panel --%>
@@ -130,9 +136,9 @@ defmodule MaplibrexDemoWeb.MapLive do
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">
               MaplibreX
             </p>
-            <h2 class="text-base font-semibold text-white">Interactive Map</h2>
+            <h2 class="text-base font-semibold text-white">{gettext("Interactive Map")}</h2>
             <p class="text-xs text-white/50 mt-1">
-              Markers, GeoJSON layers, real-time events
+              {gettext("Markers, GeoJSON layers, real-time events")}
             </p>
           </div>
 
@@ -141,7 +147,7 @@ defmodule MaplibrexDemoWeb.MapLive do
           <%!-- Map Style --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Map Style
+              {gettext("Map Style")}
             </p>
             <div class="space-y-1">
               <%= for style <- @map_styles do %>
@@ -166,7 +172,7 @@ defmodule MaplibrexDemoWeb.MapLive do
           <%!-- Navigation --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Navigation
+              {gettext("Navigation")}
             </p>
             <div class="flex gap-2">
               <button
@@ -185,7 +191,7 @@ defmodule MaplibrexDemoWeb.MapLive do
                 onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-74.5, 40], zoom: 9, duration: 1500}}))"
                 class="flex-1 px-3 py-2 rounded-lg text-xs text-white/70 bg-white/[0.05] hover:bg-white/[0.10] border border-white/[0.07] transition-all duration-300 text-center"
               >
-                Reset
+                {gettext("Reset")}
               </button>
             </div>
           </div>
@@ -195,7 +201,7 @@ defmodule MaplibrexDemoWeb.MapLive do
           <%!-- Layers --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Layers
+              {gettext("Layers")}
             </p>
             <button
               phx-click="toggle_geojson"
@@ -205,9 +211,9 @@ defmodule MaplibrexDemoWeb.MapLive do
                   else: "w-full text-left px-3 py-2.5 rounded-lg text-sm bg-white/[0.05] border border-white/[0.07] text-white/60 transition-all duration-300"
               }
             >
-              <span class="font-medium">GeoJSON Layer</span>
+              <span class="font-medium">{gettext("GeoJSON Layer")}</span>
               <span class="ml-2 text-xs opacity-70">
-                {if @show_geojson, do: "Visible", else: "Hidden"}
+                {if @show_geojson, do: gettext("Visible"), else: gettext("Hidden")}
               </span>
             </button>
           </div>
@@ -217,20 +223,20 @@ defmodule MaplibrexDemoWeb.MapLive do
           <%!-- Markers --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              Markers
+              {gettext("Markers")}
             </p>
             <div class="flex gap-2">
               <button
                 phx-click="add_marker"
                 class="flex-1 px-3 py-2 rounded-lg text-xs text-white/70 bg-white/[0.05] hover:bg-white/[0.10] border border-white/[0.07] transition-all duration-300 text-center"
               >
-                Add Marker
+                {gettext("Add Marker")}
               </button>
               <button
                 phx-click="clear_markers"
                 class="flex-1 px-3 py-2 rounded-lg text-xs text-white/70 bg-white/[0.05] hover:bg-white/[0.10] border border-white/[0.07] transition-all duration-300 text-center"
               >
-                Clear All
+                {gettext("Clear All")}
               </button>
             </div>
           </div>
@@ -241,7 +247,7 @@ defmodule MaplibrexDemoWeb.MapLive do
       <div class="absolute bottom-4 left-4 z-20">
         <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Center</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Center")}</p>
             <p class="font-mono text-xs text-cyan-300">
               {Float.round(Enum.at(@current_center, 0) * 1.0, 3)},
               {Float.round(Enum.at(@current_center, 1) * 1.0, 3)}
@@ -249,14 +255,14 @@ defmodule MaplibrexDemoWeb.MapLive do
           </div>
           <div class="w-px h-6 bg-white/10" />
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Zoom</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Zoom")}</p>
             <p class="font-mono text-xs text-cyan-300">
               {Float.round(@current_zoom * 1.0, 1)}
             </p>
           </div>
           <div class="w-px h-6 bg-white/10" />
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Markers</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Markers")}</p>
             <p class="font-mono text-xs text-cyan-300">{length(@markers)}</p>
           </div>
         </div>

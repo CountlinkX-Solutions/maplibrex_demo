@@ -1,5 +1,6 @@
 defmodule MaplibrexDemoWeb.HeatmapLive do
   use MaplibrexDemoWeb, :live_view
+  on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
   import MaplibreX.Components
 
   @impl true
@@ -94,10 +95,15 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
       />
 
       <%!-- Back nav --%>
-      <div class="absolute top-[110px] left-4 z-20">
+      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
         <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
-          &larr; Demos
+          {gettext("Back to Demos")}
         </a>
+        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
+          <a href={"/locale?locale=en&return_to=/heatmap"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
+          <span class="text-white/20 text-[10px]">|</span>
+          <a href={"/locale?locale=es&return_to=/heatmap"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
+        </div>
       </div>
 
       <%!-- Control Panel --%>
@@ -106,15 +112,15 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
           <%!-- Header --%>
           <div>
             <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">MaplibreX</p>
-            <h2 class="text-base font-semibold text-white/95">Heatmap</h2>
-            <p class="text-xs text-white/50 mt-1 leading-relaxed">500-point earthquake density visualization across the US</p>
+            <h2 class="text-base font-semibold text-white/95">{gettext("Heatmap")}</h2>
+            <p class="text-xs text-white/50 mt-1 leading-relaxed">{gettext("500-point earthquake density visualization across the US")}</p>
           </div>
           <div class="h-px bg-white/[0.06]"></div>
 
           <%!-- Radius slider --%>
           <div class="space-y-2">
             <div class="flex justify-between items-center">
-              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Radius</p>
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Radius")}</p>
               <span class="font-mono text-xs text-cyan-300/80">{@radius}px</span>
             </div>
             <form phx-change="update_radius">
@@ -139,7 +145,7 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
           <%!-- Intensity slider --%>
           <div class="space-y-2">
             <div class="flex justify-between items-center">
-              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Intensity</p>
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Intensity")}</p>
               <span class="font-mono text-xs text-cyan-300/80">{Float.round(@intensity * 1.0, 1)}x</span>
             </div>
             <form phx-change="update_intensity">
@@ -164,7 +170,7 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
           <%!-- Opacity slider --%>
           <div class="space-y-2">
             <div class="flex justify-between items-center">
-              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Opacity</p>
+              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Opacity")}</p>
               <span class="font-mono text-xs text-cyan-300/80">{trunc(@opacity * 100)}%</span>
             </div>
             <form phx-change="update_opacity">
@@ -188,11 +194,11 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
 
           <%!-- Gradient legend --%>
           <div class="space-y-2">
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">Gradient</p>
+            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Gradient")}</p>
             <div class="h-2 rounded-full" style="background: linear-gradient(to right, rgba(33,102,172,0), rgb(103,169,207), rgb(209,229,240), rgb(253,219,199), rgb(239,138,98), rgb(178,24,43));"></div>
             <div class="flex justify-between text-[9px] text-white/25">
-              <span>Low</span>
-              <span>High</span>
+              <span>{gettext("Low")}</span>
+              <span>{gettext("High")}</span>
             </div>
           </div>
         </div>
@@ -202,17 +208,17 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
       <div class="absolute bottom-4 left-4 z-20">
         <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Points</p>
-            <p class="font-mono text-xs text-cyan-300/90">500 points</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Points")}</p>
+            <p class="font-mono text-xs text-cyan-300/90">{gettext("500 points")}</p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Radius</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Radius")}</p>
             <p class="font-mono text-xs text-cyan-300/90">{@radius}px</p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">Intensity</p>
+            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Intensity")}</p>
             <p class="font-mono text-xs text-cyan-300/90">{Float.round(@intensity * 1.0, 1)}x</p>
           </div>
         </div>
