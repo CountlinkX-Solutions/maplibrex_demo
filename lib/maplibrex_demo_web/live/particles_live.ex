@@ -62,14 +62,10 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    # Setup timer for animation (60fps)
-    if connected?(socket) do
-      :timer.send_interval(16, self(), :tick)
-    end
-
+    # Animation is fully client-side via requestAnimationFrame / triggerRepaint in the hook.
+    # The server only pushes uniforms when the user changes sliders.
     socket =
       socket
-      |> assign(:time, 0.0)
       |> assign(:preset, "ocean_currents")
       |> assign(:color, [0.2, 0.6, 0.9])
       |> assign(:opacity, 0.8)
@@ -77,8 +73,6 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
       |> assign(:speed, 1.0)
       |> assign(:flow_direction, [1.0, 0.0])
       |> assign(:turbulence, 0.3)
-      |> assign(:fps, 60)
-      |> assign(:frame_count, 0)
 
     {:ok, socket}
   end
@@ -120,7 +114,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
           "u_color" => @color,
           "u_opacity" => @opacity,
           "u_point_size" => @point_size,
-          "u_time" => @time,
+          "u_time" => 0.0,
           "u_speed" => @speed,
           "u_flow_direction" => @flow_direction,
           "u_turbulence" => @turbulence
@@ -198,14 +192,6 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
                 {gettext("Lava Flow")}
               </button>
             </div>
-          </div>
-
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- FPS Counter --%>
-          <div class="bg-white/[0.04] border border-white/[0.07] rounded-xl p-3 flex items-center justify-between">
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("FPS")}</p>
-            <p class="font-mono text-sm text-cyan-300 font-semibold">{@fps}</p>
           </div>
 
           <div class="h-px bg-white/[0.06]"></div>
@@ -403,7 +389,7 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
         <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
           <div>
             <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("FPS")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">{@fps}</p>
+            <p class="font-mono text-xs text-cyan-300/90">60</p>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
@@ -435,42 +421,6 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
   end
 
   # Event Handlers
-
-  @impl true
-  def handle_info(:tick, socket) do
-    new_time = socket.assigns.time + 0.016
-    frame_count = socket.assigns.frame_count + 1
-
-    # Calculate FPS every 30 frames
-    fps =
-      if rem(frame_count, 30) == 0 do
-        60
-      else
-        socket.assigns.fps
-      end
-
-    socket = socket |> assign(:time, new_time) |> assign(:frame_count, frame_count) |> assign(:fps, fps)
-
-    # Push uniform updates to the hook
-    push_uniforms(socket)
-
-    {:noreply, socket}
-  end
-
-  # Helper to push uniform updates to the JS hook
-  defp push_uniforms(socket) do
-    uniforms = %{
-      "u_color" => socket.assigns.color,
-      "u_opacity" => socket.assigns.opacity,
-      "u_point_size" => socket.assigns.point_size,
-      "u_time" => socket.assigns.time,
-      "u_speed" => socket.assigns.speed,
-      "u_flow_direction" => socket.assigns.flow_direction,
-      "u_turbulence" => socket.assigns.turbulence
-    }
-
-    Phoenix.LiveView.push_event(socket, "update_uniforms_particle-layer", %{uniforms: uniforms})
-  end
 
   @impl true
   def handle_event("set_preset", %{"preset" => preset}, socket) do
