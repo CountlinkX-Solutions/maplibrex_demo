@@ -1,27 +1,51 @@
 defmodule MaplibrexDemoWeb.TilesLive do
+  @moduledoc """
+  Vector tiles served by a separate tile server.
+
+  Unlike the other demos, this page depends on something outside the demo
+  application: the sibling `tileserver` project, configured via
+  `:tile_server_url` (override with `TILE_SERVER_URL`). The server is probed on
+  mount; when it is not reachable the page falls back to a public basemap and
+  says so, rather than rendering a blank map with no explanation.
+  """
   use MaplibrexDemoWeb, :live_view
   on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
+
   import MaplibreX.Components
 
-  @server_url "http://localhost:4000"
+  @center [-74.5, 40]
+  @zoom 2
+
+  @probe_timeout_ms 2_000
 
   @impl true
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(:server_url, @server_url)
+      |> assign(:server_url, server_url())
+      |> assign(:server_status, :checking)
       |> assign(:current_style, "default")
-      |> assign(:current_style_url, "#{@server_url}/styles/default.json")
+      |> assign(:center, @center)
+      |> assign(:zoom, @zoom)
+      |> assign(:current_center, @center)
+      |> assign(:current_zoom, @zoom)
       |> assign(:available_styles, [
-        %{id: "default", name: "Default", description: gettext("Auto-generated with all sources")},
+        %{
+          id: "default",
+          name: "Default",
+          description: gettext("Auto-generated with all sources")
+        },
         %{id: "dark", name: "Dark", description: gettext("Dark theme with glow effects")},
         %{id: "light", name: "Light", description: gettext("Minimal light theme")},
-        %{id: "advanced", name: "Advanced", description: gettext("With expressions and advanced styles")}
+        %{
+          id: "advanced",
+          name: "Advanced",
+          description: gettext("With expressions and advanced styles")
+        }
       ])
-      |> assign(:current_center, [-74.5, 40])
-      |> assign(:current_zoom, 2)
-      |> assign(:server_status, :unknown)
-      |> assign(:sources_info, [])
+      |> assign(:vector_layers, ~w(cities countries demo world))
+
+    if connected?(socket), do: send(self(), :probe_server)
 
     {:ok, socket}
   end
@@ -29,220 +53,124 @@ defmodule MaplibrexDemoWeb.TilesLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
-      <%!-- Map fills full screen --%>
-      <.map
-        id="tiles-map"
-        center={[-74.5, 40]}
-        zoom={2}
-        style={@current_style_url}
-        class="absolute inset-0 w-full h-full"
-      />
+    <.demo_page
+      path={~p"/tiles"}
+      locale={@locale}
+      title={gettext("Vector Tiles Server")}
+      subtitle={gettext("Live tile rendering from a self-hosted vector tile server")}
+    >
+      <:map>
+        <%!-- The style URL is an assign, so switching styles (or falling back
+              to the public basemap) is a plain LiveView state change. --%>
+        <.map
+          id="tiles-map"
+          center={@center}
+          zoom={@zoom}
+          style={style_url(assigns)}
+          class="absolute inset-0 h-full w-full"
+        />
 
-      <%!-- Map controls --%>
-      <.navigation_control
-        id="nav-control"
-        map_id="tiles-map"
-        position="top-left"
-        show_compass={true}
-        show_zoom={true}
-        visualize_pitch={false}
-      />
+        <.navigation_control id="nav-control" map_id="tiles-map" position="top-left" />
+        <.scale_control id="scale-control" map_id="tiles-map" position="bottom-left" unit="metric" />
+        <.fullscreen_control id="fullscreen-control" map_id="tiles-map" position="top-left" />
+      </:map>
 
-      <.scale_control
-        id="scale-control"
-        map_id="tiles-map"
-        position="bottom-left"
-        max_width={150}
-        unit="metric"
-      />
+      <:panel>
+        <.panel_section label={gettext("Tile Server")}>
+          <.service_status
+            status={@server_status}
+            url={@server_url}
+            hint={
+              gettext(
+                "Showing a public basemap instead. Start the tile server, or point this demo elsewhere with TILE_SERVER_URL."
+              )
+            }
+          />
+        </.panel_section>
 
-      <.fullscreen_control
-        id="fullscreen-control"
-        map_id="tiles-map"
-        position="top-left"
-      />
+        <.panel_section label={gettext("Style")} class="space-y-1">
+          <.option_button
+            :for={style <- @available_styles}
+            active={@current_style == style.id}
+            description={style.description}
+            phx-click="change_style"
+            phx-value-id={style.id}
+          >
+            {style.name}
+          </.option_button>
+        </.panel_section>
 
-      <%!-- Back navigation pill --%>
-      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
-        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
-          {gettext("Back to Demos")}
-        </a>
-        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
-          <a href={"/locale?locale=en&return_to=/tiles"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
-          <span class="text-white/20 text-[10px]">|</span>
-          <a href={"/locale?locale=es&return_to=/tiles"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
-        </div>
-      </div>
+        <.panel_section label={gettext("Vector Layers")} class="flex flex-wrap gap-1.5">
+          <.chip :for={layer <- @vector_layers}>{layer}</.chip>
+        </.panel_section>
 
-      <%!-- Control Panel --%>
-      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
-        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
-          <%!-- Title --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">
-              MaplibreX
-            </p>
-            <h2 class="text-base font-semibold text-white">{gettext("Vector Tiles Server")}</h2>
-            <p class="text-xs text-white/50 mt-1">
-              {gettext("Live tile rendering from localhost:4000")}
-            </p>
-          </div>
+        <.panel_section :if={@server_status == :ok} label={gettext("Server Links")} class="space-y-1">
+          <.link_row href={"#{@server_url}/styles/#{@current_style}.json"}>
+            {gettext("Style JSON")}
+          </.link_row>
+          <.link_row :for={layer <- ~w(cities countries)} href={"#{@server_url}/#{layer}.json"}>
+            TileJSON: {layer}
+          </.link_row>
+        </.panel_section>
+      </:panel>
 
-          <div class="border-t border-white/[0.06]" />
-
-          <%!-- Style selector --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              {gettext("Style")}
-            </p>
-            <div class="space-y-1">
-              <%= for style <- @available_styles do %>
-                <button
-                  phx-click="change_style"
-                  phx-value-style={style.id}
-                  class={
-                    if @current_style == style.id,
-                      do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
-                      else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/[0.07] border border-transparent hover:border-white/[0.08] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
-                  }
-                >
-                  <span class="font-medium">{style.name}</span>
-                  <span class="block text-xs text-white/40 mt-0.5">{style.description}</span>
-                </button>
-              <% end %>
-            </div>
-          </div>
-
-          <div class="border-t border-white/[0.06]" />
-
-          <%!-- Vector Layers --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              {gettext("Vector Layers")}
-            </p>
-            <div class="flex flex-wrap gap-1.5">
-              <span class="inline-flex px-2 py-1 rounded text-[10px] bg-white/[0.05] border border-white/[0.07] text-white/60">
-                cities
-              </span>
-              <span class="inline-flex px-2 py-1 rounded text-[10px] bg-white/[0.05] border border-white/[0.07] text-white/60">
-                countries
-              </span>
-              <span class="inline-flex px-2 py-1 rounded text-[10px] bg-white/[0.05] border border-white/[0.07] text-white/60">
-                demo
-              </span>
-              <span class="inline-flex px-2 py-1 rounded text-[10px] bg-white/[0.05] border border-white/[0.07] text-white/60">
-                world
-              </span>
-            </div>
-          </div>
-
-          <div class="border-t border-white/[0.06]" />
-
-          <%!-- Server Links --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              {gettext("Server Links")}
-            </p>
-            <div class="space-y-1">
-              <a
-                href={"#{@server_url}/styles/#{@current_style}.json"}
-                target="_blank"
-                class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-xs text-white/60 hover:text-white bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] transition-all duration-300"
-              >
-                <span>{gettext("Style JSON")}</span>
-                <span class="text-white/30">→</span>
-              </a>
-              <a
-                href={"#{@server_url}/cities.json"}
-                target="_blank"
-                class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-xs text-white/60 hover:text-white bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] transition-all duration-300"
-              >
-                <span>TileJSON: cities</span>
-                <span class="text-white/30">→</span>
-              </a>
-              <a
-                href={"#{@server_url}/countries.json"}
-                target="_blank"
-                class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-xs text-white/60 hover:text-white bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] transition-all duration-300"
-              >
-                <span>TileJSON: countries</span>
-                <span class="text-white/30">→</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <%!-- Telemetry panel --%>
-      <div class="absolute bottom-4 left-4 z-20">
-        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Center")}</p>
-            <p class="font-mono text-xs text-cyan-300">
-              {Float.round(Enum.at(@current_center, 0) * 1.0, 3)},
-              {Float.round(Enum.at(@current_center, 1) * 1.0, 3)}
-            </p>
-          </div>
-          <div class="w-px h-6 bg-white/10" />
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Zoom")}</p>
-            <p class="font-mono text-xs text-cyan-300">
-              {Float.round(@current_zoom * 1.0, 1)}
-            </p>
-          </div>
-          <div class="w-px h-6 bg-white/10" />
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Style")}</p>
-            <p class="font-mono text-xs text-cyan-300 capitalize">{@current_style}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <:telemetry>
+        <.stat first label={gettext("Center")} value={format_center(@current_center)} />
+        <.stat label={gettext("Zoom")} value={Float.round(@current_zoom * 1.0, 1)} />
+        <.stat label={gettext("Style")} value={@current_style} class="font-mono text-xs capitalize" />
+        <.stat label={gettext("Source")} value={source_label(@server_status)} />
+      </:telemetry>
+    </.demo_page>
     """
   end
 
   @impl true
-  def handle_event("change_style", %{"style" => style_id}, socket) do
-    style_url = "#{@server_url}/styles/#{style_id}.json"
-
-    socket =
-      socket
-      |> assign(:current_style, style_id)
-      |> push_event("map:set_style", %{map_id: "tiles-map", style: style_url})
-
-    {:noreply, socket}
+  def handle_info(:probe_server, socket) do
+    {:noreply, assign(socket, :server_status, probe(socket.assigns.server_url))}
   end
 
   @impl true
+  def handle_event("change_style", %{"id" => style_id}, socket) do
+    {:noreply, assign(socket, :current_style, style_id)}
+  end
+
   def handle_event("map:moved", %{"center" => center, "zoom" => zoom}, socket) do
-    socket =
-      socket
-      |> assign(:current_center, center)
-      |> assign(:current_zoom, zoom)
-
-    {:noreply, socket}
+    {:noreply, socket |> assign(:current_center, center) |> assign(:current_zoom, zoom)}
   end
 
-  @impl true
   def handle_event("map:zoom_changed", %{"zoom" => zoom}, socket) do
     {:noreply, assign(socket, :current_zoom, zoom)}
   end
 
-  @impl true
-  def handle_event("map:loaded", _params, socket) do
-    {:noreply, socket}
+  def handle_event("map:" <> _, _params, socket), do: {:noreply, socket}
+
+  # Serve the requested style from the tile server, or the public fallback when
+  # it is not reachable. While probing, use the fallback so the map is never
+  # blank.
+  defp style_url(%{server_status: :ok, server_url: url, current_style: style}),
+    do: "#{url}/styles/#{style}.json"
+
+  defp style_url(_assigns),
+    do: Application.get_env(:maplibrex_demo, :fallback_style_url)
+
+  defp source_label(:ok), do: gettext("tile server")
+  defp source_label(_), do: gettext("fallback")
+
+  defp server_url, do: Application.get_env(:maplibrex_demo, :tile_server_url)
+
+  defp probe(url) do
+    case Req.get("#{url}/styles/default.json",
+           receive_timeout: @probe_timeout_ms,
+           retry: false
+         ) do
+      {:ok, %{status: 200}} -> :ok
+      _ -> :unreachable
+    end
+  rescue
+    _ -> :unreachable
   end
 
-  @impl true
-  def handle_event("map:clicked", %{"lngLat" => lng_lat}, socket) do
-    IO.inspect(lng_lat, label: "Map clicked at")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:error", %{"error" => error}, socket) do
-    IO.inspect(error, label: "Map error")
-    {:noreply, socket}
+  defp format_center([lng, lat]) do
+    "#{Float.round(lng * 1.0, 3)}, #{Float.round(lat * 1.0, 3)}"
   end
 end

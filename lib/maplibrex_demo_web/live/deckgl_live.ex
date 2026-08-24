@@ -1,6 +1,15 @@
 defmodule MaplibrexDemoWeb.DeckglLive do
+  @moduledoc """
+  deck.gl layers rendered as a MapLibre overlay: arcs, aggregated hexagons and
+  a scatterplot.
+
+  deck.gl is not part of the MaplibreX bundle. The first time a
+  `<.deckgl_layer>` mounts, the hook dynamically imports the `@deck.gl/*`
+  packages — applications that never use this component never download them.
+  """
   use MaplibrexDemoWeb, :live_view
   on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
+
   import MaplibreX.Components
 
   @impl true
@@ -18,264 +27,175 @@ defmodule MaplibrexDemoWeb.DeckglLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
-      <%!-- Map full-screen --%>
-      <.map
-        id="deckgl-map"
-        center={[-95, 40]}
-        zoom={4}
-        pitch={45}
-        bearing={0}
-        style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-        class="absolute inset-0 w-full h-full"
-      />
+    <.demo_page
+      path={~p"/deckgl"}
+      locale={@locale}
+      title={gettext("Deck.GL Layers")}
+      subtitle={gettext("3D ArcLayer, HexagonLayer, and ScatterplotLayer visualizations")}
+    >
+      <:map>
+        <.map
+          id="deckgl-map"
+          center={[-95, 40]}
+          zoom={4}
+          pitch={45}
+          bearing={0}
+          style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+          class="absolute inset-0 h-full w-full"
+        />
 
-      <%!-- Navigation Control --%>
-      <.navigation_control
-        id="nav-control"
-        map_id="deckgl-map"
-        position="top-left"
-        show_compass={true}
-        show_zoom={true}
-      />
+        <.navigation_control id="nav-control" map_id="deckgl-map" position="top-left" />
 
-      <%!-- Back nav --%>
-      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
-        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
-          {gettext("Back to Demos")}
-        </a>
-        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
-          <a href={"/locale?locale=en&return_to=/deckgl"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
-          <span class="text-white/20 text-[10px]">|</span>
-          <a href={"/locale?locale=es&return_to=/deckgl"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
-        </div>
-      </div>
-
-      <%!-- Control Panel --%>
-      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
-        <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
-          <%!-- Header --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">MaplibreX</p>
-            <h2 class="text-base font-semibold text-white/95">{gettext("Deck.GL Layers")}</h2>
-            <p class="text-xs text-white/50 mt-1 leading-relaxed">{gettext("3D ArcLayer, HexagonLayer, and ScatterplotLayer visualizations")}</p>
-          </div>
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- Visualization selector --%>
-          <div class="space-y-2">
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">{gettext("Visualization")}</p>
-            <div class="space-y-1.5">
-              <button
-                phx-click="change_viz"
-                phx-value-viz="arcs"
-                class={if @current_viz == "arcs",
-                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
-                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
-              >
-                <div class="font-medium">{gettext("Flight Connections")}</div>
-                <div class="text-[10px] opacity-60 mt-0.5">ArcLayer &mdash; {length(@flight_data)} routes</div>
-              </button>
-              <button
-                phx-click="change_viz"
-                phx-value-viz="hexagons"
-                class={if @current_viz == "hexagons",
-                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
-                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
-              >
-                <div class="font-medium">{gettext("Earthquake Density")}</div>
-                <div class="text-[10px] opacity-60 mt-0.5">HexagonLayer &mdash; {length(@earthquake_data)} events</div>
-              </button>
-              <button
-                phx-click="change_viz"
-                phx-value-viz="scatter"
-                class={if @current_viz == "scatter",
-                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
-                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
-              >
-                <div class="font-medium">{gettext("City Points")}</div>
-                <div class="text-[10px] opacity-60 mt-0.5">ScatterplotLayer &mdash; {length(@city_data)} cities</div>
-              </button>
-            </div>
-          </div>
-
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- Description for current visualization --%>
-          <div class="space-y-1.5">
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">{gettext("About")}</p>
-            <%= if @current_viz == "arcs" do %>
-              <p class="text-xs text-white/50 leading-relaxed">{gettext("ArcLayer renders animated arcs connecting source and target positions. Ideal for visualizing flight routes, migrations, or connections between locations.")}</p>
-            <% end %>
-            <%= if @current_viz == "hexagons" do %>
-              <p class="text-xs text-white/50 leading-relaxed">{gettext("HexagonLayer aggregates points into hexagonal bins with 3D elevation. Perfect for showing density and spatial distribution patterns.")}</p>
-            <% end %>
-            <%= if @current_viz == "scatter" do %>
-              <p class="text-xs text-white/50 leading-relaxed">{gettext("ScatterplotLayer efficiently renders thousands of points with customizable size and color. Ideal for showing individual geographic locations.")}</p>
-            <% end %>
-          </div>
-        </div>
-      </div>
-
-      <%!-- Telemetry bar --%>
-      <div class="absolute bottom-4 left-4 z-20">
-        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Layer")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">
-              <%= case @current_viz do %>
-                <% "arcs" -> %>ArcLayer
-                <% "hexagons" -> %>HexagonLayer
-                <% "scatter" -> %>ScatterplotLayer
-                <% _ -> %>Unknown
-              <% end %>
-            </p>
-          </div>
-          <div class="w-px h-6 bg-white/10"></div>
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Render")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">3D</p>
-          </div>
-        </div>
-      </div>
-
-      <%!-- DeckGL Layers --%>
-      <%= if @current_viz == "arcs" do %>
         <.deckgl_layer
+          :if={@current_viz == "arcs"}
           id="flight-arcs"
           map_id="deckgl-map"
           layer_type="ArcLayer"
           data={@flight_data}
           pickable={true}
-          props={%{
-            "getSourcePosition" => "from",
-            "getTargetPosition" => "to",
-            "getSourceColor" => [255, 140, 0],
-            "getTargetColor" => [255, 200, 0],
-            "getWidth" => 2
-          }}
+          props={
+            %{
+              "getSourcePosition" => "from",
+              "getTargetPosition" => "to",
+              "getSourceColor" => [255, 140, 0],
+              "getTargetColor" => [255, 200, 0],
+              "getWidth" => 2
+            }
+          }
         />
-      <% end %>
 
-      <%= if @current_viz == "hexagons" do %>
         <.deckgl_layer
+          :if={@current_viz == "hexagons"}
           id="earthquake-hexagons"
           map_id="deckgl-map"
           layer_type="HexagonLayer"
           data={@earthquake_data}
           auto_highlight={true}
-          props={%{
-            "getPosition" => "coordinates",
-            "elevationScale" => 50,
-            "radius" => 50000,
-            "coverage" => 0.9,
-            "extruded" => true,
-            "colorRange" => [
-              [1, 152, 189],
-              [73, 227, 206],
-              [216, 254, 181],
-              [254, 237, 177],
-              [254, 173, 84],
-              [209, 55, 78]
-            ]
-          }}
+          props={
+            %{
+              "getPosition" => "coordinates",
+              "elevationScale" => 50,
+              "radius" => 50_000,
+              "coverage" => 0.9,
+              "extruded" => true,
+              "colorRange" => [
+                [1, 152, 189],
+                [73, 227, 206],
+                [216, 254, 181],
+                [254, 237, 177],
+                [254, 173, 84],
+                [209, 55, 78]
+              ]
+            }
+          }
         />
-      <% end %>
 
-      <%= if @current_viz == "scatter" do %>
         <.deckgl_layer
+          :if={@current_viz == "scatter"}
           id="city-scatter"
           map_id="deckgl-map"
           layer_type="ScatterplotLayer"
           data={@city_data}
           pickable={true}
-          props={%{
-            "getPosition" => "coordinates",
-            "getRadius" => 10000,
-            "getFillColor" => [255, 140, 0],
-            "radiusScale" => 6,
-            "radiusMinPixels" => 2,
-            "radiusMaxPixels" => 30
-          }}
+          props={
+            %{
+              "getPosition" => "coordinates",
+              "getRadius" => 10_000,
+              "getFillColor" => [255, 140, 0],
+              "radiusScale" => 6,
+              "radiusMinPixels" => 2,
+              "radiusMaxPixels" => 30
+            }
+          }
         />
-      <% end %>
-    </div>
+      </:map>
+
+      <:panel>
+        <.panel_section label={gettext("Visualization")} class="space-y-1.5">
+          <.option_button
+            active={@current_viz == "arcs"}
+            description={"ArcLayer — #{length(@flight_data)} #{gettext("routes")}"}
+            phx-click="change_viz"
+            phx-value-id="arcs"
+          >
+            {gettext("Flight Connections")}
+          </.option_button>
+
+          <.option_button
+            active={@current_viz == "hexagons"}
+            description={"HexagonLayer — #{length(@earthquake_data)} #{gettext("events")}"}
+            phx-click="change_viz"
+            phx-value-id="hexagons"
+          >
+            {gettext("Earthquake Density")}
+          </.option_button>
+
+          <.option_button
+            active={@current_viz == "scatter"}
+            description={"ScatterplotLayer — #{length(@city_data)} #{gettext("cities")}"}
+            phx-click="change_viz"
+            phx-value-id="scatter"
+          >
+            {gettext("City Points")}
+          </.option_button>
+        </.panel_section>
+
+        <.panel_section label={gettext("About")}>
+          <p class="text-xs leading-relaxed text-white/50">{about_text(@current_viz)}</p>
+        </.panel_section>
+      </:panel>
+
+      <:telemetry>
+        <.stat first label={gettext("Layer")} value={layer_name(@current_viz)} />
+        <.stat label={gettext("Render")} value="3D" />
+        <.stat label={gettext("Records")} value={record_count(assigns)} />
+      </:telemetry>
+    </.demo_page>
     """
   end
 
   @impl true
-  def handle_event("change_viz", %{"viz" => viz}, socket) do
+  def handle_event("change_viz", %{"id" => viz}, socket) do
     {:noreply, assign(socket, :current_viz, viz)}
   end
 
-  @impl true
-  def handle_event("map:loaded", _params, socket) do
-    {:noreply, socket}
+  def handle_event("map:" <> _, _params, socket), do: {:noreply, socket}
+  def handle_event("deckgl:" <> _, _params, socket), do: {:noreply, socket}
+
+  defp layer_name("arcs"), do: "ArcLayer"
+  defp layer_name("hexagons"), do: "HexagonLayer"
+  defp layer_name("scatter"), do: "ScatterplotLayer"
+  defp layer_name(_), do: "—"
+
+  defp record_count(%{current_viz: "arcs", flight_data: data}), do: length(data)
+  defp record_count(%{current_viz: "hexagons", earthquake_data: data}), do: length(data)
+  defp record_count(%{current_viz: "scatter", city_data: data}), do: length(data)
+  defp record_count(_), do: 0
+
+  defp about_text("arcs") do
+    gettext(
+      "ArcLayer renders animated arcs connecting source and target positions. Ideal for visualizing flight routes, migrations, or connections between locations."
+    )
   end
 
-  @impl true
-  def handle_event("map:moved", _params, socket) do
-    {:noreply, socket}
+  defp about_text("hexagons") do
+    gettext(
+      "HexagonLayer aggregates points into hexagonal bins with 3D elevation. Perfect for showing density and spatial distribution patterns."
+    )
   end
 
-  @impl true
-  def handle_event("map:zoom_changed", _params, socket) do
-    {:noreply, socket}
+  defp about_text("scatter") do
+    gettext(
+      "ScatterplotLayer efficiently renders thousands of points with customizable size and color. Ideal for showing individual geographic locations."
+    )
   end
 
-  @impl true
-  def handle_event("map:clicked", _params, socket) do
-    {:noreply, socket}
-  end
+  defp about_text(_), do: ""
 
-  @impl true
-  def handle_event("map:error", %{"error" => error}, socket) do
-    IO.inspect(error, label: "Map error")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("deckgl:layer_loaded", %{"layerId" => layer_id}, socket) do
-    IO.inspect(layer_id, label: "DeckGL layer loaded")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("deckgl:click", %{"object" => object}, socket) do
-    IO.inspect(object, label: "DeckGL object clicked")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("deckgl:hover", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("deckgl:error", %{"error" => error}, socket) do
-    IO.inspect(error, label: "DeckGL error")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("deckgl:drag_start", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("deckgl:drag", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("deckgl:drag_end", _params, socket) do
-    {:noreply, socket}
-  end
-
-  # Datos de ejemplo
-
+  # Sample data
+  #
+  # A rough sample of routes between the largest US cities.
   defp generate_flight_data do
-    # Principales ciudades de USA
     cities = [
       {"New York", [-74.0, 40.7]},
       {"Los Angeles", [-118.2, 34.0]},
@@ -299,7 +219,6 @@ defmodule MaplibrexDemoWeb.DeckglLive do
       {"Las Vegas", [-115.1, 36.2]}
     ]
 
-    # Generar conexiones entre ciudades (formato simple para deck.gl)
     for {from_name, from_coords} <- cities,
         {to_name, to_coords} <- cities,
         from_name != to_name,
@@ -313,30 +232,21 @@ defmodule MaplibrexDemoWeb.DeckglLive do
     end
   end
 
+  # Synthetic events across the California seismic zone.
   defp generate_earthquake_data do
-    # Generar terremotos aleatorios en zona sísmica de California
     for _ <- 1..800 do
-      lng = -125.0 + :rand.uniform() * 15
-      lat = 32.0 + :rand.uniform() * 10
-      magnitude = 2.0 + :rand.uniform() * 5
-
       %{
-        "coordinates" => [lng, lat],
-        "magnitude" => magnitude
+        "coordinates" => [-125.0 + :rand.uniform() * 15, 32.0 + :rand.uniform() * 10],
+        "magnitude" => 2.0 + :rand.uniform() * 5
       }
     end
   end
 
   defp generate_city_data do
-    # Generar ciudades aleatorias en USA
     for _ <- 1..500 do
-      lng = -125.0 + :rand.uniform() * 55
-      lat = 25.0 + :rand.uniform() * 25
-      population = 10000 + :rand.uniform(1000000)
-
       %{
-        "coordinates" => [lng, lat],
-        "population" => population
+        "coordinates" => [-125.0 + :rand.uniform() * 55, 25.0 + :rand.uniform() * 25],
+        "population" => 10_000 + :rand.uniform(1_000_000)
       }
     end
   end

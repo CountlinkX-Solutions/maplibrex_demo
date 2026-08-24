@@ -1,17 +1,56 @@
 defmodule MaplibrexDemoWeb.MapLive do
+  @moduledoc """
+  The core demo: markers, a GeoJSON layer, reactive style switching and
+  client-side map commands.
+
+  Two ways of driving the map are shown side by side:
+
+    * **Reactive** — the style buttons only change an assign. The map follows,
+      because `<.map style={@current_style}>` is reactive.
+    * **Client-side commands** — the fly-to buttons use
+      `MaplibreX.Components.Map.fly_to/4`, which renders a
+      `Phoenix.LiveView.JS` command that runs in the browser with no server
+      round-trip.
+  """
   use MaplibrexDemoWeb, :live_view
   on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
+
   import MaplibreX.Components
+  alias MaplibreX.Components.Map, as: MapCmd
+
+  @initial_center [-74.5, 40]
+  @initial_zoom 9
+
+  @marker_colors ~w(red blue green purple orange yellow pink)
+
+  @demo_geojson %{
+    type: "FeatureCollection",
+    features: [
+      %{
+        type: "Feature",
+        properties: %{name: "NYC Area", description: "Demo GeoJSON Layer"},
+        geometry: %{
+          type: "Polygon",
+          coordinates: [
+            [[-74.25, 40.9], [-73.7, 40.9], [-73.7, 40.5], [-74.25, 40.5], [-74.25, 40.9]]
+          ]
+        }
+      }
+    ]
+  }
 
   @impl true
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(:center, [-74.5, 40])
-      |> assign(:zoom, 9)
-      |> assign(:current_center, [-74.5, 40])
-      |> assign(:current_zoom, 9)
+      |> assign(:center, @initial_center)
+      |> assign(:zoom, @initial_zoom)
+      |> assign(:current_center, @initial_center)
+      |> assign(:current_zoom, @initial_zoom)
       |> assign(:current_style, "https://demotiles.maplibre.org/style.json")
+      |> assign(:show_geojson, true)
+      |> assign(:show_popups, true)
+      |> assign(:demo_geojson, @demo_geojson)
       |> assign(:markers, [
         %{id: "marker-1", lng_lat: [-74.5, 40], color: "red", draggable: false},
         %{id: "marker-2", lng_lat: [-74.0, 40.5], color: "blue", draggable: true},
@@ -22,29 +61,6 @@ defmodule MaplibrexDemoWeb.MapLive do
         %{name: "Dark", url: "https://tiles.openfreemap.org/styles/dark"},
         %{name: "Liberty", url: "https://tiles.openfreemap.org/styles/liberty"}
       ])
-      |> assign(:show_popups, true)
-      |> assign(:show_geojson, true)
-      |> assign(:demo_geojson, %{
-        type: "FeatureCollection",
-        features: [
-          %{
-            type: "Feature",
-            properties: %{name: "NYC Area", description: "Demo GeoJSON Layer"},
-            geometry: %{
-              type: "Polygon",
-              coordinates: [
-                [
-                  [-74.25, 40.9],
-                  [-73.7, 40.9],
-                  [-73.7, 40.5],
-                  [-74.25, 40.5],
-                  [-74.25, 40.9]
-                ]
-              ]
-            }
-          }
-        ]
-      })
 
     {:ok, socket}
   end
@@ -52,378 +68,170 @@ defmodule MaplibrexDemoWeb.MapLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
-      <%!-- Map fills full screen --%>
-      <.map
-        id="demo-map"
-        center={@center}
-        zoom={@zoom}
-        style="https://demotiles.maplibre.org/style.json"
-        class="absolute inset-0 w-full h-full"
-      />
+    <.demo_page
+      path={~p"/map"}
+      locale={@locale}
+      title={gettext("Interactive Map")}
+      subtitle={gettext("Markers, GeoJSON layers, real-time events")}
+    >
+      <:map>
+        <.map
+          id="demo-map"
+          center={@center}
+          zoom={@zoom}
+          style={@current_style}
+          class="absolute inset-0 h-full w-full"
+        />
 
-      <%!-- Map controls --%>
-      <.navigation_control
-        id="nav-control"
-        map_id="demo-map"
-        position="top-left"
-        show_compass={true}
-        show_zoom={true}
-        visualize_pitch={false}
-      />
+        <.navigation_control id="nav-control" map_id="demo-map" position="top-left" />
+        <.scale_control id="scale-control" map_id="demo-map" position="bottom-left" unit="metric" />
+        <.fullscreen_control id="fullscreen-control" map_id="demo-map" position="top-left" />
 
-      <.scale_control
-        id="scale-control"
-        map_id="demo-map"
-        position="bottom-left"
-        max_width={150}
-        unit="metric"
-      />
-
-      <.fullscreen_control
-        id="fullscreen-control"
-        map_id="demo-map"
-        position="top-left"
-      />
-
-      <%!-- GeoJSON Layer --%>
-      <%= if @show_geojson do %>
         <.geojson_layer
+          :if={@show_geojson}
           id="nyc-area"
           map_id="demo-map"
           data={@demo_geojson}
           type="fill"
-          paint={%{
-            "fill-color" => "#088",
-            "fill-opacity" => 0.3,
-            "fill-outline-color" => "#000"
-          }}
+          paint={
+            %{
+              "fill-color" => "#22d3ee",
+              "fill-opacity" => 0.25,
+              "fill-outline-color" => "#22d3ee"
+            }
+          }
         />
-      <% end %>
 
-      <%!-- Markers --%>
-      <%= for marker <- @markers do %>
         <.marker
+          :for={marker <- @markers}
           id={marker.id}
           map_id="demo-map"
           lng_lat={marker.lng_lat}
           color={marker.color}
           draggable={marker.draggable}
-          popup_text={if @show_popups, do: "Marker #{marker.id} - #{marker.color}", else: nil}
+          popup_text={if @show_popups, do: "#{marker.id} — #{marker.color}"}
         />
-      <% end %>
+      </:map>
 
-      <%!-- Back navigation pill --%>
-      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
-        <a
-          href="/"
-          class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/75 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
-        >
-          {gettext("Back to Demos")}
-        </a>
-        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
-          <a href={"/locale?locale=en&return_to=/map"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
-          <span class="text-white/20 text-[10px]">|</span>
-          <a href={"/locale?locale=es&return_to=/map"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
-        </div>
-      </div>
+      <:panel>
+        <.panel_section label={gettext("Map Style")} class="space-y-1">
+          <.option_button
+            :for={style <- @map_styles}
+            active={@current_style == style.url}
+            phx-click="update_style"
+            phx-value-url={style.url}
+          >
+            {style.name}
+          </.option_button>
+        </.panel_section>
 
-      <%!-- Control Panel --%>
-      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
-        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
-          <%!-- Title --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">
-              MaplibreX
-            </p>
-            <h2 class="text-base font-semibold text-white">{gettext("Interactive Map")}</h2>
-            <p class="text-xs text-white/50 mt-1">
-              {gettext("Markers, GeoJSON layers, real-time events")}
-            </p>
-          </div>
+        <.panel_section label={gettext("Navigation")} class="flex gap-2">
+          <.action_button phx-click={MapCmd.fly_to("demo-map", [-73.98, 40.75], 12)}>
+            NYC
+          </.action_button>
+          <.action_button phx-click={MapCmd.fly_to("demo-map", [-118.24, 34.05], 12, duration: 1500)}>
+            Los Angeles
+          </.action_button>
+          <.action_button phx-click={MapCmd.fly_to("demo-map", @center, @zoom, duration: 1500)}>
+            {gettext("Reset")}
+          </.action_button>
+        </.panel_section>
 
-          <div class="border-t border-white/[0.06]" />
+        <.panel_section label={gettext("Layers")}>
+          <.toggle_button
+            active={@show_geojson}
+            on_label={gettext("Visible")}
+            off_label={gettext("Hidden")}
+            phx-click="toggle_geojson"
+          >
+            {gettext("GeoJSON Layer")}
+          </.toggle_button>
+        </.panel_section>
 
-          <%!-- Map Style --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              {gettext("Map Style")}
-            </p>
-            <div class="space-y-1">
-              <%= for style <- @map_styles do %>
-                <button
-                  onclick={"document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:set_style', {detail: {style: '#{style.url}'}}))"}
-                  phx-click="update_style"
-                  phx-value-url={style.url}
-                  class={
-                    if @current_style == style.url,
-                      do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
-                      else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/[0.07] border border-transparent hover:border-white/[0.08] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
-                  }
-                >
-                  {style.name}
-                </button>
-              <% end %>
-            </div>
-          </div>
+        <.panel_section label={gettext("Markers")} class="flex gap-2">
+          <.action_button phx-click="add_marker">{gettext("Add Marker")}</.action_button>
+          <.action_button phx-click="clear_markers">{gettext("Clear All")}</.action_button>
+        </.panel_section>
+      </:panel>
 
-          <div class="border-t border-white/[0.06]" />
-
-          <%!-- Navigation --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              {gettext("Navigation")}
-            </p>
-            <div class="flex gap-2">
-              <button
-                onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-73.98, 40.75], zoom: 12, duration: 1000}}))"
-                class="flex-1 px-3 py-2 rounded-lg text-xs text-white/70 bg-white/[0.05] hover:bg-white/[0.10] border border-white/[0.07] transition-all duration-300 text-center"
-              >
-                NYC
-              </button>
-              <button
-                onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-118.24, 34.05], zoom: 12, duration: 1500}}))"
-                class="flex-1 px-3 py-2 rounded-lg text-xs text-white/70 bg-white/[0.05] hover:bg-white/[0.10] border border-white/[0.07] transition-all duration-300 text-center"
-              >
-                Los Angeles
-              </button>
-              <button
-                onclick="document.getElementById('demo-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-74.5, 40], zoom: 9, duration: 1500}}))"
-                class="flex-1 px-3 py-2 rounded-lg text-xs text-white/70 bg-white/[0.05] hover:bg-white/[0.10] border border-white/[0.07] transition-all duration-300 text-center"
-              >
-                {gettext("Reset")}
-              </button>
-            </div>
-          </div>
-
-          <div class="border-t border-white/[0.06]" />
-
-          <%!-- Layers --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              {gettext("Layers")}
-            </p>
-            <button
-              phx-click="toggle_geojson"
-              class={
-                if @show_geojson,
-                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm bg-cyan-500/10 border border-cyan-400/25 text-cyan-300 transition-all duration-300",
-                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm bg-white/[0.05] border border-white/[0.07] text-white/60 transition-all duration-300"
-              }
-            >
-              <span class="font-medium">{gettext("GeoJSON Layer")}</span>
-              <span class="ml-2 text-xs opacity-70">
-                {if @show_geojson, do: gettext("Visible"), else: gettext("Hidden")}
-              </span>
-            </button>
-          </div>
-
-          <div class="border-t border-white/[0.06]" />
-
-          <%!-- Markers --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              {gettext("Markers")}
-            </p>
-            <div class="flex gap-2">
-              <button
-                phx-click="add_marker"
-                class="flex-1 px-3 py-2 rounded-lg text-xs text-white/70 bg-white/[0.05] hover:bg-white/[0.10] border border-white/[0.07] transition-all duration-300 text-center"
-              >
-                {gettext("Add Marker")}
-              </button>
-              <button
-                phx-click="clear_markers"
-                class="flex-1 px-3 py-2 rounded-lg text-xs text-white/70 bg-white/[0.05] hover:bg-white/[0.10] border border-white/[0.07] transition-all duration-300 text-center"
-              >
-                {gettext("Clear All")}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <%!-- Telemetry panel --%>
-      <div class="absolute bottom-4 left-4 z-20">
-        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Center")}</p>
-            <p class="font-mono text-xs text-cyan-300">
-              {Float.round(Enum.at(@current_center, 0) * 1.0, 3)},
-              {Float.round(Enum.at(@current_center, 1) * 1.0, 3)}
-            </p>
-          </div>
-          <div class="w-px h-6 bg-white/10" />
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Zoom")}</p>
-            <p class="font-mono text-xs text-cyan-300">
-              {Float.round(@current_zoom * 1.0, 1)}
-            </p>
-          </div>
-          <div class="w-px h-6 bg-white/10" />
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Markers")}</p>
-            <p class="font-mono text-xs text-cyan-300">{length(@markers)}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <:telemetry>
+        <.stat first label={gettext("Center")} value={format_center(@current_center)} />
+        <.stat label={gettext("Zoom")} value={format_zoom(@current_zoom)} />
+        <.stat label={gettext("Markers")} value={length(@markers)} />
+      </:telemetry>
+    </.demo_page>
     """
   end
 
   @impl true
   def handle_event("update_style", %{"url" => url}, socket) do
+    # No JS command needed: `<.map style={@current_style}>` is reactive, so
+    # updating the assign is enough for the hook to call setStyle.
     {:noreply, assign(socket, :current_style, url)}
   end
 
-  @impl true
+  def handle_event("toggle_geojson", _params, socket) do
+    {:noreply, assign(socket, :show_geojson, !socket.assigns.show_geojson)}
+  end
+
+  def handle_event("toggle_popups", _params, socket) do
+    {:noreply, assign(socket, :show_popups, !socket.assigns.show_popups)}
+  end
+
   def handle_event("add_marker", _params, socket) do
-    # Generar posición aleatoria cerca del centro actual
-    [lng, lat] = socket.assigns.center
+    [lng, lat] = socket.assigns.current_center
     new_lng = lng + (:rand.uniform() - 0.5) * 2
     new_lat = lat + (:rand.uniform() - 0.5) * 2
 
-    colors = ["red", "blue", "green", "purple", "orange", "yellow", "pink"]
-    random_color = Enum.random(colors)
-
-    new_marker = %{
+    marker = %{
       id: "marker-#{System.unique_integer([:positive])}",
       lng_lat: [new_lng, new_lat],
-      color: random_color,
+      color: Enum.random(@marker_colors),
       draggable: true
     }
 
     socket =
       socket
-      |> assign(:markers, socket.assigns.markers ++ [new_marker])
-      |> push_event("fly_to_marker", %{lng: new_lng, lat: new_lat})
+      |> update(:markers, &(&1 ++ [marker]))
+      # The server-side counterpart of MapCmd.fly_to/4: MaplibreX listens for
+      # this event name on every mounted map.
+      |> push_event("map:fly_to", %{center: marker.lng_lat, zoom: 13, duration: 1000})
 
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("clear_markers", _params, socket) do
     {:noreply, assign(socket, :markers, [])}
   end
 
-  @impl true
-  def handle_event("toggle_geojson", _params, socket) do
-    {:noreply, assign(socket, :show_geojson, !socket.assigns.show_geojson)}
+  # Map events pushed by MaplibreX. `map:moved` is debounced client-side, so
+  # these assigns update without flooding the socket during a pan.
+  def handle_event("map:moved", %{"center" => center, "zoom" => zoom}, socket) do
+    {:noreply, socket |> assign(:current_center, center) |> assign(:current_zoom, zoom)}
   end
 
-  @impl true
-  def handle_event("toggle_popups", _params, socket) do
-    {:noreply, assign(socket, :show_popups, !socket.assigns.show_popups)}
-  end
-
-  @impl true
-  def handle_event("map:loaded", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:fly_to", _params, socket) do
-    # El comando JS ya se ejecutó en el cliente, solo ignoramos el evento del servidor
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:zoom_in", _params, socket) do
-    # El comando JS ya se ejecutó en el cliente, solo ignoramos el evento del servidor
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:zoom_out", _params, socket) do
-    # El comando JS ya se ejecutó en el cliente, solo ignoramos el evento del servidor
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:reset_north", _params, socket) do
-    # El comando JS ya se ejecutó en el cliente, solo ignoramos el evento del servidor
-    {:noreply, socket}
-  end
-
-  @impl true
   def handle_event("map:zoom_changed", %{"zoom" => zoom}, socket) do
-    # Actualizar el zoom mostrado en el estado (sin re-renderizar el mapa)
     {:noreply, assign(socket, :current_zoom, zoom)}
   end
 
-  @impl true
-  def handle_event("map:moved", %{"center" => center, "zoom" => zoom}, socket) do
-    # Actualizar centro y zoom mostrados en el estado (sin re-renderizar el mapa)
-    socket =
-      socket
-      |> assign(:current_center, center)
-      |> assign(:current_zoom, zoom)
-
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:clicked", %{"lngLat" => lng_lat}, socket) do
-    IO.inspect(lng_lat, label: "Map clicked at")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("marker:clicked", %{"markerId" => marker_id, "lngLat" => lng_lat}, socket) do
-    IO.inspect({marker_id, lng_lat}, label: "Marker clicked")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("marker:drag_start", %{"markerId" => marker_id, "lngLat" => lng_lat}, socket) do
-    # Evento cuando se comienza a arrastrar un marcador
-    IO.inspect({marker_id, lng_lat}, label: "Marker drag started")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("marker:dragging", %{"markerId" => marker_id, "lngLat" => lng_lat}, socket) do
-    # Evento continuo mientras se arrastra el marcador
-    # NO actualizamos el estado aquí para evitar re-renders constantes
-    IO.inspect({marker_id, lng_lat}, label: "Marker dragging")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("marker:drag_end", %{"markerId" => marker_id, "lngLat" => lng_lat}, socket) do
-    IO.inspect({marker_id, lng_lat}, label: "Marker dragged to")
-
-    # Actualizar posición del marcador arrastrado
+  def handle_event("marker:drag_end", %{"markerId" => id, "lngLat" => lng_lat}, socket) do
     markers =
-      Enum.map(socket.assigns.markers, fn marker ->
-        if marker.id == marker_id do
-          %{marker | lng_lat: lng_lat}
-        else
-          marker
-        end
+      Enum.map(socket.assigns.markers, fn
+        %{id: ^id} = marker -> %{marker | lng_lat: lng_lat}
+        marker -> marker
       end)
 
     {:noreply, assign(socket, :markers, markers)}
   end
 
-  @impl true
-  def handle_event("layer:feature_mouseenter", %{"layerId" => layer_id, "feature" => feature}, socket) do
-    # Evento cuando el mouse entra sobre una feature de la capa GeoJSON
-    IO.inspect({layer_id, feature["properties"]}, label: "Feature mouseenter")
-    {:noreply, socket}
+  # Events the demo acknowledges but does not act on.
+  def handle_event("map:" <> _, _params, socket), do: {:noreply, socket}
+  def handle_event("marker:" <> _, _params, socket), do: {:noreply, socket}
+  def handle_event("layer:" <> _, _params, socket), do: {:noreply, socket}
+
+  defp format_center([lng, lat]) do
+    "#{Float.round(lng * 1.0, 3)}, #{Float.round(lat * 1.0, 3)}"
   end
 
-  @impl true
-  def handle_event("layer:feature_mouseleave", %{"layerId" => layer_id}, socket) do
-    # Evento cuando el mouse sale de una feature de la capa GeoJSON
-    IO.inspect(layer_id, label: "Feature mouseleave")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:feature_click", %{"layerId" => layer_id, "feature" => feature}, socket) do
-    # Evento cuando se hace click en una feature de la capa GeoJSON
-    IO.inspect({layer_id, feature["properties"]}, label: "Feature clicked")
-    {:noreply, socket}
-  end
+  defp format_zoom(zoom), do: Float.round(zoom * 1.0, 1)
 end

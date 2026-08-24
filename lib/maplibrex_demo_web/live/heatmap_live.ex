@@ -1,7 +1,20 @@
 defmodule MaplibrexDemoWeb.HeatmapLive do
+  @moduledoc """
+  A heatmap layer over 500 synthetic seismic events, with radius, intensity and
+  opacity driven from LiveView assigns.
+
+  Every slider re-renders the layer's `paint` map; the GeoJSON layer hook diffs
+  it and applies only the properties that changed, so dragging a slider does
+  not re-add the source.
+  """
   use MaplibrexDemoWeb, :live_view
   on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
+
   import MaplibreX.Components
+
+  @point_count 500
+
+  @gradient "linear-gradient(to right, rgba(33,102,172,0), rgb(103,169,207), rgb(209,229,240), rgb(253,219,199), rgb(239,138,98), rgb(178,24,43))"
 
   @impl true
   def mount(_params, _session, socket) do
@@ -10,6 +23,8 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
       |> assign(:radius, 25)
       |> assign(:intensity, 1.0)
       |> assign(:opacity, 0.8)
+      |> assign(:point_count, @point_count)
+      |> assign(:gradient, @gradient)
       |> assign(:earthquake_data, generate_earthquake_data())
 
     {:ok, socket}
@@ -18,334 +33,175 @@ defmodule MaplibrexDemoWeb.HeatmapLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
-      <%!-- Map full-screen --%>
-      <.map
-        id="heatmap-map"
-        center={[-98.5, 39.8]}
-        zoom={3.5}
-        pitch={0}
-        bearing={0}
-        style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-        class="absolute inset-0 w-full h-full"
-      />
+    <.demo_page
+      path={~p"/heatmap"}
+      locale={@locale}
+      title={gettext("Heatmap")}
+      subtitle={gettext("500-point earthquake density visualization across the US")}
+    >
+      <:map>
+        <.map
+          id="heatmap-map"
+          center={[-98.5, 39.8]}
+          zoom={3.5}
+          pitch={0}
+          bearing={0}
+          style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+          class="absolute inset-0 h-full w-full"
+        />
 
-      <%!-- Navigation Control --%>
-      <.navigation_control
-        id="nav-control"
-        map_id="heatmap-map"
-        position="top-left"
-        show_compass={true}
-        show_zoom={true}
-      />
+        <.navigation_control id="nav-control" map_id="heatmap-map" position="top-left" />
 
-      <%!-- Heatmap Layer --%>
-      <.geojson_layer
-        id="earthquake-heatmap"
-        map_id="heatmap-map"
-        data={@earthquake_data}
-        type="heatmap"
-        paint={%{
-          "heatmap-weight" => [
-            "interpolate",
-            ["linear"],
-            ["get", "magnitude"],
-            0,
-            0,
-            6,
-            1
-          ],
-          "heatmap-intensity" => [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            0,
-            @intensity,
-            9,
-            @intensity * 3
-          ],
-          "heatmap-color" => [
-            "interpolate",
-            ["linear"],
-            ["heatmap-density"],
-            0,
-            "rgba(33,102,172,0)",
-            0.2,
-            "rgb(103,169,207)",
-            0.4,
-            "rgb(209,229,240)",
-            0.6,
-            "rgb(253,219,199)",
-            0.8,
-            "rgb(239,138,98)",
-            1,
-            "rgb(178,24,43)"
-          ],
-          "heatmap-radius" => [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            0,
-            @radius / 4,
-            9,
-            @radius
-          ],
-          "heatmap-opacity" => @opacity
-        }}
-      />
+        <.geojson_layer
+          id="earthquake-heatmap"
+          map_id="heatmap-map"
+          data={@earthquake_data}
+          type="heatmap"
+          paint={heatmap_paint(@radius, @intensity, @opacity)}
+        />
+      </:map>
 
-      <%!-- Back nav --%>
-      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
-        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
-          {gettext("Back to Demos")}
-        </a>
-        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
-          <a href={"/locale?locale=en&return_to=/heatmap"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
-          <span class="text-white/20 text-[10px]">|</span>
-          <a href={"/locale?locale=es&return_to=/heatmap"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
-        </div>
-      </div>
+      <:panel>
+        <.panel_section label={gettext("Radius")}>
+          <.slider
+            label={gettext("Kernel size")}
+            name="value"
+            value={@radius}
+            min="10"
+            max="50"
+            step="1"
+            on_change="update_radius"
+            display={"#{@radius}px"}
+          />
+          <.slider_bounds min="10px" max="50px" />
+        </.panel_section>
 
-      <%!-- Control Panel --%>
-      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
-        <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
-          <%!-- Header --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">MaplibreX</p>
-            <h2 class="text-base font-semibold text-white/95">{gettext("Heatmap")}</h2>
-            <p class="text-xs text-white/50 mt-1 leading-relaxed">{gettext("500-point earthquake density visualization across the US")}</p>
-          </div>
-          <div class="h-px bg-white/[0.06]"></div>
+        <.panel_section label={gettext("Intensity")}>
+          <.slider
+            label={gettext("Weight multiplier")}
+            name="value"
+            value={@intensity}
+            min="0.5"
+            max="3.0"
+            step="0.1"
+            on_change="update_intensity"
+            display={"#{Float.round(@intensity * 1.0, 1)}x"}
+          />
+          <.slider_bounds min="0.5x" max="3.0x" />
+        </.panel_section>
 
-          <%!-- Radius slider --%>
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Radius")}</p>
-              <span class="font-mono text-xs text-cyan-300/80">{@radius}px</span>
-            </div>
-            <form phx-change="update_radius">
-              <input
-                type="range"
-                min="10"
-                max="50"
-                step="1"
-                value={@radius}
-                name="value"
-                class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-              />
-            </form>
-            <div class="flex justify-between text-[9px] text-white/25">
-              <span>10px</span>
-              <span>50px</span>
-            </div>
-          </div>
+        <.panel_section label={gettext("Opacity")}>
+          <.slider
+            label={gettext("Layer opacity")}
+            name="value"
+            value={@opacity}
+            min="0"
+            max="1"
+            step="0.05"
+            on_change="update_opacity"
+            display={"#{trunc(@opacity * 100)}%"}
+          />
+          <.slider_bounds min="0%" max="100%" />
+        </.panel_section>
 
-          <div class="h-px bg-white/[0.06]"></div>
+        <.panel_section label={gettext("Gradient")}>
+          <.gradient_bar css_gradient={@gradient} low={gettext("Low")} high={gettext("High")} />
+        </.panel_section>
+      </:panel>
 
-          <%!-- Intensity slider --%>
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Intensity")}</p>
-              <span class="font-mono text-xs text-cyan-300/80">{Float.round(@intensity * 1.0, 1)}x</span>
-            </div>
-            <form phx-change="update_intensity">
-              <input
-                type="range"
-                min="0.5"
-                max="3.0"
-                step="0.1"
-                value={@intensity}
-                name="value"
-                class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-              />
-            </form>
-            <div class="flex justify-between text-[9px] text-white/25">
-              <span>0.5x</span>
-              <span>3.0x</span>
-            </div>
-          </div>
-
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- Opacity slider --%>
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Opacity")}</p>
-              <span class="font-mono text-xs text-cyan-300/80">{trunc(@opacity * 100)}%</span>
-            </div>
-            <form phx-change="update_opacity">
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={@opacity}
-                name="value"
-                class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-              />
-            </form>
-            <div class="flex justify-between text-[9px] text-white/25">
-              <span>0%</span>
-              <span>100%</span>
-            </div>
-          </div>
-
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- Gradient legend --%>
-          <div class="space-y-2">
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Gradient")}</p>
-            <div class="h-2 rounded-full" style="background: linear-gradient(to right, rgba(33,102,172,0), rgb(103,169,207), rgb(209,229,240), rgb(253,219,199), rgb(239,138,98), rgb(178,24,43));"></div>
-            <div class="flex justify-between text-[9px] text-white/25">
-              <span>{gettext("Low")}</span>
-              <span>{gettext("High")}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <%!-- Telemetry bar --%>
-      <div class="absolute bottom-4 left-4 z-20">
-        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Points")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">{gettext("500 points")}</p>
-          </div>
-          <div class="w-px h-6 bg-white/10"></div>
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Radius")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">{@radius}px</p>
-          </div>
-          <div class="w-px h-6 bg-white/10"></div>
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Intensity")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">{Float.round(@intensity * 1.0, 1)}x</p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <:telemetry>
+        <.stat first label={gettext("Points")} value={@point_count} />
+        <.stat label={gettext("Radius")} value={"#{@radius}px"} />
+        <.stat label={gettext("Intensity")} value={"#{Float.round(@intensity * 1.0, 1)}x"} />
+        <.stat label={gettext("Opacity")} value={"#{trunc(@opacity * 100)}%"} />
+      </:telemetry>
+    </.demo_page>
     """
   end
 
-  # Event Handlers
-
   @impl true
   def handle_event("update_radius", %{"value" => value}, socket) do
-    radius =
-      case Integer.parse(value) do
-        {int_value, _} -> int_value
-        :error -> 25
-      end
-
-    {:noreply, assign(socket, :radius, radius)}
+    {:noreply, assign(socket, :radius, parse_integer(value, 25))}
   end
 
-  @impl true
   def handle_event("update_intensity", %{"value" => value}, socket) do
-    intensity =
-      case Float.parse(value) do
-        {float_value, _} -> float_value
-        :error -> 1.0
-      end
-
-    {:noreply, assign(socket, :intensity, intensity)}
+    {:noreply, assign(socket, :intensity, parse_float(value, 1.0))}
   end
 
-  @impl true
   def handle_event("update_opacity", %{"value" => value}, socket) do
-    opacity =
-      case Float.parse(value) do
-        {float_value, _} -> float_value
-        :error -> 0.8
-      end
-
-    {:noreply, assign(socket, :opacity, opacity)}
+    {:noreply, assign(socket, :opacity, parse_float(value, 0.8))}
   end
 
-  @impl true
-  def handle_event("map:loaded", _params, socket) do
-    {:noreply, socket}
+  def handle_event("map:" <> _, _params, socket), do: {:noreply, socket}
+  def handle_event("layer:" <> _, _params, socket), do: {:noreply, socket}
+
+  # MapLibre paint properties. Radius and intensity are zoom-interpolated so
+  # the heatmap keeps a consistent visual density as you zoom in.
+  defp heatmap_paint(radius, intensity, opacity) do
+    %{
+      "heatmap-weight" => ["interpolate", ["linear"], ["get", "magnitude"], 0, 0, 6, 1],
+      "heatmap-intensity" => [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        0,
+        intensity,
+        9,
+        intensity * 3
+      ],
+      "heatmap-color" => [
+        "interpolate",
+        ["linear"],
+        ["heatmap-density"],
+        0,
+        "rgba(33,102,172,0)",
+        0.2,
+        "rgb(103,169,207)",
+        0.4,
+        "rgb(209,229,240)",
+        0.6,
+        "rgb(253,219,199)",
+        0.8,
+        "rgb(239,138,98)",
+        1,
+        "rgb(178,24,43)"
+      ],
+      "heatmap-radius" => ["interpolate", ["linear"], ["zoom"], 0, radius / 4, 9, radius],
+      "heatmap-opacity" => opacity
+    }
   end
 
-  @impl true
-  def handle_event("map:moved", _params, socket) do
-    {:noreply, socket}
+  defp parse_integer(value, fallback) do
+    case Integer.parse(value) do
+      {parsed, _} -> parsed
+      :error -> fallback
+    end
   end
 
-  @impl true
-  def handle_event("map:zoom_changed", _params, socket) do
-    {:noreply, socket}
+  defp parse_float(value, fallback) do
+    case Float.parse(value) do
+      {parsed, _} -> parsed
+      :error -> fallback
+    end
   end
 
-  @impl true
-  def handle_event("map:clicked", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:error", %{"error" => error}, socket) do
-    IO.inspect(error, label: "Map error")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:added", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:removed", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:source_loaded", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:feature_clicked", %{"feature" => feature}, socket) do
-    IO.inspect(feature, label: "Earthquake clicked")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:feature_mouseenter", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:feature_mouseleave", _params, socket) do
-    {:noreply, socket}
-  end
-
-  # Helper Functions
-
+  # Synthetic seismic events spread across the continental US.
   defp generate_earthquake_data do
-    # Generate 500 random earthquake points across USA
     features =
-      for _ <- 1..500 do
-        # Random coordinates within USA bounds
-        lng = -125.0 + :rand.uniform() * 55.0
-        lat = 25.0 + :rand.uniform() * 25.0
-        magnitude = 2.0 + :rand.uniform() * 4.0
-
+      for _ <- 1..@point_count do
         %{
           "type" => "Feature",
           "geometry" => %{
             "type" => "Point",
-            "coordinates" => [lng, lat]
+            "coordinates" => [-125.0 + :rand.uniform() * 55.0, 25.0 + :rand.uniform() * 25.0]
           },
           "properties" => %{
-            "magnitude" => magnitude,
+            "magnitude" => 2.0 + :rand.uniform() * 4.0,
             "depth" => :rand.uniform() * 100
           }
         }
       end
 
-    %{
-      "type" => "FeatureCollection",
-      "features" => features
-    }
+    %{"type" => "FeatureCollection", "features" => features}
   end
 end

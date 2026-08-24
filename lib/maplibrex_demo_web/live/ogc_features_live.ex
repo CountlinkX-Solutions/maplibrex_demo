@@ -1,10 +1,30 @@
 defmodule MaplibrexDemoWeb.OgcFeaturesLive do
+  @moduledoc """
+  Reads city features from an OGC API - Features endpoint and renders each one
+  as a marker.
+
+  Like `/tiles`, this page depends on the sibling `tileserver` project via
+  `:tile_server_url` (override with `TILE_SERVER_URL`). When the endpoint is
+  not reachable the page says so and offers a retry, instead of sitting on an
+  empty map.
+
+  It also spot-checks a handful of well-known cities: if the server returns
+  coordinates more than a degree away from the expected position, the axis
+  order is probably swapped — a common OGC implementation bug.
+  """
   use MaplibrexDemoWeb, :live_view
   on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
+
   import MaplibreX.Components
+  alias MaplibreX.Components.Map, as: MapCmd
 
-  @server_url "http://localhost:4000"
+  @center [0, 20]
+  @zoom 2
 
+  @request_timeout_ms 5_000
+  @feature_limit 50
+
+  # Reference coordinates used to sanity-check what the server returns.
   @expected_coords %{
     "Tokyo" => %{lon: 139.74, lat: 35.68, region: "Asia (East)"},
     "New York" => %{lon: -73.99, lat: 40.72, region: "North America"},
@@ -17,17 +37,18 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(:server_url, @server_url)
-      |> assign(:loading, true)
+      |> assign(:server_url, server_url())
+      |> assign(:status, :checking)
       |> assign(:error, nil)
       |> assign(:features, [])
       |> assign(:test_cities, [])
       |> assign(:feature_count, 0)
-      |> assign(:current_center, [0, 20])
-      |> assign(:current_zoom, 2)
+      |> assign(:center, @center)
+      |> assign(:zoom, @zoom)
+      |> assign(:current_center, @center)
+      |> assign(:current_zoom, @zoom)
 
-    # Load features on mount
-    send(self(), :load_features)
+    if connected?(socket), do: send(self(), :load_features)
 
     {:ok, socket}
   end
@@ -35,28 +56,25 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
-      <%!-- Map full-screen --%>
-      <.map
-        id="ogc-map"
-        center={[0, 20]}
-        zoom={2}
-        style="https://demotiles.maplibre.org/style.json"
-        class="absolute inset-0 w-full h-full"
-      />
+    <.demo_page
+      path={~p"/ogc"}
+      locale={@locale}
+      title={gettext("OGC Features")}
+      subtitle={gettext("OGC API Features conformance test against a self-hosted server")}
+    >
+      <:map>
+        <.map
+          id="ogc-map"
+          center={@center}
+          zoom={@zoom}
+          style="https://demotiles.maplibre.org/style.json"
+          class="absolute inset-0 h-full w-full"
+        />
 
-      <%!-- Navigation Control --%>
-      <.navigation_control
-        id="nav-control"
-        map_id="ogc-map"
-        position="top-left"
-        show_compass={true}
-        show_zoom={true}
-      />
+        <.navigation_control id="nav-control" map_id="ogc-map" position="top-left" />
 
-      <%!-- Markers con popup por cada feature cargada --%>
-      <%= for feature <- @features do %>
         <.marker
+          :for={feature <- @features}
           id={"city-#{:erlang.phash2(feature["properties"]["name"])}"}
           map_id="ogc-map"
           lng_lat={feature["geometry"]["coordinates"]}
@@ -64,318 +82,166 @@ defmodule MaplibrexDemoWeb.OgcFeaturesLive do
           draggable={false}
           popup_text={feature["properties"]["name"]}
         />
-      <% end %>
+      </:map>
 
-      <%!-- Back nav pill --%>
-      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
-        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
-          {gettext("Back to Demos")}
-        </a>
-        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
-          <a href={"/locale?locale=en&return_to=/ogc"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
-          <span class="text-white/20 text-[10px]">|</span>
-          <a href={"/locale?locale=es&return_to=/ogc"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
-        </div>
-      </div>
+      <:panel>
+        <.panel_section label={gettext("Feature Server")}>
+          <.service_status
+            status={@status}
+            url={"#{@server_url}/ogc/collections/cities/items"}
+            hint={
+              gettext("Start the tile server, or point this demo elsewhere with TILE_SERVER_URL.")
+            }
+          />
+          <p :if={@error} class="mt-2 font-mono text-[10px] break-all text-amber-200/70">
+            {@error}
+          </p>
+        </.panel_section>
 
-      <%!-- Control Panel --%>
-      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
-        <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
-          <%!-- Header --%>
-          <div>
-            <h2 class="text-sm font-semibold text-white tracking-wide">{gettext("OGC Features")}</h2>
-            <p class="text-[11px] text-white/40 mt-0.5 leading-relaxed">
-              {gettext("OGC API Features conformance test against localhost:4000")}
-            </p>
-          </div>
+        <.panel_section label={gettext("Actions")} class="space-y-1.5">
+          <.option_button phx-click="reload_features">
+            {gettext("Reload Features")}
+          </.option_button>
+          <.option_button phx-click={MapCmd.fly_to("ogc-map", [139.74, 35.68], 10, duration: 1200)}>
+            {gettext("Fly to Tokyo")}
+          </.option_button>
+          <.option_button phx-click={MapCmd.fly_to("ogc-map", [-73.99, 40.72], 10, duration: 1200)}>
+            {gettext("Fly to New York")}
+          </.option_button>
+        </.panel_section>
 
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- Status --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              {gettext("Status")}
-            </p>
-            <%= if @loading do %>
-              <div class="flex items-center gap-2 text-sm text-white/60">
-                <div class="w-3 h-3 rounded-full border border-cyan-400/50 border-t-cyan-400 animate-spin">
-                </div>
-                {gettext("Loading features...")}
-              </div>
-            <% end %>
-            <%= if @error do %>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-red-500/10 border border-red-400/25 text-red-300">
-                Error: {@error}
+        <.panel_section :if={@test_cities != []} label={gettext("Test Results")} class="space-y-2">
+          <div
+            :for={city <- @test_cities}
+            class="space-y-1.5 rounded-xl border border-white/[0.07] bg-white/[0.04] p-3"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-white/80">{city.name}</span>
+              <span class={[
+                "inline-flex items-center rounded-full border px-2 py-0.5 text-[9px] font-semibold",
+                if(city.correct,
+                  do: "border-emerald-400/25 bg-emerald-500/10 text-emerald-300",
+                  else: "border-red-400/25 bg-red-500/10 text-red-300"
+                )
+              ]}>
+                {if city.correct, do: gettext("Pass"), else: gettext("Fail")}
               </span>
-            <% end %>
-            <%= if !@loading and is_nil(@error) do %>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500/10 border border-emerald-400/25 text-emerald-300">
-                {@feature_count} {gettext("features loaded")}
-              </span>
-            <% end %>
-          </div>
-
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- Actions --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              {gettext("Actions")}
-            </p>
-            <div class="space-y-1.5">
-              <button
-                phx-click="reload_features"
-                class="w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
-              >
-                {gettext("Reload Features")}
-              </button>
-              <button
-                onclick="document.getElementById('ogc-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [139.74, 35.68], zoom: 10, duration: 1200}}))"
-                class="w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
-              >
-                {gettext("Fly to Tokyo")}
-              </button>
-              <button
-                onclick="document.getElementById('ogc-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [-73.99, 40.72], zoom: 10, duration: 1200}}))"
-                class="w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
-              >
-                {gettext("Fly to New York")}
-              </button>
             </div>
-          </div>
 
-          <%!-- Test Results --%>
-          <%= if length(@test_cities) > 0 do %>
-            <div class="h-px bg-white/[0.06]"></div>
-            <div>
-              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-                {gettext("Test Results")}
-              </p>
-              <div class="space-y-2">
-                <%= for city <- @test_cities do %>
-                  <div class="bg-white/[0.04] border border-white/[0.07] rounded-xl p-3 space-y-1.5">
-                    <div class="flex items-center justify-between">
-                      <span class="text-xs text-white/80 font-medium">{city.name}</span>
-                      <%= if city.correct do %>
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500/10 border border-emerald-400/25 text-emerald-300">
-                          {gettext("Pass")}
-                        </span>
-                      <% else %>
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-red-500/10 border border-red-400/25 text-red-300">
-                          {gettext("Fail")}
-                        </span>
-                      <% end %>
-                    </div>
-                    <div class="flex gap-3 text-[9px]">
-                      <div>
-                        <p class="text-white/30 uppercase tracking-widest">{gettext("Server")}</p>
-                        <p class="font-mono text-white/55">
-                          [{Float.round(Enum.at(city.coords, 0), 2)}, {Float.round(
-                            Enum.at(city.coords, 1),
-                            2
-                          )}]
-                        </p>
-                      </div>
-                      <div class="w-px bg-white/10"></div>
-                      <div>
-                        <p class="text-white/30 uppercase tracking-widest">{gettext("Region")}</p>
-                        <p class="font-mono text-white/55">{city.expected.region}</p>
-                      </div>
-                    </div>
-                    <button
-                      onclick={"document.getElementById('ogc-map').dispatchEvent(new CustomEvent('maplibrex:fly_to', {detail: {center: [#{Enum.at(city.coords, 0)}, #{Enum.at(city.coords, 1)}], zoom: 10, duration: 1200}}))"}
-                      class="w-full text-left px-2 py-1.5 rounded-lg text-[10px] text-white/50 hover:text-white/80 bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.05] hover:border-white/[0.10] transition-all duration-300"
-                    >
-                      {gettext("Fly to %{city}", city: city.name)}
-                    </button>
-                  </div>
-                <% end %>
+            <div class="flex gap-3 text-[9px]">
+              <div>
+                <p class="tracking-widest text-white/30 uppercase">{gettext("Server")}</p>
+                <p class="font-mono text-white/55">
+                  [{Float.round(Enum.at(city.coords, 0) * 1.0, 2)}, {Float.round(
+                    Enum.at(city.coords, 1) * 1.0,
+                    2
+                  )}]
+                </p>
+              </div>
+              <div class="w-px bg-white/10" />
+              <div>
+                <p class="tracking-widest text-white/30 uppercase">{gettext("Region")}</p>
+                <p class="font-mono text-white/55">{city.expected.region}</p>
               </div>
             </div>
-          <% end %>
 
-          <div class="h-px bg-white/[0.06]"></div>
+            <.action_button phx-click={MapCmd.fly_to("ogc-map", city.coords, 10, duration: 1200)}>
+              {gettext("Fly to %{city}", city: city.name)}
+            </.action_button>
+          </div>
+        </.panel_section>
+      </:panel>
 
-          <%!-- Server --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              {gettext("Server")}
-            </p>
-            <p class="font-mono text-[10px] text-white/50 break-all">{@server_url}</p>
-          </div>
-        </div>
-      </div>
-
-      <%!-- Telemetry --%>
-      <div class="absolute bottom-4 left-4 z-20">
-        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Features")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">{@feature_count}</p>
-          </div>
-          <div class="w-px h-6 bg-white/10"></div>
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Status")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">
-              {cond do
-                @loading -> gettext("loading")
-                @error -> gettext("error")
-                true -> gettext("ready")
-              end}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <:telemetry>
+        <.stat first label={gettext("Features")} value={@feature_count} />
+        <.stat label={gettext("Status")} value={status_label(@status)} />
+        <.stat label={gettext("Center")} value={format_center(@current_center)} />
+      </:telemetry>
+    </.demo_page>
     """
   end
 
   @impl true
   def handle_info(:load_features, socket) do
-    case fetch_features() do
-      {:ok, features} ->
-        test_cities = extract_test_cities(features)
-
-        socket =
+    socket =
+      case fetch_features(socket.assigns.server_url) do
+        {:ok, features} ->
           socket
-          |> assign(:loading, false)
+          |> assign(:status, :ok)
+          |> assign(:error, nil)
           |> assign(:features, features)
           |> assign(:feature_count, length(features))
-          |> assign(:test_cities, test_cities)
+          |> assign(:test_cities, extract_test_cities(features))
 
-        {:noreply, socket}
-
-      {:error, reason} ->
-        socket =
+        {:error, reason} ->
           socket
-          |> assign(:loading, false)
+          |> assign(:status, :unreachable)
           |> assign(:error, reason)
+          |> assign(:features, [])
+          |> assign(:feature_count, 0)
+          |> assign(:test_cities, [])
+      end
 
-        {:noreply, socket}
-    end
+    {:noreply, socket}
   end
 
   @impl true
   def handle_event("reload_features", _params, socket) do
-    socket =
-      socket
-      |> assign(:loading, true)
-      |> assign(:error, nil)
-
     send(self(), :load_features)
-    {:noreply, socket}
+    {:noreply, socket |> assign(:status, :checking) |> assign(:error, nil)}
   end
 
-  @impl true
-  def handle_event("fly_to_city", %{"city" => city_name}, socket) do
-    case Enum.find(socket.assigns.features, fn f -> f["properties"]["name"] == city_name end) do
-      nil ->
-        {:noreply, socket}
-
-      feature ->
-        coords = feature["geometry"]["coordinates"]
-
-        socket =
-          push_event(socket, "map:fly_to", %{
-            map_id: "ogc-map",
-            center: coords,
-            zoom: 10,
-            duration: 1500
-          })
-
-        {:noreply, socket}
-    end
-  end
-
-  @impl true
   def handle_event("map:moved", %{"center" => center, "zoom" => zoom}, socket) do
-    socket =
-      socket
-      |> assign(:current_center, center)
-      |> assign(:current_zoom, zoom)
-
-    {:noreply, socket}
+    {:noreply, socket |> assign(:current_center, center) |> assign(:current_zoom, zoom)}
   end
 
-  @impl true
   def handle_event("map:zoom_changed", %{"zoom" => zoom}, socket) do
     {:noreply, assign(socket, :current_zoom, zoom)}
   end
 
-  @impl true
-  def handle_event("map:loaded", _params, socket) do
-    {:noreply, socket}
-  end
+  def handle_event("map:" <> _, _params, socket), do: {:noreply, socket}
+  def handle_event("marker:" <> _, _params, socket), do: {:noreply, socket}
+  def handle_event("layer:" <> _, _params, socket), do: {:noreply, socket}
 
-  @impl true
-  def handle_event("map:clicked", _params, socket) do
-    {:noreply, socket}
-  end
+  defp server_url, do: Application.get_env(:maplibrex_demo, :tile_server_url)
 
-  @impl true
-  def handle_event("map:error", %{"error" => error}, socket) do
-    IO.inspect(error, label: "Map error")
-    {:noreply, socket}
-  end
+  defp status_label(:ok), do: gettext("ready")
+  defp status_label(:checking), do: gettext("loading")
+  defp status_label(_), do: gettext("error")
 
-  @impl true
-  def handle_event("layer:feature_mouseenter", _params, socket) do
-    {:noreply, socket}
-  end
+  defp fetch_features(server_url) do
+    url = "#{server_url}/ogc/collections/cities/items?limit=#{@feature_limit}"
 
-  @impl true
-  def handle_event("layer:feature_mouseleave", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:feature_clicked", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("marker:clicked", _params, socket) do
-    {:noreply, socket}
-  end
-
-  # Private functions
-
-  defp fetch_features do
-    url = "#{@server_url}/ogc/collections/cities/items?limit=50"
-
-    case Req.get(url) do
-      {:ok, %{status: 200, body: body}} ->
-        {:ok, body["features"] || []}
-
-      {:ok, %{status: status}} ->
-        {:error, "HTTP #{status}"}
-
-      {:error, reason} ->
-        {:error, inspect(reason)}
+    case Req.get(url, receive_timeout: @request_timeout_ms, retry: false) do
+      {:ok, %{status: 200, body: body}} -> {:ok, body["features"] || []}
+      {:ok, %{status: status}} -> {:error, "HTTP #{status}"}
+      {:error, reason} -> {:error, Exception.message(reason)}
     end
+  rescue
+    error -> {:error, Exception.message(error)}
   end
 
+  # Flags features whose coordinates land more than a degree from where the
+  # city actually is — usually a lat/lon axis-order bug on the server.
   defp extract_test_cities(features) do
     features
-    |> Enum.filter(fn f ->
-      name = get_in(f, ["properties", "name"])
-      Map.has_key?(@expected_coords, name)
-    end)
+    |> Enum.filter(&Map.has_key?(@expected_coords, get_in(&1, ["properties", "name"])))
     |> Enum.take(5)
     |> Enum.map(fn feature ->
       name = get_in(feature, ["properties", "name"])
-      coords = get_in(feature, ["geometry", "coordinates"])
-      expected = Map.get(@expected_coords, name)
-
-      lon_match = abs(Enum.at(coords, 0) - expected.lon) < 1
-      lat_match = abs(Enum.at(coords, 1) - expected.lat) < 1
+      [lon, lat] = coords = get_in(feature, ["geometry", "coordinates"])
+      expected = Map.fetch!(@expected_coords, name)
 
       %{
         name: name,
         coords: coords,
         expected: expected,
-        correct: lon_match and lat_match
+        correct: abs(lon - expected.lon) < 1 and abs(lat - expected.lat) < 1
       }
     end)
+  end
+
+  defp format_center([lng, lat]) do
+    "#{Float.round(lng * 1.0, 2)}, #{Float.round(lat * 1.0, 2)}"
   end
 end

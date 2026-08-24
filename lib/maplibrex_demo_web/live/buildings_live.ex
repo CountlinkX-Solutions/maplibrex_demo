@@ -1,15 +1,36 @@
 defmodule MaplibrexDemoWeb.BuildingsLive do
+  @moduledoc """
+  Extruded 3D buildings driven by a `fill-extrusion` layer.
+
+  Height, opacity and the colour expression all come from assigns, so every
+  control is an ordinary LiveView event — no client-side state to keep in sync.
+  """
   use MaplibrexDemoWeb, :live_view
   on_mount {MaplibrexDemoWeb.LocaleHook, :set_locale}
+
   import MaplibreX.Components
+
+  @center [-74.006, 40.7128]
+  @zoom 14
+
+  @color_schemes [
+    %{id: "height", label_key: :by_height},
+    %{id: "uniform", label_key: :uniform_blue},
+    %{id: "type", label_key: :by_type}
+  ]
 
   @impl true
   def mount(_params, _session, socket) do
     socket =
       socket
+      |> assign(:center, @center)
+      |> assign(:zoom, @zoom)
+      |> assign(:current_center, @center)
+      |> assign(:current_zoom, @zoom)
       |> assign(:height_exaggeration, 1.0)
       |> assign(:opacity, 0.8)
       |> assign(:color_scheme, "height")
+      |> assign(:color_schemes, @color_schemes)
       |> assign(:buildings_data, generate_buildings_data())
 
     {:ok, socket}
@@ -18,355 +39,185 @@ defmodule MaplibrexDemoWeb.BuildingsLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
-      <%!-- Map full-screen --%>
-      <.map
-        id="buildings-map"
-        center={[-74.006, 40.7128]}
-        zoom={14}
-        pitch={60}
-        bearing={-17.6}
-        style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-        class="absolute inset-0 w-full h-full"
-      />
+    <.demo_page
+      path={~p"/buildings"}
+      locale={@locale}
+      title={gettext("3D Buildings")}
+      subtitle={gettext("Extruded NYC building geometry with real-time height and color controls")}
+    >
+      <:map>
+        <.map
+          id="buildings-map"
+          center={@center}
+          zoom={@zoom}
+          pitch={60}
+          bearing={-17.6}
+          style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+          class="absolute inset-0 h-full w-full"
+        />
 
-      <%!-- Navigation Control --%>
-      <.navigation_control
-        id="nav-control"
-        map_id="buildings-map"
-        position="top-left"
-        show_compass={true}
-        show_zoom={true}
-      />
+        <.navigation_control id="nav-control" map_id="buildings-map" position="top-left" />
 
-      <%!-- 3D Buildings Layer --%>
-      <.geojson_layer
-        id="buildings-3d"
-        map_id="buildings-map"
-        data={@buildings_data}
-        type="fill-extrusion"
-        paint={get_paint_properties(assigns)}
-      />
+        <.geojson_layer
+          id="buildings-3d"
+          map_id="buildings-map"
+          data={@buildings_data}
+          type="fill-extrusion"
+          paint={extrusion_paint(@color_scheme, @height_exaggeration, @opacity)}
+        />
+      </:map>
 
-      <%!-- Back nav --%>
-      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
-        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
-          {gettext("Back to Demos")}
-        </a>
-        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
-          <a href={"/locale?locale=en&return_to=/buildings"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
-          <span class="text-white/20 text-[10px]">|</span>
-          <a href={"/locale?locale=es&return_to=/buildings"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
-        </div>
-      </div>
+      <:panel>
+        <.panel_section label={gettext("Color Scheme")} class="space-y-1.5">
+          <.option_button
+            :for={scheme <- @color_schemes}
+            active={@color_scheme == scheme.id}
+            phx-click="set_color_scheme"
+            phx-value-id={scheme.id}
+          >
+            {scheme_label(scheme.label_key)}
+          </.option_button>
+        </.panel_section>
 
-      <%!-- Control Panel --%>
-      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
-        <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
-          <%!-- Header --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-1">MaplibreX</p>
-            <h2 class="text-base font-semibold text-white/95">{gettext("3D Buildings")}</h2>
-            <p class="text-xs text-white/50 mt-1 leading-relaxed">{gettext("Extruded NYC building geometry with real-time height and color controls")}</p>
-          </div>
-          <div class="h-px bg-white/[0.06]"></div>
+        <.panel_section label={gettext("Height Exaggeration")}>
+          <.slider
+            label={gettext("Vertical scale")}
+            name="value"
+            value={@height_exaggeration}
+            min="0.5"
+            max="3.0"
+            step="0.1"
+            on_change="update_height"
+            display={"#{Float.round(@height_exaggeration * 1.0, 1)}x"}
+          />
+          <.slider_bounds min="0.5x" max="3.0x" />
+        </.panel_section>
 
-          <%!-- Color Scheme --%>
-          <div class="space-y-2">
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">{gettext("Color Scheme")}</p>
-            <div class="space-y-1.5">
-              <button
-                phx-click="set_color_scheme"
-                phx-value-scheme="height"
-                class={if @color_scheme == "height",
-                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
-                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
-              >
-                {gettext("By Height")}
-              </button>
-              <button
-                phx-click="set_color_scheme"
-                phx-value-scheme="uniform"
-                class={if @color_scheme == "uniform",
-                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
-                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
-              >
-                {gettext("Uniform Blue")}
-              </button>
-              <button
-                phx-click="set_color_scheme"
-                phx-value-scheme="type"
-                class={if @color_scheme == "type",
-                  do: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
-                  else: "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"}
-              >
-                {gettext("By Type")}
-              </button>
-            </div>
-          </div>
+        <.panel_section label={gettext("Opacity")}>
+          <.slider
+            label={gettext("Layer opacity")}
+            name="value"
+            value={@opacity}
+            min="0.3"
+            max="1.0"
+            step="0.05"
+            on_change="update_opacity"
+            display={"#{trunc(@opacity * 100)}%"}
+          />
+          <.slider_bounds min="30%" max="100%" />
+        </.panel_section>
+      </:panel>
 
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- Height Exaggeration slider --%>
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Height Exaggeration")}</p>
-              <span class="font-mono text-xs text-cyan-300/80">{Float.round(@height_exaggeration * 1.0, 1)}x</span>
-            </div>
-            <form phx-change="update_height">
-              <input
-                type="range"
-                min="0.5"
-                max="3.0"
-                step="0.1"
-                value={@height_exaggeration}
-                name="value"
-                class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-              />
-            </form>
-            <div class="flex justify-between text-[9px] text-white/25">
-              <span>0.5x</span>
-              <span>3.0x</span>
-            </div>
-          </div>
-
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- Opacity slider --%>
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35">{gettext("Opacity")}</p>
-              <span class="font-mono text-xs text-cyan-300/80">{trunc(@opacity * 100)}%</span>
-            </div>
-            <form phx-change="update_opacity">
-              <input
-                type="range"
-                min="0.3"
-                max="1.0"
-                step="0.05"
-                value={@opacity}
-                name="value"
-                class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-              />
-            </form>
-            <div class="flex justify-between text-[9px] text-white/25">
-              <span>30%</span>
-              <span>100%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <%!-- Telemetry bar --%>
-      <div class="absolute bottom-4 left-4 z-20">
-        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Location")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">40.71, -74.01</p>
-          </div>
-          <div class="w-px h-6 bg-white/10"></div>
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Zoom")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">14</p>
-          </div>
-          <div class="w-px h-6 bg-white/10"></div>
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Height")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">{Float.round(@height_exaggeration * 1.0, 1)}x</p>
-          </div>
-          <div class="w-px h-6 bg-white/10"></div>
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Opacity")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">{trunc(@opacity * 100)}%</p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <:telemetry>
+        <.stat first label={gettext("Location")} value={format_center(@current_center)} />
+        <.stat label={gettext("Zoom")} value={Float.round(@current_zoom * 1.0, 1)} />
+        <.stat label={gettext("Height")} value={"#{Float.round(@height_exaggeration * 1.0, 1)}x"} />
+        <.stat label={gettext("Opacity")} value={"#{trunc(@opacity * 100)}%"} />
+      </:telemetry>
+    </.demo_page>
     """
   end
 
-  # Helper function to get paint properties based on color scheme
-  defp get_paint_properties(assigns) do
-    color_expression =
-      case assigns.color_scheme do
-        "height" ->
-          [
-            "interpolate",
-            ["linear"],
-            ["get", "height"],
-            0,
-            "#fbb03b",
-            50,
-            "#223b53",
-            150,
-            "#e55e5e"
-          ]
+  @impl true
+  def handle_event("set_color_scheme", %{"id" => scheme}, socket) do
+    {:noreply, assign(socket, :color_scheme, scheme)}
+  end
 
-        "uniform" ->
-          "#4a90e2"
+  def handle_event("update_height", %{"value" => value}, socket) do
+    {:noreply, assign(socket, :height_exaggeration, parse_float(value, 1.0))}
+  end
 
-        "type" ->
-          [
-            "match",
-            ["get", "type"],
-            "residential",
-            "#fbb03b",
-            "commercial",
-            "#223b53",
-            "office",
-            "#e55e5e",
-            "#888888"
-          ]
+  def handle_event("update_opacity", %{"value" => value}, socket) do
+    {:noreply, assign(socket, :opacity, parse_float(value, 0.8))}
+  end
 
-        _ ->
-          "#4a90e2"
-      end
+  def handle_event("map:moved", %{"center" => center, "zoom" => zoom}, socket) do
+    {:noreply, socket |> assign(:current_center, center) |> assign(:current_zoom, zoom)}
+  end
 
+  def handle_event("map:" <> _, _params, socket), do: {:noreply, socket}
+  def handle_event("layer:" <> _, _params, socket), do: {:noreply, socket}
+
+  defp scheme_label(:by_height), do: gettext("By Height")
+  defp scheme_label(:uniform_blue), do: gettext("Uniform Blue")
+  defp scheme_label(:by_type), do: gettext("By Type")
+
+  defp extrusion_paint(color_scheme, height_exaggeration, opacity) do
     %{
-      "fill-extrusion-color" => color_expression,
-      "fill-extrusion-height" => ["*", ["get", "height"], assigns.height_exaggeration],
+      "fill-extrusion-color" => color_expression(color_scheme),
+      "fill-extrusion-height" => ["*", ["get", "height"], height_exaggeration],
       "fill-extrusion-base" => ["get", "base_height"],
-      "fill-extrusion-opacity" => assigns.opacity,
+      "fill-extrusion-opacity" => opacity,
       "fill-extrusion-vertical-gradient" => true
     }
   end
 
-  # Event Handlers
-
-  @impl true
-  def handle_event("update_height", %{"value" => value}, socket) do
-    height =
-      case Float.parse(value) do
-        {float_value, _} -> float_value
-        :error -> 1.0
-      end
-
-    {:noreply, assign(socket, :height_exaggeration, height)}
+  defp color_expression("height") do
+    ["interpolate", ["linear"], ["get", "height"], 0, "#fbb03b", 50, "#223b53", 150, "#e55e5e"]
   end
 
-  @impl true
-  def handle_event("update_opacity", %{"value" => value}, socket) do
-    opacity =
-      case Float.parse(value) do
-        {float_value, _} -> float_value
-        :error -> 0.8
-      end
-
-    {:noreply, assign(socket, :opacity, opacity)}
+  defp color_expression("type") do
+    [
+      "match",
+      ["get", "type"],
+      "residential",
+      "#fbb03b",
+      "commercial",
+      "#223b53",
+      "office",
+      "#e55e5e",
+      "#888888"
+    ]
   end
 
-  @impl true
-  def handle_event("set_color_scheme", %{"scheme" => scheme}, socket) do
-    {:noreply, assign(socket, :color_scheme, scheme)}
+  defp color_expression(_uniform), do: "#4a90e2"
+
+  defp format_center([lng, lat]) do
+    "#{Float.round(lat * 1.0, 2)}, #{Float.round(lng * 1.0, 2)}"
   end
 
-  @impl true
-  def handle_event("map:loaded", _params, socket) do
-    {:noreply, socket}
+  defp parse_float(value, fallback) do
+    case Float.parse(value) do
+      {parsed, _} -> parsed
+      :error -> fallback
+    end
   end
 
-  @impl true
-  def handle_event("map:moved", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:zoom_changed", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:clicked", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:error", %{"error" => error}, socket) do
-    IO.inspect(error, label: "Map error")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:added", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:removed", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:feature_mouseenter", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:feature_mouseleave", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:feature_click", _params, socket) do
-    {:noreply, socket}
-  end
-
-  # Helper Functions
-
+  # A 15x15 grid of blocks standing in for Manhattan.
   defp generate_buildings_data do
-    # Generate buildings in a grid pattern (simulating Manhattan)
-    # Center: -74.006, 40.7128 (NYC)
-    center_lng = -74.006
-    center_lat = 40.7128
-
+    [center_lng, center_lat] = @center
     building_types = ["residential", "commercial", "office"]
 
     features =
       for x <- 0..14, y <- 0..14 do
-        # Create a small rectangular building
-        lng_offset = (x - 7) * 0.002
-        lat_offset = (y - 7) * 0.002
+        lng = center_lng + (x - 7) * 0.002
+        lat = center_lat + (y - 7) * 0.002
 
-        lng = center_lng + lng_offset
-        lat = center_lat + lat_offset
-
-        # Building dimensions
         width = 0.0008 + :rand.uniform() * 0.0004
         depth = 0.0008 + :rand.uniform() * 0.0004
-
-        # Building properties
-        height = 20 + :rand.uniform() * 130
-        base_height = :rand.uniform() < 0.1 && 5 || 0
-        building_type = Enum.random(building_types)
-
-        # Create polygon coordinates
-        coordinates = [
-          [
-            [lng - width / 2, lat - depth / 2],
-            [lng + width / 2, lat - depth / 2],
-            [lng + width / 2, lat + depth / 2],
-            [lng - width / 2, lat + depth / 2],
-            [lng - width / 2, lat - depth / 2]
-          ]
-        ]
 
         %{
           "type" => "Feature",
           "geometry" => %{
             "type" => "Polygon",
-            "coordinates" => coordinates
+            "coordinates" => [
+              [
+                [lng - width / 2, lat - depth / 2],
+                [lng + width / 2, lat - depth / 2],
+                [lng + width / 2, lat + depth / 2],
+                [lng - width / 2, lat + depth / 2],
+                [lng - width / 2, lat - depth / 2]
+              ]
+            ]
           },
           "properties" => %{
-            "height" => height,
-            "base_height" => base_height,
-            "type" => building_type
+            "height" => 20 + :rand.uniform() * 130,
+            "base_height" => if(:rand.uniform() < 0.1, do: 5, else: 0),
+            "type" => Enum.random(building_types)
           }
         }
       end
 
-    %{
-      "type" => "FeatureCollection",
-      "features" => features
-    }
+    %{"type" => "FeatureCollection", "features" => features}
   end
 end

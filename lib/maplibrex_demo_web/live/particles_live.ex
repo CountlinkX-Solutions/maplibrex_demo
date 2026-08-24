@@ -79,391 +79,236 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
 
   @impl true
   def render(assigns) do
-    assigns = assign(assigns, :vertex_shader, @vertex_shader)
-    assigns = assign(assigns, :fragment_shader, @fragment_shader)
+    assigns =
+      assigns
+      |> assign(:vertex_shader, @vertex_shader)
+      |> assign(:fragment_shader, @fragment_shader)
 
     ~H"""
-    <div class="relative w-full h-screen overflow-hidden bg-[#050810]">
-      <%!-- Map full-screen --%>
-      <.map
-        id="particles-map"
-        center={[0, 20]}
-        zoom={2}
-        pitch={0}
-        bearing={0}
-        style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-        class="absolute inset-0 w-full h-full"
-      />
+    <.demo_page
+      path={~p"/particles"}
+      locale={@locale}
+      title={gettext("WebGL Particles")}
+      subtitle={gettext("1,000 particles animated via custom GLSL vertex & fragment shaders")}
+    >
+      <:map>
+        <.map
+          id="particles-map"
+          center={[0, 20]}
+          zoom={2}
+          pitch={0}
+          bearing={0}
+          style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+          class="absolute inset-0 h-full w-full"
+        />
 
-      <%!-- Navigation Control --%>
-      <.navigation_control
-        id="nav-control"
-        map_id="particles-map"
-        position="top-left"
-        show_compass={true}
-        show_zoom={true}
-      />
+        <.navigation_control id="nav-control" map_id="particles-map" position="top-left" />
 
-      <%!-- Custom WebGL Particle Layer --%>
-      <.custom_layer
-        id="particle-layer"
-        map_id="particles-map"
-        vertex_shader={@vertex_shader}
-        fragment_shader={@fragment_shader}
-        uniforms={%{
-          "u_color" => @color,
-          "u_opacity" => @opacity,
-          "u_point_size" => @point_size,
-          "u_time" => 0.0,
-          "u_speed" => @speed,
-          "u_flow_direction" => @flow_direction,
-          "u_turbulence" => @turbulence
-        }}
-      />
+        <.custom_layer
+          id="particle-layer"
+          map_id="particles-map"
+          vertex_shader={@vertex_shader}
+          fragment_shader={@fragment_shader}
+          uniforms={uniforms(assigns)}
+        />
+      </:map>
 
-      <%!-- Back nav pill --%>
-      <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
-        <a href="/" class="flex items-center gap-2 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] no-underline">
-          {gettext("Back to Demos")}
-        </a>
-        <div class="flex items-center gap-1 bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-full px-3 py-1.5">
-          <a href={"/locale?locale=en&return_to=/particles"} class={if @locale == "en", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>EN</a>
-          <span class="text-white/20 text-[10px]">|</span>
-          <a href={"/locale?locale=es&return_to=/particles"} class={if @locale == "es", do: "text-[10px] font-semibold text-cyan-300 no-underline", else: "text-[10px] font-medium text-white/40 hover:text-white/70 no-underline"}>ES</a>
-        </div>
-      </div>
+      <:panel>
+        <.panel_section label={gettext("Preset")} class="space-y-1.5">
+          <.option_button
+            :for={{id, _values} <- presets()}
+            active={@preset == id}
+            phx-click="set_preset"
+            phx-value-id={id}
+          >
+            {preset_label(id)}
+          </.option_button>
+        </.panel_section>
 
-      <%!-- Control Panel --%>
-      <div class="absolute top-4 right-4 bottom-16 w-72 z-20 overflow-y-auto">
-        <div class="bg-[rgba(8,12,28,0.85)] backdrop-blur-xl border border-white/[0.09] rounded-2xl p-5 space-y-5">
-          <%!-- Header --%>
-          <div>
-            <h2 class="text-sm font-semibold text-white tracking-wide">{gettext("WebGL Particles")}</h2>
-            <p class="text-[11px] text-white/40 mt-0.5 leading-relaxed">
-              {gettext("1,000 particles animated via custom GLSL vertex & fragment shaders")}
-            </p>
+        <.panel_section label={gettext("Particle Color")}>
+          <div
+            class="mb-3 h-6 rounded-lg border border-white/[0.07]"
+            style={"background-color: #{css_color(@color)}"}
+          />
+          <div class="space-y-3">
+            <.slider
+              label="R"
+              name="value"
+              value={Enum.at(@color, 0)}
+              min="0"
+              max="1"
+              step="0.01"
+              on_change="update_color_r"
+              display={to_string(Float.round(Enum.at(@color, 0), 2))}
+            />
+            <.slider
+              label="G"
+              name="value"
+              value={Enum.at(@color, 1)}
+              min="0"
+              max="1"
+              step="0.01"
+              on_change="update_color_g"
+              display={to_string(Float.round(Enum.at(@color, 1), 2))}
+            />
+            <.slider
+              label="B"
+              name="value"
+              value={Enum.at(@color, 2)}
+              min="0"
+              max="1"
+              step="0.01"
+              on_change="update_color_b"
+              display={to_string(Float.round(Enum.at(@color, 2), 2))}
+            />
           </div>
+        </.panel_section>
 
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- Preset --%>
+        <.panel_section label={gettext("Flow Parameters")} class="space-y-3">
+          <.slider
+            label={gettext("Speed")}
+            name="value"
+            value={@speed}
+            min="0"
+            max="5"
+            step="0.1"
+            on_change="update_speed"
+            display={"#{Float.round(@speed, 1)}x"}
+          />
+          <.slider
+            label={gettext("Turbulence")}
+            name="value"
+            value={@turbulence}
+            min="0"
+            max="1"
+            step="0.05"
+            on_change="update_turbulence"
+            display={to_string(Float.round(@turbulence, 2))}
+          />
           <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-2">
-              {gettext("Preset")}
-            </p>
-            <div class="space-y-1.5">
-              <button
-                phx-click="set_preset"
-                phx-value-preset="ocean_currents"
-                class={
-                  if @preset == "ocean_currents",
-                    do:
-                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
-                    else:
-                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
-                }
-              >
-                {gettext("Ocean Currents")}
-              </button>
-              <button
-                phx-click="set_preset"
-                phx-value-preset="wind_flow"
-                class={
-                  if @preset == "wind_flow",
-                    do:
-                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
-                    else:
-                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
-                }
-              >
-                {gettext("Wind Flow")}
-              </button>
-              <button
-                phx-click="set_preset"
-                phx-value-preset="lava_flow"
-                class={
-                  if @preset == "lava_flow",
-                    do:
-                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-cyan-300 bg-cyan-500/10 border border-cyan-400/25",
-                    else:
-                      "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white/65 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.07] hover:border-white/[0.12] transition-all duration-300"
-                }
-              >
-                {gettext("Lava Flow")}
-              </button>
+            <.slider
+              label={gettext("Direction")}
+              name="value"
+              value={direction_degrees(@flow_direction)}
+              min="0"
+              max="360"
+              step="15"
+              on_change="update_direction"
+              display={"#{direction_degrees(@flow_direction)}°"}
+            />
+            <div class="mt-1 flex justify-between text-[9px] text-white/25">
+              <span>N</span><span>E</span><span>S</span><span>W</span>
             </div>
           </div>
+        </.panel_section>
 
-          <div class="h-px bg-white/[0.06]"></div>
+        <.panel_section label={gettext("Render")} class="space-y-3">
+          <.slider
+            label={gettext("Opacity")}
+            name="value"
+            value={@opacity}
+            min="0"
+            max="1"
+            step="0.05"
+            on_change="update_opacity"
+            display={"#{trunc(@opacity * 100)}%"}
+          />
+          <.slider
+            label={gettext("Size")}
+            name="value"
+            value={@point_size}
+            min="1"
+            max="10"
+            step="0.5"
+            on_change="update_point_size"
+            display={"#{Float.round(@point_size, 1)}px"}
+          />
+        </.panel_section>
+      </:panel>
 
-          <%!-- Particle Color --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-3">
-              {gettext("Particle Color")}
-            </p>
-            <%!-- Color preview swatch --%>
-            <div
-              class="h-6 rounded-lg mb-3 border border-white/[0.07]"
-              style={"background-color: rgb(#{trunc(Enum.at(@color, 0) * 255)}, #{trunc(Enum.at(@color, 1) * 255)}, #{trunc(Enum.at(@color, 2) * 255)});"}
-            >
-            </div>
-            <div class="space-y-3">
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">R</p>
-                  <p class="font-mono text-[10px] text-white/50">
-                    {Float.round(Enum.at(@color, 0), 2)}
-                  </p>
-                </div>
-                <form phx-change="update_color_r">
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={Enum.at(@color, 0)}
-                    name="value"
-                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-                  />
-                </form>
-              </div>
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">G</p>
-                  <p class="font-mono text-[10px] text-white/50">
-                    {Float.round(Enum.at(@color, 1), 2)}
-                  </p>
-                </div>
-                <form phx-change="update_color_g">
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={Enum.at(@color, 1)}
-                    name="value"
-                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-                  />
-                </form>
-              </div>
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">B</p>
-                  <p class="font-mono text-[10px] text-white/50">
-                    {Float.round(Enum.at(@color, 2), 2)}
-                  </p>
-                </div>
-                <form phx-change="update_color_b">
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={Enum.at(@color, 2)}
-                    name="value"
-                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-                  />
-                </form>
-              </div>
-            </div>
-          </div>
-
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- Flow Parameters --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-3">
-              {gettext("Flow Parameters")}
-            </p>
-            <div class="space-y-3">
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Speed")}</p>
-                  <p class="font-mono text-[10px] text-white/50">{Float.round(@speed, 1)}x</p>
-                </div>
-                <form phx-change="update_speed">
-                  <input
-                    type="range"
-                    min="0"
-                    max="5"
-                    step="0.1"
-                    value={@speed}
-                    name="value"
-                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-                  />
-                </form>
-              </div>
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Turbulence")}</p>
-                  <p class="font-mono text-[10px] text-white/50">{Float.round(@turbulence, 2)}</p>
-                </div>
-                <form phx-change="update_turbulence">
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.05"
-                    value={@turbulence}
-                    name="value"
-                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-                  />
-                </form>
-              </div>
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Direction")}</p>
-                  <p class="font-mono text-[10px] text-white/50">
-                    {trunc(atan2(@flow_direction) * 180 / :math.pi())}deg
-                  </p>
-                </div>
-                <form phx-change="update_direction">
-                  <input
-                    type="range"
-                    min="0"
-                    max="360"
-                    step="15"
-                    value={trunc(atan2(@flow_direction) * 180 / :math.pi())}
-                    name="value"
-                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-                  />
-                </form>
-                <div class="flex justify-between text-[9px] text-white/25 mt-1">
-                  <span>N</span><span>E</span><span>S</span><span>W</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="h-px bg-white/[0.06]"></div>
-
-          <%!-- Render --%>
-          <div>
-            <p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/35 mb-3">
-              {gettext("Render")}
-            </p>
-            <div class="space-y-3">
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Opacity")}</p>
-                  <p class="font-mono text-[10px] text-white/50">{trunc(@opacity * 100)}%</p>
-                </div>
-                <form phx-change="update_opacity">
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.05"
-                    value={@opacity}
-                    name="value"
-                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-                  />
-                </form>
-              </div>
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Size")}</p>
-                  <p class="font-mono text-[10px] text-white/50">
-                    {Float.round(@point_size, 1)}px
-                  </p>
-                </div>
-                <form phx-change="update_point_size">
-                  <input
-                    type="range"
-                    min="1"
-                    max="10"
-                    step="0.5"
-                    value={@point_size}
-                    name="value"
-                    class="w-full h-1 rounded-full bg-white/10 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-400 [&::-webkit-slider-thumb]:cursor-pointer"
-                  />
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <%!-- Telemetry --%>
-      <div class="absolute bottom-4 left-4 z-20">
-        <div class="bg-[rgba(8,12,28,0.82)] backdrop-blur-xl border border-white/[0.09] rounded-xl px-4 py-3 flex items-center gap-4">
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("FPS")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">60</p>
-          </div>
-          <div class="w-px h-6 bg-white/10"></div>
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Preset")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">
-              {case @preset do
-                "ocean_currents" -> gettext("Ocean")
-                "wind_flow" -> gettext("Wind")
-                "lava_flow" -> gettext("Lava")
-                other -> other
-              end}
-            </p>
-          </div>
-          <div class="w-px h-6 bg-white/10"></div>
-          <div>
-            <p class="text-[9px] uppercase tracking-widest text-white/35">{gettext("Particles")}</p>
-            <p class="font-mono text-xs text-cyan-300/90">{gettext("1,000")}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <:telemetry>
+        <.stat first label={gettext("Preset")} value={preset_label(@preset)} />
+        <.stat label={gettext("Particles")} value="1,000" />
+        <.stat label={gettext("Shader")} value="GLSL" />
+      </:telemetry>
+    </.demo_page>
     """
   end
 
-  # Helper function to calculate angle from direction vector
-  defp atan2(flow_direction) do
-    [x, y] = flow_direction
-    :math.atan2(y, x)
+  # Uniform values handed to the custom WebGL layer.
+  defp uniforms(assigns) do
+    %{
+      "u_color" => assigns.color,
+      "u_opacity" => assigns.opacity,
+      "u_point_size" => assigns.point_size,
+      "u_time" => 0.0,
+      "u_speed" => assigns.speed,
+      "u_flow_direction" => assigns.flow_direction,
+      "u_turbulence" => assigns.turbulence
+    }
   end
+
+  defp css_color([r, g, b]) do
+    "rgb(#{trunc(r * 255)}, #{trunc(g * 255)}, #{trunc(b * 255)})"
+  end
+
+  defp direction_degrees([x, y]) do
+    :math.atan2(y, x) |> Kernel.*(180) |> Kernel./(:math.pi()) |> trunc()
+  end
+
+  defp preset_label("ocean_currents"), do: gettext("Ocean Currents")
+  defp preset_label("wind_flow"), do: gettext("Wind Flow")
+  defp preset_label("lava_flow"), do: gettext("Lava Flow")
+  defp preset_label(other), do: other
 
   # Event Handlers
 
-  @impl true
-  def handle_event("set_preset", %{"preset" => preset}, socket) do
-    socket =
-      case preset do
-        "ocean_currents" ->
-          socket
-          |> assign(:preset, preset)
-          |> assign(:color, [0.2, 0.6, 0.9])
-          |> assign(:opacity, 0.8)
-          |> assign(:point_size, 3.0)
-          |> assign(:speed, 1.0)
-          |> assign(:turbulence, 0.3)
-          |> assign(:flow_direction, [1.0, 0.0])
-
-        "wind_flow" ->
-          socket
-          |> assign(:preset, preset)
-          |> assign(:color, [0.9, 0.9, 0.9])
-          |> assign(:opacity, 0.6)
-          |> assign(:point_size, 2.0)
-          |> assign(:speed, 2.5)
-          |> assign(:turbulence, 0.7)
-          |> assign(:flow_direction, [0.7, 0.7])
-
-        "lava_flow" ->
-          socket
-          |> assign(:preset, preset)
-          |> assign(:color, [1.0, 0.3, 0.1])
-          |> assign(:opacity, 0.9)
-          |> assign(:point_size, 4.0)
-          |> assign(:speed, 0.5)
-          |> assign(:turbulence, 0.9)
-          |> assign(:flow_direction, [0.0, -1.0])
-
-        _ ->
-          socket
-      end
-
-    {:noreply, push_uniforms(socket)}
+  # Each preset is just a set of uniform values; the shader itself never changes.
+  defp presets do
+    %{
+      "ocean_currents" => %{
+        color: [0.2, 0.6, 0.9],
+        opacity: 0.8,
+        point_size: 3.0,
+        speed: 1.0,
+        turbulence: 0.3,
+        flow_direction: [1.0, 0.0]
+      },
+      "wind_flow" => %{
+        color: [0.9, 0.9, 0.9],
+        opacity: 0.6,
+        point_size: 2.0,
+        speed: 2.5,
+        turbulence: 0.7,
+        flow_direction: [0.7, 0.7]
+      },
+      "lava_flow" => %{
+        color: [1.0, 0.3, 0.1],
+        opacity: 0.9,
+        point_size: 4.0,
+        speed: 0.5,
+        turbulence: 0.9,
+        flow_direction: [0.0, -1.0]
+      }
+    }
   end
 
   @impl true
+  def handle_event("set_preset", %{"id" => preset}, socket) do
+    case Map.fetch(presets(), preset) do
+      {:ok, values} ->
+        socket =
+          Enum.reduce(values, assign(socket, :preset, preset), fn {key, value}, acc ->
+            assign(acc, key, value)
+          end)
+
+        {:noreply, push_uniforms(socket)}
+
+      :error ->
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("update_color_r", %{"value" => value}, socket) do
     r = parse_float(value, 0.5)
     [_old_r, g, b] = socket.assigns.color
@@ -471,7 +316,6 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
     {:noreply, push_uniforms(socket)}
   end
 
-  @impl true
   def handle_event("update_color_g", %{"value" => value}, socket) do
     g = parse_float(value, 0.5)
     [r, _old_g, b] = socket.assigns.color
@@ -479,7 +323,6 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
     {:noreply, push_uniforms(socket)}
   end
 
-  @impl true
   def handle_event("update_color_b", %{"value" => value}, socket) do
     b = parse_float(value, 0.5)
     [r, g, _old_b] = socket.assigns.color
@@ -487,31 +330,26 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
     {:noreply, push_uniforms(socket)}
   end
 
-  @impl true
   def handle_event("update_opacity", %{"value" => value}, socket) do
     socket = assign(socket, :opacity, parse_float(value, 0.8))
     {:noreply, push_uniforms(socket)}
   end
 
-  @impl true
   def handle_event("update_point_size", %{"value" => value}, socket) do
     socket = assign(socket, :point_size, parse_float(value, 3.0))
     {:noreply, push_uniforms(socket)}
   end
 
-  @impl true
   def handle_event("update_speed", %{"value" => value}, socket) do
     socket = assign(socket, :speed, parse_float(value, 1.0))
     {:noreply, push_uniforms(socket)}
   end
 
-  @impl true
   def handle_event("update_turbulence", %{"value" => value}, socket) do
     socket = assign(socket, :turbulence, parse_float(value, 0.3))
     {:noreply, push_uniforms(socket)}
   end
 
-  @impl true
   def handle_event("update_direction", %{"value" => value}, socket) do
     angle_deg = parse_float(value, 0.0)
     angle_rad = angle_deg * :math.pi() / 180.0
@@ -520,41 +358,8 @@ defmodule MaplibrexDemoWeb.ParticlesLive do
     {:noreply, push_uniforms(socket)}
   end
 
-  @impl true
-  def handle_event("map:loaded", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:moved", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:zoom_changed", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:clicked", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("map:error", %{"error" => error}, socket) do
-    IO.inspect(error, label: "Map error")
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:added", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("layer:removed", _params, socket) do
-    {:noreply, socket}
-  end
+  def handle_event("map:" <> _, _params, socket), do: {:noreply, socket}
+  def handle_event("layer:" <> _, _params, socket), do: {:noreply, socket}
 
   # Helper Functions
 
