@@ -24,7 +24,7 @@ defmodule MaplibrexDemoWeb.TerrainLive do
     socket =
       socket
       |> assign(:terrain_enabled, true)
-      |> assign(:exaggeration, 1.0)
+      |> assign(:exaggeration, 0.5)
       |> assign(:center, @alps)
       |> assign(:zoom, @zoom)
       |> assign(:current_zoom, @zoom)
