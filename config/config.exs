@@ -41,6 +41,15 @@ config :esbuild,
     # which npm links rather than copies. Without this, esbuild resolves the
     # bundle's peer imports (maplibre-gl, @deck.gl/*) relative to the library's
     # real location instead of this application's node_modules, and they fail.
+    #
+    # assets/node_modules is on NODE_PATH for the same reason, and it is the
+    # half that matters with a git dependency: deps/ is already on NODE_PATH
+    # (Phoenix puts it there for `import "phoenix"`), so `maplibrex` resolves
+    # to the real deps/maplibrex directory rather than the node_modules
+    # symlink, and --preserve-symlinks never comes into play. From there
+    # esbuild walks up looking for node_modules and never reaches
+    # assets/node_modules, so the peer imports fail. Listing it explicitly
+    # makes them resolvable no matter which way `maplibrex` was found.
     args: ~w(
         js/app.js
         --bundle
@@ -55,7 +64,13 @@ config :esbuild,
         --alias:@=.
       ),
     cd: Path.expand("../assets", __DIR__),
-    env: %{"NODE_PATH" => [Path.expand("../deps", __DIR__), Mix.Project.build_path()]}
+    env: %{
+      "NODE_PATH" => [
+        Path.expand("../deps", __DIR__),
+        Path.expand("../assets/node_modules", __DIR__),
+        Mix.Project.build_path()
+      ]
+    }
   ]
 
 # Configure tailwind (the version is required)
