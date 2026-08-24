@@ -1,169 +1,177 @@
-<style>
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes orbPulse {
-    0%, 100% { opacity: 0.5; transform: scale(1); }
-    50%       { opacity: 0.7; transform: scale(1.05); }
-  }
-  .anim-1 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.05s both; }
-  .anim-2 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.15s both; }
-  .anim-3 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.25s both; }
-  .anim-4 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.35s both; }
-
-  .demo-card {
-    display: block;
-    text-decoration: none;
-    transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s ease;
-  }
-  .demo-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 0 1px rgba(34,211,238,0.3), 0 12px 40px rgba(0,0,0,0.4);
-  }
-  .demo-card:hover .card-border {
-    border-color: rgba(34,211,238,0.2);
-  }
-  .demo-card:hover .card-arrow {
-    transform: translate(2px, -2px);
-    color: rgba(34,211,238,0.9);
-  }
-  .card-arrow {
-    transition: transform 0.2s ease, color 0.2s ease;
-  }
-</style>
-
 <Layouts.flash_group flash={@flash} />
 
-<%# ── Ambient orbs ── %>
-<div aria-hidden="true" style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;">
-  <div style="position:absolute;top:-15%;left:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,0.10) 0%,transparent 70%);animation:orbPulse 8s ease-in-out infinite;"></div>
-  <div style="position:absolute;bottom:-20%;right:-8%;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.10) 0%,transparent 70%);animation:orbPulse 10s ease-in-out infinite 2s;"></div>
+<%!-- Ambient background orbs --%>
+<div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+  <div class="absolute -top-[15%] -left-[10%] h-[600px] w-[600px] animate-[orb-pulse_8s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.10)_0%,transparent_70%)]" />
+  <div class="absolute -right-[8%] -bottom-[20%] h-[700px] w-[700px] animate-[orb-pulse_10s_ease-in-out_infinite_2s] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.10)_0%,transparent_70%)]" />
 </div>
 
-<div style="position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;">
-
-  <%# ── Navbar ── %>
-  <nav style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid rgba(255,255,255,0.06);">
-    <span style="font-size:1.05rem;font-weight:700;letter-spacing:-0.01em;color:rgba(255,255,255,0.95);">
-      Maplibre<span style="color:#22d3ee;">X</span>
+<div class="relative z-10 flex min-h-screen flex-col">
+  <%!-- Navbar --%>
+  <nav class="flex items-center justify-between border-b border-white/[0.06] px-8 py-5">
+    <span class="text-[1.05rem] font-bold tracking-tight text-white/95">
+      Maplibre<span class="text-cyan-400">X</span>
     </span>
-    <div style="display:flex;align-items:center;gap:1.5rem;">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);letter-spacing:0.08em;">
+
+    <div class="flex items-center gap-6">
+      <span class="hidden font-mono text-[0.7rem] tracking-[0.08em] text-white/30 sm:inline">
         Phoenix LiveView × MapLibre GL
       </span>
-      <%# Language switcher %>
-      <div style="display:flex;align-items:center;gap:0.35rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:9999px;padding:0.25rem 0.65rem;">
-        <a href="/locale?locale=en&return_to=/" style={"font-size:0.65rem;font-weight:#{if @locale == "en", do: "700", else: "500"};color:#{if @locale == "en", do: "#22d3ee", else: "rgba(255,255,255,0.35)"};text-decoration:none;"}>EN</a>
-        <span style="color:rgba(255,255,255,0.15);font-size:0.65rem;">|</span>
-        <a href="/locale?locale=es&return_to=/" style={"font-size:0.65rem;font-weight:#{if @locale == "es", do: "700", else: "500"};color:#{if @locale == "es", do: "#22d3ee", else: "rgba(255,255,255,0.35)"};text-decoration:none;"}>ES</a>
+
+      <div class="flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1">
+        <.locale_toggle locale="en" current={@locale} />
+        <span class="text-[0.65rem] text-white/15">|</span>
+        <.locale_toggle locale="es" current={@locale} />
       </div>
     </div>
   </nav>
 
-  <%# ── Hero ── %>
-  <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:5rem 1.5rem 3rem;">
-
-    <div class="anim-1" style="margin-bottom:1.25rem;">
-      <span style="display:inline-block;padding:0.3rem 0.9rem;border-radius:9999px;border:1px solid rgba(34,211,238,0.3);background:rgba(34,211,238,0.06);font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(34,211,238,0.85);">
-        <%= gettext("Component Library · v0.1") %>
+  <%!-- Hero --%>
+  <div class="flex flex-col items-center px-6 pt-20 pb-12 text-center">
+    <div class="animate-[fade-up_0.6s_cubic-bezier(0.22,1,0.36,1)_0.05s_both] mb-5">
+      <span class="inline-block rounded-full border border-cyan-400/30 bg-cyan-400/[0.06] px-3.5 py-1.5 text-[0.7rem] font-semibold tracking-[0.12em] text-cyan-400/85 uppercase">
+        {gettext("Component Library · v0.1")}
       </span>
     </div>
 
-    <h1 class="anim-2" style="font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.1;letter-spacing:-0.03em;color:rgba(255,255,255,0.95);max-width:700px;margin:0 0 1.25rem;">
-      <%= gettext("Interactive Maps for Phoenix LiveView") |> String.split(" for ") |> List.first() %><br>
-      <span style="background:linear-gradient(135deg,#22d3ee,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
-        for Phoenix LiveView
+    <h1 class="animate-[fade-up_0.6s_cubic-bezier(0.22,1,0.36,1)_0.15s_both] mb-5 max-w-[700px] text-[clamp(2rem,5vw,3.5rem)] leading-[1.1] font-extrabold tracking-[-0.03em] text-white/95">
+      {gettext("Interactive Maps")}<br />
+      <span class="bg-gradient-to-br from-cyan-400 to-indigo-400 bg-clip-text text-transparent">
+        {gettext("for Phoenix LiveView")}
       </span>
     </h1>
 
-    <p class="anim-3" style="font-size:1.05rem;color:rgba(255,255,255,0.5);max-width:520px;line-height:1.65;margin:0 0 2.5rem;">
-      <%= gettext("MaplibreX wraps MapLibre GL JS as native LiveView components. Real-time maps, zero custom JavaScript.") %>
+    <p class="animate-[fade-up_0.6s_cubic-bezier(0.22,1,0.36,1)_0.25s_both] mb-10 max-w-[520px] text-[1.05rem] leading-relaxed text-white/50">
+      {gettext(
+        "MaplibreX wraps MapLibre GL JS as native LiveView components. Real-time maps, zero custom JavaScript."
+      )}
     </p>
 
-    <div class="anim-4" style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;">
-      <a href="#demos" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.7rem 1.5rem;border-radius:9999px;background:linear-gradient(135deg,rgba(34,211,238,0.9),rgba(99,102,241,0.9));color:#050810;font-weight:700;font-size:0.875rem;text-decoration:none;transition:opacity 0.2s ease;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-        <%= gettext("Explore Demos") %>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+    <div class="animate-[fade-up_0.6s_cubic-bezier(0.22,1,0.36,1)_0.35s_both] flex flex-wrap justify-center gap-3">
+      <a
+        href="#demos"
+        class="inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-cyan-400/90 to-indigo-500/90 px-6 py-2.5 text-sm font-bold text-[#050810] no-underline transition-opacity duration-200 hover:opacity-85"
+      >
+        {gettext("Explore Demos")}
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M7 17L17 7M17 7H7M17 7v10" />
+        </svg>
       </a>
-      <a href="https://github.com/roger120981/maplibrex" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.7rem 1.5rem;border-radius:9999px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.75);font-weight:500;font-size:0.875rem;text-decoration:none;transition:background 0.2s ease,border-color 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.08)';this.style.borderColor='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(255,255,255,0.12)'">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.506 0 12.303c0 5.445 3.435 10.043 8.205 11.674.6.107.825-.262.825-.585 0-.292-.015-1.261-.015-2.291C6 21.67 5.22 20.346 4.98 19.654c-.135-.354-.72-1.446-1.23-1.738-.42-.23-1.02-.8-.015-.815.945-.015 1.62.892 1.845 1.261 1.08 1.86 2.805 1.338 3.495 1.015.105-.8.42-1.338.765-1.645-2.67-.308-5.46-1.37-5.46-6.075 0-1.338.465-2.446 1.23-3.307-.12-.308-.54-1.569.12-3.26 0 0 1.005-.323 3.3 1.26.96-.276 1.98-.415 3-.415s2.04.139 3 .416c2.295-1.6 3.3-1.261 3.3-1.261.66 1.691.24 2.952.12 3.26.765.861 1.23 1.953 1.23 3.307 0 4.721-2.805 5.767-5.475 6.075.435.384.81 1.122.81 2.276 0 1.645-.015 2.968-.015 3.383 0 .323.225.707.825.585a12.047 12.047 0 0 0 5.919-4.489A12.536 12.536 0 0 0 24 12.304C24 5.505 18.63 0 12 0Z"/></svg>
+
+      <a
+        href="https://github.com/CountlinkX-Solutions/maplibrex"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-6 py-2.5 text-sm font-medium text-white/75 no-underline transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.08]"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.506 0 12.303c0 5.445 3.435 10.043 8.205 11.674.6.107.825-.262.825-.585 0-.292-.015-1.261-.015-2.291C6 21.67 5.22 20.346 4.98 19.654c-.135-.354-.72-1.446-1.23-1.738-.42-.23-1.02-.8-.015-.815.945-.015 1.62.892 1.845 1.261 1.08 1.86 2.805 1.338 3.495 1.015.105-.8.42-1.338.765-1.645-2.67-.308-5.46-1.37-5.46-6.075 0-1.338.465-2.446 1.23-3.307-.12-.308-.54-1.569.12-3.26 0 0 1.005-.323 3.3 1.26.96-.276 1.98-.415 3-.415s2.04.139 3 .416c2.295-1.6 3.3-1.261 3.3-1.261.66 1.691.24 2.952.12 3.26.765.861 1.23 1.953 1.23 3.307 0 4.721-2.805 5.767-5.475 6.075.435.384.81 1.122.81 2.276 0 1.645-.015 2.968-.015 3.383 0 .323.225.707.825.585a12.047 12.047 0 0 0 5.919-4.489A12.536 12.536 0 0 0 24 12.304C24 5.505 18.63 0 12 0Z" />
+        </svg>
         GitHub
       </a>
     </div>
   </div>
 
-  <%# ── Stats row ── %>
-  <div style="display:flex;justify-content:center;gap:0;margin-bottom:4rem;padding:0 1.5rem;">
-    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:1rem;display:flex;overflow:hidden;">
-      <%= for {label, value} <- [{gettext("Components"), "20+"}, {"Demos", "9"}, {"LiveView", "1.0"}, {"MapLibre GL", "4.x"}] do %>
-        <div style="padding:1rem 1.75rem;text-align:center;border-right:1px solid rgba(255,255,255,0.06);">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:#22d3ee;line-height:1;"><%= value %></div>
-          <div style="font-size:0.7rem;color:rgba(255,255,255,0.35);margin-top:0.3rem;letter-spacing:0.05em;"><%= label %></div>
-        </div>
-      <% end %>
+  <%!-- Stats --%>
+  <div class="mb-16 flex justify-center px-6">
+    <div class="flex flex-wrap justify-center overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03]">
+      <div
+        :for={{label, value} <- @stats}
+        class="border-r border-white/[0.06] px-7 py-4 text-center last:border-r-0"
+      >
+        <div class="font-mono text-xl leading-none font-bold text-cyan-400">{value}</div>
+        <div class="mt-1.5 text-[0.7rem] tracking-[0.05em] text-white/35">{label}</div>
+      </div>
     </div>
   </div>
 
-  <%# ── Demos Grid ── %>
-  <div id="demos" style="padding:0 2rem 5rem;max-width:1100px;margin:0 auto;width:100%;">
-
-    <div style="margin-bottom:2.5rem;">
-      <p style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.3);margin-bottom:0.5rem;"><%= gettext("Interactive demos") %></p>
-      <h2 style="font-size:1.6rem;font-weight:700;color:rgba(255,255,255,0.92);letter-spacing:-0.02em;"><%= gettext("Explore the capabilities") %></h2>
+  <%!-- Demo grid --%>
+  <div id="demos" class="mx-auto w-full max-w-[1100px] px-8 pb-20">
+    <div class="mb-10">
+      <p class="mb-2 text-[0.65rem] font-semibold tracking-[0.15em] text-white/30 uppercase">
+        {gettext("Interactive demos")}
+      </p>
+      <h2 class="text-2xl font-bold tracking-[-0.02em] text-white/90">
+        {gettext("Explore the capabilities")}
+      </h2>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;">
-
-      <%= for demo <- [
-        %{path: "/map",       label: gettext("Core"),          title: gettext("Interactive Map"),   desc: gettext("Draggable markers, GeoJSON layers, real-time style switching"),            icon: "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"},
-        %{path: "/tiles",     label: gettext("Server"),        title: gettext("Vector Tiles"),      desc: gettext("Vector tile rendering from a local server (localhost:4000) with PostgreSQL"),  icon: "M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"},
-        %{path: "/ogc",       label: gettext("Standards"),     title: gettext("OGC Features"),      desc: gettext("OGC API Features conformance with real geographic data from your own server"),    icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"},
-        %{path: "/deckgl",    label: gettext("Visualization"), title: gettext("Deck.GL Layers"),    desc: gettext("3D ArcLayer, HexagonLayer density and ScatterplotLayer with integrated deck.gl"),       icon: "M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"},
-        %{path: "/terrain",   label: gettext("Visualization"), title: gettext("3D Terrain"),        desc: gettext("Elevation rendering with DEM sources, hillshade and extruded terrain up to 3x"),     icon: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"},
-        %{path: "/heatmap",   label: gettext("Visualization"), title: gettext("Heatmap"),           desc: gettext("500 seismic points on a heatmap with adjustable radius, intensity and opacity"),       icon: "M13 10V3L4 14h7v7l9-11h-7z"},
-        %{path: "/buildings", label: gettext("Visualization"), title: gettext("3D Buildings"),      desc: gettext("Extruded New York buildings with configurable color schemes and height"),        icon: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"},
-        %{path: "/markers",   label: gettext("Interactive"),   title: gettext("Markers & Filters"),  desc: gettext("Category markers with real-time filtering and drag to update coordinates"), icon: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"},
-        %{path: "/particles", label: gettext("Advanced"),      title: gettext("WebGL Particles"),   desc: gettext("System of 1,000 animated particles with custom GLSL shaders (vertex + fragment)"),    icon: "M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"}
-      ] do %>
-        <a href={demo.path} class="demo-card">
-          <div style="padding:1px;border-radius:1.125rem;background:rgba(255,255,255,0.04);">
-            <div class="card-border" style="background:rgba(8,12,28,0.9);border-radius:1rem;border:1px solid rgba(255,255,255,0.07);padding:1.5rem;height:100%;display:flex;flex-direction:column;gap:1rem;transition:border-color 0.25s ease;">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
-                <div style="width:40px;height:40px;flex-shrink:0;border-radius:0.625rem;background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.12);display:flex;align-items:center;justify-content:center;">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(34,211,238,0.8)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                    <path d={demo.icon}/>
-                  </svg>
-                </div>
-                <span style="font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(34,211,238,0.6);background:rgba(34,211,238,0.06);border:1px solid rgba(34,211,238,0.12);border-radius:9999px;padding:0.2rem 0.6rem;white-space:nowrap;">
-                  <%= demo.label %>
-                </span>
-              </div>
-              <div style="flex:1;">
-                <h3 style="font-size:0.975rem;font-weight:700;color:rgba(255,255,255,0.92);margin:0 0 0.4rem;letter-spacing:-0.01em;"><%= demo.title %></h3>
-                <p style="font-size:0.8rem;color:rgba(255,255,255,0.45);line-height:1.55;margin:0;"><%= demo.desc %></p>
-              </div>
-              <div style="display:flex;align-items:center;justify-content:flex-end;">
-                <span class="card-arrow" style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.3);letter-spacing:0.02em;">
-                  <%= gettext("Open demo →") %>
-                </span>
-              </div>
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">
+      <a
+        :for={demo <- @demos}
+        href={demo.path}
+        class="group block rounded-[1.125rem] bg-white/[0.04] p-px no-underline transition-[transform,box-shadow] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[3px] hover:shadow-[0_0_0_1px_rgba(34,211,238,0.3),0_12px_40px_rgba(0,0,0,0.4)]"
+      >
+        <div class="flex h-full flex-col gap-4 rounded-2xl border border-white/[0.07] bg-[rgba(8,12,28,0.9)] p-6 transition-colors duration-[250ms] group-hover:border-cyan-400/20">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-[0.625rem] border border-cyan-400/[0.12] bg-cyan-400/[0.08]">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="rgba(34,211,238,0.8)"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d={demo.icon} />
+              </svg>
             </div>
-          </div>
-        </a>
-      <% end %>
 
+            <span class="rounded-full border border-cyan-400/[0.12] bg-cyan-400/[0.06] px-2.5 py-1 text-[0.62rem] font-semibold tracking-[0.1em] whitespace-nowrap text-cyan-400/60 uppercase">
+              {demo.label}
+            </span>
+          </div>
+
+          <div class="flex-1">
+            <h3 class="mb-1.5 text-[0.975rem] font-bold tracking-[-0.01em] text-white/90">
+              {demo.title}
+            </h3>
+            <p class="text-[0.8rem] leading-relaxed text-white/45">{demo.desc}</p>
+          </div>
+
+          <div class="flex items-center justify-end">
+            <span class="text-xs font-semibold text-white/30 transition-[transform,color] duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-cyan-400/90">
+              {gettext("Open demo →")}
+            </span>
+          </div>
+        </div>
+      </a>
     </div>
   </div>
 
-  <%# ── Footer ── %>
-  <div style="margin-top:auto;padding:1.5rem 2rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:gap;">
-    <span style="font-size:0.75rem;color:rgba(255,255,255,0.25);">
-      MaplibreX &mdash; <%= gettext("Built with Phoenix LiveView") %>
+  <%!-- Footer --%>
+  <footer class="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.06] px-8 py-6">
+    <span class="text-xs text-white/25">
+      MaplibreX &mdash; {gettext("Built with Phoenix LiveView")}
     </span>
-    <span style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.2);">
-      localhost:4003
-    </span>
-  </div>
-
+    <div class="flex items-center gap-4">
+      <a
+        href="https://hexdocs.pm/maplibrex"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-mono text-[0.65rem] text-white/25 no-underline hover:text-white/50"
+      >
+        hexdocs
+      </a>
+      <a
+        href="https://github.com/CountlinkX-Solutions/maplibrex"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-mono text-[0.65rem] text-white/25 no-underline hover:text-white/50"
+      >
+        github
+      </a>
+    </div>
+  </footer>
 </div>
