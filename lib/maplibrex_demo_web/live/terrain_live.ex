@@ -12,9 +12,10 @@ defmodule MaplibrexDemoWeb.TerrainLive do
   import MaplibreX.Components
   alias MaplibreX.Components.Map, as: MapCmd
 
-  @alps [11.39085, 47.3]
+  # Same camera as the official MapLibre 3D terrain example.
+  @alps [11.39085, 47.27574]
   @zoom 12
-  @pitch 72
+  @pitch 70
 
   @dem_url "https://tiles.mapterhorn.com/tilejson.json"
 
@@ -23,7 +24,7 @@ defmodule MaplibrexDemoWeb.TerrainLive do
     socket =
       socket
       |> assign(:terrain_enabled, true)
-      |> assign(:exaggeration, 1.5)
+      |> assign(:exaggeration, 1.0)
       |> assign(:center, @alps)
       |> assign(:zoom, @zoom)
       |> assign(:current_zoom, @zoom)
@@ -44,12 +45,17 @@ defmodule MaplibrexDemoWeb.TerrainLive do
       subtitle={gettext("Elevation rendering with DEM sources")}
     >
       <:map>
+        <%!-- max_pitch is not decoration: MapLibre clamps pitch to 60 without
+              it, which flattens this view. Same camera as the official
+              MapLibre 3D terrain example. --%>
         <.map
           id="terrain-map"
           center={@center}
           zoom={@zoom}
-          pitch={72}
+          pitch={70}
           bearing={0}
+          max_zoom={18}
+          max_pitch={85}
           style="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
           class="absolute inset-0 h-full w-full"
         />
@@ -68,7 +74,7 @@ defmodule MaplibrexDemoWeb.TerrainLive do
           paint={
             %{
               "hillshade-exaggeration" => 0.7,
-              "hillshade-shadow-color" => "#004050",
+              "hillshade-shadow-color" => "#473B24",
               "hillshade-highlight-color" => "#ffffff",
               "hillshade-illumination-anchor" => "map"
             }
@@ -114,7 +120,7 @@ defmodule MaplibrexDemoWeb.TerrainLive do
 
         <.panel_section label={gettext("Location")} class="flex gap-2">
           <.action_button phx-click={
-            MapCmd.fly_to("terrain-map", @center, 12, duration: 1500, pitch: 72, bearing: 0)
+            MapCmd.fly_to("terrain-map", @center, 12, duration: 1500, pitch: 70, bearing: 0)
           }>
             Alps
           </.action_button>

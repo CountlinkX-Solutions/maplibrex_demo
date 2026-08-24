@@ -98,14 +98,16 @@ defmodule MaplibrexDemoWeb.DemoComponents do
   @doc """
   Back-to-demos pill and the EN/ES switcher.
 
-  Sits below the map's own navigation control, which owns the top-left corner.
+  Sits below the map's own controls, which own the top-left corner. The offset
+  clears the tallest stack any page uses — navigation plus fullscreen, which
+  measures 136px — so the bar lands in the same place on every page.
   """
   attr :path, :string, required: true
   attr :locale, :string, required: true
 
   def demo_nav(assigns) do
     ~H"""
-    <div class="absolute top-[110px] left-4 z-20 flex flex-col gap-2">
+    <div class="absolute top-[148px] left-4 z-20 flex flex-col gap-2">
       <a
         href={~p"/"}
         class={[
