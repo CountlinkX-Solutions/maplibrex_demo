@@ -88,6 +88,8 @@ defmodule MaplibrexDemoWeb do
       import Phoenix.HTML
       # Core UI components
       import MaplibrexDemoWeb.CoreComponents
+      # Shared chrome for the demo pages
+      import MaplibrexDemoWeb.DemoComponents
 
       # Common modules used in templates
       alias Phoenix.LiveView.JS

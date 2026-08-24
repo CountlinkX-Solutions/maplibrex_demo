@@ -43,7 +43,7 @@ defmodule MaplibrexDemoWeb.Layouts do
       </a>
       <nav class="flex items-center gap-4">
         <a
-          href="https://github.com/roger120981/maplibrex"
+          href="https://github.com/CountlinkX-Solutions/maplibrex"
           class="text-sm text-white/60 hover:text-white transition-colors duration-200"
           target="_blank"
           rel="noopener noreferrer"
@@ -133,7 +133,10 @@ defmodule MaplibrexDemoWeb.Layouts do
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="system"
       >
-        <.icon name="hero-computer-desktop-micro" class="size-4 text-white/60 hover:text-white transition-colors" />
+        <.icon
+          name="hero-computer-desktop-micro"
+          class="size-4 text-white/60 hover:text-white transition-colors"
+        />
       </button>
 
       <button
