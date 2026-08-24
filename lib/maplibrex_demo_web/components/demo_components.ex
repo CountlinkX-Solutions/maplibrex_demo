@@ -343,6 +343,24 @@ defmodule MaplibrexDemoWeb.DemoComponents do
   end
 
   @doc """
+  A boxed label/value pair for the control panel.
+
+  The telemetry bar is easy to miss in the corner, so panels that expose a
+  live camera value repeat it where the controls are.
+  """
+  attr :label, :string, required: true
+  attr :value, :any, required: true
+
+  def readout(assigns) do
+    ~H"""
+    <div class="rounded-lg border border-white/[0.07] bg-white/[0.04] px-2 py-1.5">
+      <p class="text-[9px] tracking-widest text-white/35 uppercase">{@label}</p>
+      <p class="font-mono text-xs text-cyan-300">{@value}</p>
+    </div>
+    """
+  end
+
+  @doc """
   A small read-only tag, used for listing layer or source names.
   """
   slot :inner_block, required: true

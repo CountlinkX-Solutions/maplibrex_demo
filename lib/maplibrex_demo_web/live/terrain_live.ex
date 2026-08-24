@@ -14,7 +14,7 @@ defmodule MaplibrexDemoWeb.TerrainLive do
 
   # Same camera as the official MapLibre 3D terrain example.
   @alps [11.39085, 47.27574]
-  @zoom 12
+  @zoom 10
   @pitch 70
 
   @dem_url "https://tiles.mapterhorn.com/tilejson.json"
@@ -118,9 +118,17 @@ defmodule MaplibrexDemoWeb.TerrainLive do
           </div>
         </.panel_section>
 
+        <.panel_section label={gettext("View")}>
+          <div class="grid grid-cols-3 gap-2">
+            <.readout label={gettext("Zoom")} value={Float.round(@current_zoom * 1.0, 1)} />
+            <.readout label={gettext("Pitch")} value={"#{round(@current_pitch)}°"} />
+            <.readout label={gettext("Bearing")} value={"#{round(@current_bearing)}°"} />
+          </div>
+        </.panel_section>
+
         <.panel_section label={gettext("Location")} class="flex gap-2">
           <.action_button phx-click={
-            MapCmd.fly_to("terrain-map", @center, 12, duration: 1500, pitch: 70, bearing: 0)
+            MapCmd.fly_to("terrain-map", @center, @zoom, duration: 1500, pitch: 70, bearing: 0)
           }>
             Alps
           </.action_button>
