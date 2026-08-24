@@ -1,5 +1,14 @@
 import Config
 
+# The /tiles and /ogc demos talk to a separate tile server. Point them
+# somewhere else without recompiling:
+#
+#     TILE_SERVER_URL=https://tiles.example.com mix phx.server
+#
+if url = System.get_env("TILE_SERVER_URL") do
+  config :maplibrex_demo, tile_server_url: url
+end
+
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration

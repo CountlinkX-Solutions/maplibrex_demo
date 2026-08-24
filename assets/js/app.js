@@ -21,7 +21,7 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
-import {MapHooks} from "../../deps/maplibrex/assets/js/maplibrex"
+import {MapHooks} from "maplibrex"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
@@ -35,19 +35,9 @@ topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 
-// Handle fly_to_marker event from LiveView
-window.addEventListener("phx:fly_to_marker", (e) => {
-  const mapElement = document.getElementById("demo-map")
-  if (mapElement) {
-    mapElement.dispatchEvent(new CustomEvent("maplibrex:fly_to", {
-      detail: {
-        center: [e.detail.lng, e.detail.lat],
-        zoom: 13,
-        duration: 1000
-      }
-    }))
-  }
-})
+// No custom map glue is needed here: MaplibreX registers its own LiveView
+// handlers, so `push_event(socket, "map:fly_to", %{...})` from a LiveView
+// reaches the map directly.
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()

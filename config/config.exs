@@ -8,7 +8,15 @@
 import Config
 
 config :maplibrex_demo,
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime],
+  # The /tiles and /ogc demos read from a separate tile server (the sibling
+  # `tileserver` project), not from this application. Both pages degrade to a
+  # public basemap and say so when it is not reachable.
+  #
+  # Override at runtime with TILE_SERVER_URL — see config/runtime.exs.
+  tile_server_url: "http://localhost:4000",
+  # Public style used when the tile server is unreachable.
+  fallback_style_url: "https://demotiles.maplibre.org/style.json"
 
 # Configures the endpoint
 config :maplibrex_demo, MaplibrexDemoWeb.Endpoint,
@@ -25,8 +33,27 @@ config :maplibrex_demo, MaplibrexDemoWeb.Endpoint,
 config :esbuild,
   version: "0.25.4",
   maplibrex_demo: [
-    args:
-      ~w(js/app.js --bundle --target=es2022 --outdir=../priv/static/assets/js --external:/fonts/* --external:/images/* --alias:@=.),
+    # --splitting: deck.gl is imported dynamically by MaplibreX, so code
+    # splitting keeps it out of the main bundle — only /deckgl pays for it.
+    # Requires format=esm, so root.html.heex loads app.js as type="module".
+    #
+    # --preserve-symlinks: `maplibrex` is installed as a `file:` dependency,
+    # which npm links rather than copies. Without this, esbuild resolves the
+    # bundle's peer imports (maplibre-gl, @deck.gl/*) relative to the library's
+    # real location instead of this application's node_modules, and they fail.
+    args: ~w(
+        js/app.js
+        --bundle
+        --format=esm
+        --splitting
+        --chunk-names=chunks/[name]-[hash]
+        --target=es2022
+        --outdir=../priv/static/assets/js
+        --preserve-symlinks
+        --external:/fonts/*
+        --external:/images/*
+        --alias:@=.
+      ),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => [Path.expand("../deps", __DIR__), Mix.Project.build_path()]}
   ]

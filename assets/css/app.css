@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@import "../../deps/maplibrex/assets/css/maplibrex.css";
+@import "maplibre-gl/dist/maplibre-gl.css";
+@import "maplibrex/css";
 
 @theme {
   --font-family-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -12,6 +13,27 @@
   --glass-border: rgba(255, 255, 255, 0.09);
   --accent: #22d3ee;
   --accent-dim: rgba(34, 211, 238, 0.15);
+}
+
+/* Landing page entrance animations, referenced from Tailwind arbitrary
+   animation utilities in home.html.heex. */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes orb-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%      { opacity: 0.7; transform: scale(1.05); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Base resets */

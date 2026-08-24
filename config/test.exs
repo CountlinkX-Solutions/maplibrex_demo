@@ -1,5 +1,10 @@
 import Config
 
+# Point the tile-server demos at a port nothing listens on, so the degraded
+# path is what the test suite exercises — deterministically, whatever happens
+# to be running on the developer's machine.
+config :maplibrex_demo, tile_server_url: "http://127.0.0.1:1"
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :maplibrex_demo, MaplibrexDemoWeb.Endpoint,

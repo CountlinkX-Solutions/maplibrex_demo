@@ -1,0 +1,19 @@
+{
+  "name": "maplibrex-demo-assets",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Front-end dependencies for the MaplibreX demo application",
+  "comments": {
+    "dependencies": "MaplibreX declares these as peer dependencies and marks them external in its bundle, so the host application owns the version. The @deck.gl/* packages are only needed because this demo uses <.deckgl_layer>.",
+    "maplibrex": "Defaults to the Elixir dependency checkout at deps/maplibrex. When MAPLIBREX_PATH points at a local library checkout, `mix assets.setup` installs from there with --no-save, leaving this entry untouched.",
+    "maplibre-gl": "Pinned to v5 because this demo showcases <.deckgl_layer>. MaplibreX itself supports >=5 <7; deck.gl is the only component that still needs v5, because @deck.gl/mapbox reads the internal map.transform that maplibre-gl v6 removed."
+  },
+  "dependencies": {
+    "@deck.gl/aggregation-layers": "^9.0.0",
+    "@deck.gl/core": "^9.0.0",
+    "@deck.gl/layers": "^9.0.0",
+    "@deck.gl/mapbox": "^9.0.0",
+    "maplibre-gl": "^5.0.0",
+    "maplibrex": "file:../deps/maplibrex"
+  }
+}

@@ -28,10 +28,16 @@ maplibrex_demo-*.tar
 # Ignore assets that are produced by build tools.
 /priv/static/assets/
 
-# Ignore digested assets cache.
+# Ignore digested assets cache and the digest output of `mix phx.digest`.
 /priv/static/cache_manifest.json
+/priv/static/**/*-????????????????????????????????.*
+/priv/static/*.gz
+/priv/static/**/*.gz
 
 # In case you use Node.js/npm, you want to ignore these.
 npm-debug.log
 /assets/node_modules/
 
+
+# Local agent tooling cache (gentle-ai skill registry).
+/.atl/
