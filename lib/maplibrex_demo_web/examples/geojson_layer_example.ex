@@ -9,9 +9,14 @@ defmodule MaplibrexDemoWeb.Examples.GeojsonLayerExample do
   import MaplibreX.Components
   import MaplibrexDemoWeb.Examples.ExampleComponents
 
-  # Demo plumbing, not needed in an application: applies the page's locale
-  # and copies each map event to the page's Events tab.
+  # Demo plumbing, not needed in an application: applies the page's locale,
+  # copies each map event to the page's Events tab and keeps @theme on the
+  # page's light or dark theme.
   on_mount MaplibrexDemoWeb.Examples.Plumbing
+
+  # OpenFreeMap's basemap for the page's theme: the map's style follows @theme.
+  defp basemap("dark"), do: "https://tiles.openfreemap.org/styles/dark"
+  defp basemap("light"), do: "https://tiles.openfreemap.org/styles/liberty"
 
   @madrid [-3.7038, 40.4168]
 
@@ -36,7 +41,7 @@ defmodule MaplibrexDemoWeb.Examples.GeojsonLayerExample do
   }
 
   @colors [
-    {"purple", "#5b3fa6"},
+    {"purple", "#7c5cd6"},
     {"teal", "#0f8b8d"},
     {"orange", "#d9480f"},
     {"red", "#c92a2a"}
@@ -47,7 +52,7 @@ defmodule MaplibrexDemoWeb.Examples.GeojsonLayerExample do
     socket =
       socket
       |> assign(center: @madrid, points: @points, selected: nil, map_error: nil)
-      |> assign(color: "#5b3fa6", radius: 8, visible: true)
+      |> assign(color: "#7c5cd6", radius: 8, visible: true)
       |> assign_options()
 
     {:ok, socket}

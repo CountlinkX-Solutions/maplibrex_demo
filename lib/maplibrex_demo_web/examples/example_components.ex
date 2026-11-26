@@ -16,6 +16,10 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
   `class="h-full w-full"`. Says the map is loading until MapLibre paints over
   it, and shows a map error on top. When its parent is shown in full screen,
   it takes the room the controls leave (see `app.css`).
+
+  It also holds the `ExampleTheme` hook, which tells the example's LiveView
+  the page's theme whenever it changes (see `MaplibrexDemoWeb.Examples.Plumbing`).
+  A page runs one example, so its id is fixed.
   """
   attr :error, :string, default: nil, doc: "the last map:error message, if any"
   attr :error_id, :string, required: true
@@ -34,6 +38,7 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
       data-example-frame
       class={["relative h-preview overflow-hidden bg-surface", @tall && "sm:h-scenario"]}
     >
+      <span id="example-theme" phx-hook="ExampleTheme" hidden></span>
       <p
         data-map-loading
         class="absolute inset-0 flex items-center justify-center gap-2 text-ui text-ink-subtle"

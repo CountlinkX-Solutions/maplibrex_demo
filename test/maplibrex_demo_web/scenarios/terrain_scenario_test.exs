@@ -18,6 +18,22 @@ defmodule MaplibrexDemoWeb.Scenarios.TerrainScenarioTest do
     |> render_change(Map.merge(%{"exaggeration" => "1.5", "terrain" => "true"}, options))
   end
 
+  test "the hillshading is warm on the light basemap and muted on the dark one", %{conn: conn} do
+    view = mount_scenario(conn)
+    hillshade = ~s(#scenario-hillshade[data-config*='"hillshade-highlight-color":)
+
+    assert has_element?(view, hillshade <> ~s("#fff8e7']))
+
+    render_hook(view, "theme", %{"theme" => "dark"})
+
+    assert has_element?(view, hillshade <> ~s("#5e5646']))
+
+    assert has_element?(
+             view,
+             ~s(#scenario-hillshade[data-config*='"hillshade-shadow-color":"#000000'])
+           )
+  end
+
   test "combines two DEM sources, hillshading, terrain and a navigation control", %{conn: conn} do
     view = mount_scenario(conn)
 

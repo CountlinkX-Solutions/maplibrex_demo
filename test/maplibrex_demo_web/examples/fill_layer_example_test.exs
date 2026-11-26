@@ -42,6 +42,16 @@ defmodule MaplibrexDemoWeb.Examples.FillLayerExampleTest do
     assert has_element?(view, "#assign-outline", "false")
   end
 
+  test "the outline is light on the dark basemap", %{conn: conn} do
+    view = mount_example(conn)
+
+    assert has_element?(view, layer(~s("fill-outline-color":"#1f2330")))
+
+    render_hook(view, "theme", %{"theme" => "dark"})
+
+    assert has_element?(view, layer(~s("fill-outline-color":"#e8e9f1")))
+  end
+
   test "a clicked polygon comes back with its class", %{conn: conn} do
     view = mount_example(conn)
 

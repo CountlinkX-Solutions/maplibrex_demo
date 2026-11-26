@@ -9,9 +9,14 @@ defmodule MaplibrexDemoWeb.Examples.VectorTileSourceExample do
   import MaplibreX.Components
   import MaplibrexDemoWeb.Examples.ExampleComponents
 
-  # Demo plumbing, not needed in an application: applies the page's locale
-  # and copies each map event to the page's Events tab.
+  # Demo plumbing, not needed in an application: applies the page's locale,
+  # copies each map event to the page's Events tab and keeps @theme on the
+  # page's light or dark theme.
   on_mount MaplibrexDemoWeb.Examples.Plumbing
+
+  # OpenFreeMap's basemap for the page's theme: the map's style follows @theme.
+  defp basemap("dark"), do: "https://tiles.openfreemap.org/styles/dark"
+  defp basemap("light"), do: "https://tiles.openfreemap.org/styles/positron"
 
   # Values of the tiles' CONTINENT field.
   @continents ["Africa", "Asia", "Europe", "North America", "South America", "Oceania"]
@@ -70,10 +75,10 @@ defmodule MaplibrexDemoWeb.Examples.VectorTileSourceExample do
   def handle_event("layer:" <> _event, _payload, socket), do: {:noreply, socket}
   def handle_event("map:" <> _event, _payload, socket), do: {:noreply, socket}
 
-  # The chosen continent in the accent colour, the rest left unfilled.
+  # The chosen continent in purple, the rest in a faint grey.
   defp fill_paint(continent) do
     %{
-      "fill-color" => ["case", ["==", ["get", "CONTINENT"], continent], "#5b3fa6", "#d8d8e0"],
+      "fill-color" => ["case", ["==", ["get", "CONTINENT"], continent], "#7c5cd6", "#d8d8e0"],
       "fill-opacity" => ["case", ["==", ["get", "CONTINENT"], continent], 0.55, 0.15]
     }
   end

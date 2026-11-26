@@ -20,9 +20,14 @@ defmodule MaplibrexDemoWeb.Examples.MapExample do
 
   alias MaplibreX.Components.Map, as: MapCmd
 
-  # Demo plumbing, not needed in an application: applies the page's locale
-  # and copies each map event to the page's Events tab.
+  # Demo plumbing, not needed in an application: applies the page's locale,
+  # copies each map event to the page's Events tab and keeps @theme on the
+  # page's light or dark theme.
   on_mount MaplibrexDemoWeb.Examples.Plumbing
+
+  # OpenFreeMap's basemap for the page's theme: the map's style follows @theme.
+  defp basemap("dark"), do: "https://tiles.openfreemap.org/styles/dark"
+  defp basemap("light"), do: "https://tiles.openfreemap.org/styles/liberty"
 
   @places [
     %{id: "madrid", center: [-3.7038, 40.4168], zoom: 11},
@@ -110,7 +115,7 @@ defmodule MaplibrexDemoWeb.Examples.MapExample do
 
   defp place_list, do: @places
 
-  defp marker_color(id, id), do: "#5b3fa6"
+  defp marker_color(id, id), do: "#7c5cd6"
   defp marker_color(_id, _current), do: "#63637a"
 
   defp places do

@@ -9,9 +9,14 @@ defmodule MaplibrexDemoWeb.Examples.HeatmapLayerExample do
   import MaplibreX.Components
   import MaplibrexDemoWeb.Examples.ExampleComponents
 
-  # Demo plumbing, not needed in an application: applies the page's locale
-  # and copies each map event to the page's Events tab.
+  # Demo plumbing, not needed in an application: applies the page's locale,
+  # copies each map event to the page's Events tab and keeps @theme on the
+  # page's light or dark theme.
   on_mount MaplibrexDemoWeb.Examples.Plumbing
+
+  # OpenFreeMap's basemap for the page's theme: the map's style follows @theme.
+  defp basemap("dark"), do: "https://tiles.openfreemap.org/styles/dark"
+  defp basemap("light"), do: "https://tiles.openfreemap.org/styles/positron"
 
   @impl true
   def mount(_params, _session, socket) do
@@ -49,7 +54,7 @@ defmodule MaplibrexDemoWeb.Examples.HeatmapLayerExample do
   def handle_event("source:" <> _event, _payload, socket), do: {:noreply, socket}
   def handle_event("map:" <> _event, _payload, socket), do: {:noreply, socket}
 
-  # Density from transparent through the accent to orange.
+  # Density from transparent through purple to orange.
   defp paint(radius, intensity) do
     %{
       "heatmap-radius" => radius,
@@ -60,9 +65,9 @@ defmodule MaplibrexDemoWeb.Examples.HeatmapLayerExample do
         ["linear"],
         ["heatmap-density"],
         0,
-        "rgba(91, 63, 166, 0)",
+        "rgba(124, 92, 214, 0)",
         0.3,
-        "rgba(91, 63, 166, 0.6)",
+        "rgba(124, 92, 214, 0.6)",
         0.7,
         "#c92a2a",
         1,

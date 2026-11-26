@@ -15,9 +15,28 @@ defmodule MaplibrexDemoWeb.Scenarios.TerrainScenario do
 
   alias MaplibreX.Components.Map, as: MapCmd
 
-  # Demo plumbing, not needed in an application: applies the page's locale
-  # and reports each map event to the page.
+  # Demo plumbing, not needed in an application: applies the page's locale,
+  # reports each map event to the page and keeps @theme on the page's light
+  # or dark theme.
   on_mount MaplibrexDemoWeb.Examples.Plumbing
+
+  # OpenFreeMap's basemap for the page's theme: the map's style follows @theme.
+  defp basemap("dark"), do: "https://tiles.openfreemap.org/styles/dark"
+  defp basemap("light"), do: "https://tiles.openfreemap.org/styles/positron"
+
+  # Warm hillshading: cream highlights on the light basemap; on the dark
+  # one, muted highlights and black shadows, so its light labels still read.
+  defp hillshade(theme) do
+    {shadow, highlight} =
+      if theme == "dark", do: {"#000000", "#5e5646"}, else: {"#473b24", "#fff8e7"}
+
+    %{
+      "hillshade-exaggeration" => 0.7,
+      "hillshade-shadow-color" => shadow,
+      "hillshade-highlight-color" => highlight,
+      "hillshade-illumination-anchor" => "map"
+    }
+  end
 
   # Each flight ends on a camera pitched and turned towards a range; a lower
   # zoom keeps the camera above the peaks around it.

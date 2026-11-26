@@ -361,6 +361,8 @@ The dark figure on which every source appears. A 40 px caption bar names the fil
 ### Example Panel (signature)
 The framed preview under the tab row: a 360 px map frame on the surface ("Loading the map" until MapLibre paints), the example's control groups (a label in subtle ink, a row of example buttons, sliders), and a readout of the current assigns as `@name value` in mono. A value that changes flashes the lavender wash in accent ink and fades out over 1.4 s. MapLibre's own controls stay on white with map ink; an active custom control button is filled purple.
 
+The basemap follows the theme, live: OpenFreeMap's Positron or Liberty in the light theme, its Dark style in the dark theme. The heatmap, particles and deck.gl scenarios keep the dark basemap in both themes, because their data is drawn for a dark ground, and the two blank-style examples draw their own ground. The attribution strip is 85 % white rather than MapLibre's 50 % (the compact one stays opaque), so its text stays legible over the dark basemap. Sample data on the maps uses a lighter purple (`#7c5cd6`) than the accent, one that reads on both basemaps; the few colours tied to the ground follow the theme too: label halos take the page's canvas, fill outlines the theme's ink, the blank-style land and the 3D scenario's hillshading darken in the dark theme.
+
 ## Do's and Don'ts
 
 ### Do:

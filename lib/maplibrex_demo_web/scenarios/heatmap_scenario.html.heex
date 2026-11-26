@@ -1,5 +1,7 @@
 <div id="heatmap-scenario">
   <.example_frame error={@map_error} error_id="scenario-heatmap-map-error" tall>
+    <%!-- Dark in both themes: the heat ramp's pale middle would vanish on a
+          light basemap. --%>
     <.map
       id="scenario-heatmap-map"
       center={[-106.0, 39.5]}

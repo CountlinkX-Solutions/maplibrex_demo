@@ -9,12 +9,17 @@ defmodule MaplibrexDemoWeb.Examples.CircleLayerExample do
   import MaplibreX.Components
   import MaplibrexDemoWeb.Examples.ExampleComponents
 
-  # Demo plumbing, not needed in an application: applies the page's locale
-  # and copies each map event to the page's Events tab.
+  # Demo plumbing, not needed in an application: applies the page's locale,
+  # copies each map event to the page's Events tab and keeps @theme on the
+  # page's light or dark theme.
   on_mount MaplibrexDemoWeb.Examples.Plumbing
 
+  # OpenFreeMap's basemap for the page's theme: the map's style follows @theme.
+  defp basemap("dark"), do: "https://tiles.openfreemap.org/styles/dark"
+  defp basemap("light"), do: "https://tiles.openfreemap.org/styles/positron"
+
   @colors [
-    {"purple", "#5b3fa6"},
+    {"purple", "#7c5cd6"},
     {"teal", "#0f8b8d"},
     {"orange", "#d9480f"},
     {"red", "#c92a2a"}
@@ -24,7 +29,7 @@ defmodule MaplibrexDemoWeb.Examples.CircleLayerExample do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(color: "#5b3fa6", selected: nil, map_error: nil)
+      |> assign(color: "#7c5cd6", selected: nil, map_error: nil)
       |> assign_radius(6)
 
     {:ok, socket}

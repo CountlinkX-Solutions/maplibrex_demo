@@ -6,12 +6,12 @@
       zoom={@zoom}
       pitch={@pitch}
       bearing={@bearing}
-      style="https://tiles.openfreemap.org/styles/liberty"
+      style={basemap(@theme)}
       class="h-full w-full"
     >
       <%!-- Nested in <.map>: rendered right after the map element, so they
             follow the assigns and mount and unmount like components placed
-            next to it. The chosen place's marker takes the accent. --%>
+            next to it. The chosen place's marker is purple. --%>
       <.marker
         :for={place <- place_list()}
         :if={@markers}

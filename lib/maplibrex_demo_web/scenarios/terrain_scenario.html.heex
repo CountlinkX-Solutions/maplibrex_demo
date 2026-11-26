@@ -12,7 +12,7 @@
       pitch={@start.pitch}
       bearing={@start.bearing}
       max_pitch={85}
-      style="https://tiles.openfreemap.org/styles/positron"
+      style={basemap(@theme)}
       class="h-full w-full"
     />
   </.example_frame>
@@ -40,14 +40,7 @@
     id="scenario-hillshade"
     map_id="scenario-terrain-map"
     source_id="scenario-hillshade-dem"
-    paint={
-      %{
-        "hillshade-exaggeration" => 0.7,
-        "hillshade-shadow-color" => "#473b24",
-        "hillshade-highlight-color" => "#fff8e7",
-        "hillshade-illumination-anchor" => "map"
-      }
-    }
+    paint={hillshade(@theme)}
   />
 
   <.terrain

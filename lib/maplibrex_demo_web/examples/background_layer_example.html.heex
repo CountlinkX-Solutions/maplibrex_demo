@@ -4,6 +4,8 @@
     error_id="example-background-map-error"
     hosts={["demotiles.maplibre.org"]}
   >
+    <%!-- A blank style, in both themes: the background and the land below
+          are all the map draws, in the colour chosen here. --%>
     <.map
       id="example-background-map"
       center={[15, 25]}
@@ -34,7 +36,7 @@
     map_id="example-background-map"
     source_id="example-background-countries"
     source_layer="countries"
-    paint={%{"fill-color" => "#ffffff", "fill-outline-color" => "#9a9db0"}}
+    paint={%{"fill-color" => land(@theme), "fill-outline-color" => "#9a9db0"}}
   />
 
   <div class="space-y-3 border-t border-line px-4 py-4">

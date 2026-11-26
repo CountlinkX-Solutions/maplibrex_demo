@@ -31,6 +31,27 @@ defmodule MaplibrexDemoWeb.Examples.BackgroundLayerExampleTest do
            )
   end
 
+  test "the land follows the theme", %{conn: conn} do
+    view = mount_example(conn)
+    land = ~s(#example-background-land[data-config*='"fill-color":)
+
+    assert has_element?(view, land <> ~s("#ffffff']))
+
+    render_hook(view, "theme", %{"theme" => "dark"})
+
+    assert has_element?(view, land <> ~s("#3d4255']))
+  end
+
+  test "in the dark theme the sea starts dark too", %{conn: conn} do
+    {:ok, view, _html} =
+      conn
+      |> put_connect_params(%{"theme" => "dark"})
+      |> live_isolated(BackgroundLayerExample, session: %{"locale" => "en"})
+
+    assert has_element?(view, layer(~s("background-color":"#1f2330")))
+    assert has_element?(view, ~s(#example-background-color-ink[aria-pressed="true"]))
+  end
+
   test "the colour buttons and the opacity slider set the paint", %{conn: conn} do
     view = mount_example(conn)
 
