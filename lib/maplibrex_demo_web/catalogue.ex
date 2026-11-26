@@ -35,6 +35,12 @@ defmodule MaplibrexDemoWeb.Catalogue do
 
   @issues_url "https://github.com/CountlinkX-Solutions/maplibrex/issues"
 
+  # The latest MaplibreX version published on Hex. It cannot be read from the
+  # library the demo runs, which follows `main`, so it is written here once.
+  # Bump it whenever the library publishes a release on Hex: the overview's
+  # install step and the roadmap compare it with the version the demo runs.
+  @hex_release "0.1.1"
+
   @family_ids [:map, :markers, :layers, :sources, :controls, :three_d, :advanced]
 
   @typedoc "A family with its components and computed counts."
@@ -743,6 +749,25 @@ defmodule MaplibrexDemoWeb.Catalogue do
 
       {:error, reason} ->
         raise "cannot read the documentation of MaplibreX.Components: #{inspect(reason)}"
+    end
+  end
+
+  @doc "The latest MaplibreX version published on Hex."
+  @spec hex_release() :: String.t()
+  def hex_release, do: @hex_release
+
+  @doc """
+  Whether `version` is ahead of the release on Hex, `hex` (by default
+  `hex_release/0`): true while the library's `main` branch carries work that
+  is not published yet. A version that cannot be parsed is not ahead.
+  """
+  @spec unreleased?(String.t(), String.t()) :: boolean()
+  def unreleased?(version, hex \\ @hex_release) do
+    with {:ok, version} <- Version.parse(version),
+         {:ok, hex} <- Version.parse(hex) do
+      Version.compare(version, hex) == :gt
+    else
+      :error -> false
     end
   end
 

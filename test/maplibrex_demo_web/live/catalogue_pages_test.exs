@@ -3,15 +3,60 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
 
   import Phoenix.LiveViewTest
 
-  alias MaplibrexDemoWeb.Catalogue
+  alias MaplibrexDemoWeb.{Catalogue, LibraryDocs, OverviewLive}
+
+  defp render_note(component, assigns),
+    do: component |> render_component(assigns) |> LazyHTML.from_fragment()
+
+  defp count(document, selector), do: document |> LazyHTML.query(selector) |> Enum.count()
+  defp text(document, selector), do: document |> LazyHTML.query(selector) |> LazyHTML.text()
 
   describe "overview" do
     test "shows how to install the library and the minimal template", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
-      assert has_element?(view, "#install-dependency code", ~s({:maplibrex, "~> 0.1.0"}))
       assert has_element?(view, "#install-hooks code", "MapHooks")
       assert has_element?(view, "#minimal-template code", "<.map")
+    end
+
+    test "installs the library from the main branch the demo runs", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(
+               view,
+               "#install-dependency code",
+               ~s({:maplibrex, github: "CountlinkX-Solutions/maplibrex", branch: "main"})
+             )
+
+      refute has_element?(view, "#install-dependency code", "~>")
+    end
+
+    test "names the release on Hex and what it lacks", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      state = if Catalogue.unreleased?(LibraryDocs.version()), do: "unreleased", else: "released"
+      note = ~s(#install-hex-release[data-state="#{state}"])
+
+      assert has_element?(view, note, Catalogue.hex_release())
+      assert has_element?(view, "#install-step-dependency #{note}")
+    end
+
+    test "says the Hex release lacks the roadmap's fixes while main is ahead of it" do
+      note =
+        render_note(&OverviewLive.hex_release_note/1, version: "0.2.0", hex: "0.1.1")
+
+      assert count(note, ~s(#install-hex-release[data-state="unreleased"])) == 1
+      assert text(note, "#install-hex-release") =~ "0.1.1"
+      assert count(note, ~s(#install-hex-release a[href="/roadmap#next-release-heading"])) == 1
+    end
+
+    test "says main has nothing unreleased once Hex has caught up" do
+      note =
+        render_note(&OverviewLive.hex_release_note/1, version: "0.2.0", hex: "0.2.0")
+
+      assert count(note, ~s(#install-hex-release[data-state="released"])) == 1
+      assert text(note, "#install-hex-release") =~ "0.2.0"
+      assert count(note, "#install-hex-release a") == 0
     end
 
     test "says maplibre-gl 6 needs its worker files served, with the issue", %{conn: conn} do
