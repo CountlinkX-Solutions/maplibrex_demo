@@ -33,34 +33,27 @@ defmodule MaplibrexDemoWeb.OverviewLive do
   })
   '''
 
+  # The esbuild and alias snippets show only the lines to change in the files
+  # Phoenix generates. The README indents them as they sit there; here they
+  # start at the margin, so the longest line fits the code block on a desktop.
   @esbuild ~S'''
-  config :esbuild,
-    version: "0.25.4",
-    my_app: [
-      args:
-        ~w(js/app.js --bundle --target=es2022 --outdir=../priv/static/assets/js
-           --external:/fonts/* --external:/images/* --alias:@=.
-           --external:@deck.gl/*),
-      cd: Path.expand("../assets", __DIR__),
-      env: %{
-        "NODE_PATH" => [
-          Path.expand("../deps", __DIR__),
-          Mix.Project.build_path(),
-          Path.expand("../assets/node_modules", __DIR__)
-        ]
-      }
+  env: %{
+    "NODE_PATH" => [
+      Path.expand("../deps", __DIR__),
+      Mix.Project.build_path(),
+      Path.expand("../assets/node_modules", __DIR__)
     ]
+  }
   '''
 
-  @worker_copy ~S'''
-  defp copy_maplibre_worker(_args) do
-    dest = "priv/static/assets/js"
-    File.mkdir_p!(dest)
-
-    for file <- ~w(maplibre-gl-worker.mjs maplibre-gl-shared.mjs) do
-      File.cp!(Path.join("assets/node_modules/maplibre-gl/dist", file), Path.join(dest, file))
-    end
-  end
+  @worker_aliases ~S'''
+  "assets.build": ["compile", "tailwind my_app", "esbuild my_app", "maplibrex.copy_worker"],
+  "assets.deploy": [
+    "tailwind my_app --minify",
+    "esbuild my_app --minify",
+    "maplibrex.copy_worker",
+    "phx.digest"
+  ],
   '''
 
   @worker_url ~S'''
@@ -100,7 +93,8 @@ defmodule MaplibrexDemoWeb.OverviewLive do
     {:noreply, assign(socket, center: center, zoom: zoom)}
   end
 
-  # The components push every event they emit; ignore the ones you do not use.
+  # Components given no `events` list push every event they emit; ignore the
+  # ones you do not use.
   def handle_event(_event, _params, socket), do: {:noreply, socket}
   '''
 
@@ -124,7 +118,7 @@ defmodule MaplibrexDemoWeb.OverviewLive do
           npm: String.trim_trailing(@npm),
           hooks: String.trim_trailing(@hooks),
           esbuild: String.trim_trailing(@esbuild),
-          worker_copy: String.trim_trailing(@worker_copy),
+          worker_aliases: String.trim_trailing(@worker_aliases),
           worker_url: String.trim_trailing(@worker_url),
           stylesheets: String.trim_trailing(@stylesheets),
           import: String.trim_trailing(@import),
@@ -243,7 +237,7 @@ defmodule MaplibrexDemoWeb.OverviewLive do
               <p class="mt-4 mb-3 max-w-measure text-body text-ink-muted">
                 <.rich_text text={
                   gettext(
-                    "The bare `\"maplibrex\"` import resolves through `NODE_PATH`, which the generated esbuild profile points at `deps/`. The bundle found there imports `maplibre-gl`, which npm installed in `assets/node_modules`; add that directory to `NODE_PATH`:"
+                    "The bare `\"maplibrex\"` import resolves through `NODE_PATH`, which the generated esbuild profile points at `deps/`. The bundle found there imports `maplibre-gl`, which npm installed in `assets/node_modules`. In `config/config.exs`, add that directory to the `NODE_PATH` of the esbuild profile, after the two entries already there:"
                   )
                 } />
               </p>
@@ -256,7 +250,7 @@ defmodule MaplibrexDemoWeb.OverviewLive do
               <p class="mt-3 max-w-measure text-body text-ink-muted">
                 <.rich_text text={
                   gettext(
-                    "Without that entry the build stops with `Could not resolve \"maplibre-gl\"`. The `--external:@deck.gl/*` flag is only for an application without the deck.gl packages, which only `deckgl_layer` needs; with them installed, leave it out."
+                    "Without that entry the build stops with `Could not resolve \"maplibre-gl\"`. If you did not install the deck.gl packages, which only `deckgl_layer` needs, also add `--external:@deck.gl/*` at the end of the profile's `args`."
                   )
                 } />
               </p>
@@ -270,13 +264,13 @@ defmodule MaplibrexDemoWeb.OverviewLive do
               <p class="mb-3 max-w-measure text-body text-ink-muted">
                 <.rich_text text={
                   gettext(
-                    "maplibre-gl 6 starts its worker from separate files that esbuild does not copy into your build, and without them the map draws no tile data; maplibre-gl 5 needs none of this. Copy the files next to `app.js` with this function in `mix.exs`, and add `&copy_maplibre_worker/1` right after the esbuild task in the `assets.build` and `assets.deploy` aliases:"
+                    "maplibre-gl 6 starts its worker from separate files that esbuild does not copy into your build, and without them the map draws no tile data; maplibre-gl 5 needs none of this. MaplibreX's `mix maplibrex.copy_worker` copies them next to `app.js`: add it to the asset aliases in `mix.exs`, after esbuild:"
                   )
                 } />
               </p>
               <.code_block
-                id="install-worker-copy"
-                code={@snippets.worker_copy}
+                id="install-worker-aliases"
+                code={@snippets.worker_aliases}
                 language={:elixir}
                 title="mix.exs"
               />
@@ -294,7 +288,7 @@ defmodule MaplibrexDemoWeb.OverviewLive do
               <p class="mt-3 max-w-measure text-body text-ink-muted">
                 <.rich_text text={
                   gettext(
-                    "Run `mix assets.build` after every install or upgrade of maplibre-gl: `mix phx.server` does not copy the files."
+                    "Run `mix assets.build` after every install or upgrade of maplibre-gl: `mix phx.server` does not copy the files. With maplibre-gl 5 the task copies nothing and says so, so the aliases can keep it."
                   )
                 } />
               </p>
@@ -327,7 +321,7 @@ defmodule MaplibrexDemoWeb.OverviewLive do
               <p class="mt-3 max-w-measure text-body text-ink-muted">
                 <.rich_text text={
                   gettext(
-                    "The components push their events whether or not your LiveView handles them, and an event with no matching clause crashes it: keep a catch-all as the last `handle_event/3`."
+                    "A component pushes every event it emits unless it is given an `events` list, and an event with no matching clause crashes your LiveView. Either keep a catch-all as the last `handle_event/3`, as above, or give each component that emits events the list of those you handle, such as `events={[\"map:moved\"]}`. While any component has no `events` list, keep the catch-all."
                   )
                 } />
               </p>

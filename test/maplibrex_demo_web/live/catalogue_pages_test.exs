@@ -98,21 +98,42 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
       assert has_element?(view, hooks, "longPollFallbackMs: 2500")
     end
 
-    test "adds assets/node_modules to NODE_PATH in the esbuild profile", %{conn: conn} do
+    test "adds only the lines the generated esbuild profile lacks", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
       esbuild = "#install-step-hooks #install-esbuild code"
       assert has_element?(view, esbuild, ~s|Path.expand("../assets/node_modules", __DIR__)|)
-      assert has_element?(view, esbuild, "--external:@deck.gl/*")
+
+      # The lines to add, as the library README shows them since 0.2.1, not a
+      # whole profile to paste over the generated one.
+      for line <- [":esbuild", "version:", "cd:", "args:"] do
+        refute has_element?(view, esbuild, line), "the esbuild lines include #{line}"
+      end
+
+      assert has_element?(view, "#install-step-hooks .inline-code", "--external:@deck.gl/*")
     end
 
-    test "serves the maplibre-gl 6 worker in a step of its own", %{conn: conn} do
+    test "copies the maplibre-gl 6 worker with the library's mix task", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
-      copy = "#install-step-worker #install-worker-copy code"
-      assert has_element?(view, copy, "maplibre-gl-worker.mjs")
-      assert has_element?(view, copy, "maplibre-gl-shared.mjs")
+      aliases = "#install-step-worker #install-worker-aliases code"
+      assert has_element?(view, aliases, "maplibrex.copy_worker")
+      assert has_element?(view, aliases, "assets.build")
+      assert has_element?(view, aliases, "assets.deploy")
+      refute has_element?(view, "#install", "copy_maplibre_worker")
       assert has_element?(view, "#install-step-worker #install-worker-url code", "setWorkerUrl")
+    end
+
+    test "offers an events list as the alternative to a catch-all clause", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(
+               view,
+               "#install-step-components .inline-code",
+               ~s(events={["map:moved"]})
+             )
+
+      assert has_element?(view, "#minimal-template code", "no `events` list")
     end
 
     test "ends both examples with a catch-all handle_event/3 clause", %{conn: conn} do
@@ -143,7 +164,7 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
     test "cites none of the closed installation issues", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
-      for number <- [41, 42] do
+      for number <- [41, 42, 48] do
         refute has_element?(view, ~s(#overview a[href$="/issues/#{number}"]))
       end
     end

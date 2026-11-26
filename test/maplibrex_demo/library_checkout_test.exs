@@ -20,8 +20,10 @@ defmodule MaplibrexDemo.LibraryCheckoutTest do
     end
 
     # The overview's install steps follow the library README at this commit,
-    # the first with the fixes for #41 and #42. When the lock moves on, check
-    # those steps against the README and move this with it.
+    # release 0.2.1: only the lines to add to the esbuild profile, the
+    # `mix maplibrex.copy_worker` task in the asset aliases (#48), and the
+    # `events` attribute next to the catch-all clause. When the lock moves on,
+    # check those steps against the README and move this with it.
     test "locks MaplibreX at the commit the overview's install steps follow" do
       assert {:git, _url, "c84b7f95443ae70c05e434736a655ca39ceef409", _opts} = maplibrex_lock()
     end
