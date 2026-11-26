@@ -122,6 +122,8 @@ defmodule MaplibrexDemoWeb.OverviewLive do
         totals: Catalogue.status_counts(),
         total: length(Catalogue.components()),
         version: LibraryDocs.version(),
+        # The release whose fixes the roadmap lists, published or not.
+        release: Catalogue.next_release().version,
         readme_install_url: @readme_install_url,
         snippets: %{
           dependency: String.trim_trailing(@dependency),
@@ -471,7 +473,11 @@ defmodule MaplibrexDemoWeb.OverviewLive do
             <.next_link
               navigate={~p"/roadmap"}
               title={gettext("Roadmap")}
-              text={gettext("What is limited or planned, and what the next library release fixes.")}
+              text={
+                gettext("What is limited or planned, and what MaplibreX %{version} fixes.",
+                  version: @release
+                )
+              }
             />
           </ul>
         </section>

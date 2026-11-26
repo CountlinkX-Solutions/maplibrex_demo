@@ -63,8 +63,8 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       end
     end
 
-    # Statuses on the library's main branch (0.2.0, unreleased), derived from
-    # its open issues.
+    # Statuses on the library's main branch (0.2.0, published on Hex),
+    # derived from its open issues.
     @limited %{
       map: [21, 25, 26],
       marker: [35, 36],
@@ -275,11 +275,11 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
   end
 
   describe "next_release/0" do
-    test "reports 0.2.0 as merged on main, not published, with the issues it fixes" do
+    test "reports 0.2.0 as published on Hex, with the issues it fixes" do
       release = Catalogue.next_release()
 
       assert release.version == "0.2.0"
-      assert release.state == :merged
+      assert release.state == :published
 
       assert release.items |> Enum.flat_map(& &1.issues) |> Enum.sort() ==
                [3, 4, 5, 12, 15, 16, 17, 18, 20]
