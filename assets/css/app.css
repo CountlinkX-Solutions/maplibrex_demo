@@ -1,4 +1,11 @@
-@import "tailwindcss";
+/* Classes are read from these directories only, as in a generated Phoenix
+   application. The watcher then follows exactly these, whatever the working
+   directory and .gitignore hold. */
+@import "tailwindcss" source(none);
+@source "../css";
+@source "../js";
+@source "../../lib/maplibrex_demo_web";
+
 @import "maplibre-gl/dist/maplibre-gl.css";
 @import "maplibrex/css";
 

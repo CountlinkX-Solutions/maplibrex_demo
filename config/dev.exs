@@ -42,14 +42,17 @@ config :maplibrex_demo, MaplibrexDemoWeb.Endpoint,
 # configured to run both http and https servers on
 # different ports.
 
-# Watch static and templates for browser reloading.
+# Watch static files, translations and every source file of the web layer
+# for browser reloading. The whole of lib/maplibrex_demo_web counts: the
+# catalogue, the highlighter and the examples' and scenarios' sources are
+# what the pages show.
 config :maplibrex_demo, MaplibrexDemoWeb.Endpoint,
   live_reload: [
     web_console_logger: true,
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
-      ~r"priv/gettext/.*(po)$",
-      ~r"lib/maplibrex_demo_web/(?:controllers|live|components|router)/?.*\.(ex|heex)$"
+      ~r"priv/gettext/.*\.po$",
+      ~r"lib/maplibrex_demo_web/.*\.(ex|heex)$"
     ]
   ]
 
