@@ -1,0 +1,59 @@
+<div id="geojson-layer-example">
+  <.example_frame error={@map_error} error_id="example-geojson-map-error">
+    <.map
+      id="example-geojson-map"
+      center={@center}
+      zoom={10}
+      style="https://tiles.openfreemap.org/styles/liberty"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- The layer sits next to <.map>, not inside it, and names it with map_id. --%>
+  <.geojson_layer
+    :if={@visible}
+    id="example-geojson-points"
+    map_id="example-geojson-map"
+    type="circle"
+    data={@points}
+    paint={paint(@color, @radius)}
+  />
+
+  <div class="space-y-3 border-t border-line px-4 py-4">
+    <%!-- Assigns: each control changes an assign; the layer follows. --%>
+    <.example_group id="example-geojson-assigns" label={gettext("Set assigns")}>
+      <.example_button
+        :for={{name, hex} <- colors()}
+        id={"example-geojson-color-#{name}"}
+        code
+        pressed={@color == hex}
+        phx-click="color"
+        phx-value-color={hex}
+      >
+        <.example_swatch color={hex} />{hex}
+      </.example_button>
+
+      <.form
+        for={@options}
+        id="example-geojson-options"
+        phx-change="options"
+        class="grid w-full gap-4 pt-2 sm:max-w-lg sm:grid-cols-[1fr_auto] sm:items-end"
+      >
+        <.example_range field={@options[:radius]} label="radius" min="3" max="20" />
+        <.example_checkbox field={@options[:visible]} label="visible" />
+      </.form>
+    </.example_group>
+
+    <.example_note id="example-geojson-sample-data">
+      {gettext("Sample data: twelve points placed on a ring for this example. Click one.")}
+    </.example_note>
+  </div>
+
+  <%!-- The assigns as they are now: layer:feature_clicked sets selected. --%>
+  <.example_readout values={[
+    color: @color,
+    radius: @radius,
+    visible: @visible,
+    selected: @selected || "—"
+  ]} />
+</div>

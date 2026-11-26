@@ -96,6 +96,23 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
     """
   end
 
+  @doc """
+  A short note under the controls: that the data is sample data, or what
+  the example needs to run.
+  """
+  attr :id, :string, required: true
+  attr :icon, :string, default: "hero-beaker-micro"
+  slot :inner_block, required: true
+
+  def example_note(assigns) do
+    ~H"""
+    <p id={@id} class="flex items-start gap-1.5 text-label text-ink-muted">
+      <.icon name={@icon} class="mt-px size-3.5 shrink-0 text-ink-subtle" />
+      <span>{render_slot(@inner_block)}</span>
+    </p>
+    """
+  end
+
   @doc "A dot of colour, for buttons that set a colour."
   attr :color, :string, required: true
 

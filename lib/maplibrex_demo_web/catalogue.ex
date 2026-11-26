@@ -122,6 +122,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :geojson_layer,
         family: :layers,
         module: Lib.GeoJSONLayer,
+        example: MaplibrexDemoWeb.Examples.GeojsonLayerExample,
         summary:
           gettext(
             "Draws GeoJSON data as a fill, line, circle, symbol, heatmap or fill-extrusion layer, with optional clustering and feature events."
