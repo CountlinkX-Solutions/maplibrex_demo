@@ -1,0 +1,68 @@
+<div id="raster-layer-example">
+  <.example_frame
+    error={@map_error}
+    error_id="example-raster-layer-map-error"
+    hosts={["tiles.openfreemap.org", "gibs.earthdata.nasa.gov"]}
+  >
+    <.map
+      id="example-raster-layer-map"
+      center={[10, 30]}
+      zoom={1.6}
+      style="https://tiles.openfreemap.org/styles/positron"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- NASA's imagery is public domain; the attribution credits the service.
+        GIBS orders the tile path {z}/{y}/{x}. --%>
+  <.raster_tile_source
+    id="example-raster-layer-tiles"
+    map_id="example-raster-layer-map"
+    tiles={[
+      "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg"
+    ]}
+    tile_size={256}
+    max_zoom={8}
+    attribution="Imagery: NASA EOSDIS GIBS"
+  />
+
+  <.raster_layer
+    id="example-raster-layer-imagery"
+    map_id="example-raster-layer-map"
+    source_id="example-raster-layer-tiles"
+    paint={
+      %{
+        "raster-opacity" => @opacity,
+        "raster-saturation" => @saturation,
+        "raster-hue-rotate" => @hue
+      }
+    }
+  />
+
+  <div class="border-t border-line px-4 py-4">
+    <.form
+      for={@options}
+      id="example-raster-layer-options"
+      phx-change="options"
+      class="grid w-full gap-4 sm:grid-cols-3"
+    >
+      <.example_range
+        field={@options[:opacity]}
+        label="raster-opacity"
+        min="0"
+        max="1"
+        step="0.05"
+      />
+      <.example_range
+        field={@options[:saturation]}
+        label="raster-saturation"
+        min="-1"
+        max="1"
+        step="0.1"
+      />
+      <.example_range field={@options[:hue]} label="raster-hue-rotate" min="0" max="360" step="5" />
+    </.form>
+  </div>
+
+  <.example_readout values={[opacity: @opacity, saturation: @saturation, hue: @hue]} />
+</div>
