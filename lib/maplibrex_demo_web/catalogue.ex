@@ -61,14 +61,6 @@ defmodule MaplibrexDemoWeb.Catalogue do
   def components do
     reactive_control = issue(3, gettext("Changing `position` after mount has no effect."))
 
-    undocumented_events =
-      issue(
-        28,
-        gettext(
-          "The events its documentation lists are never sent; `source:added`, `source:error` and `source:removed` arrive instead."
-        )
-      )
-
     reactive_custom_control =
       issue(3, gettext("Changes to `position` or `class` after mount are not applied."))
 
@@ -281,16 +273,14 @@ defmodule MaplibrexDemoWeb.Catalogue do
         module: Lib.ImageSource,
         example: MaplibrexDemoWeb.Examples.ImageSourceExample,
         summary: gettext("Places an image at four coordinates for a raster layer to draw."),
-        status: :limited,
-        issues: [undocumented_events]
+        status: :stable
       },
       %Component{
         name: :video_source,
         family: :sources,
         module: Lib.VideoSource,
         summary: gettext("Places a video at four coordinates for a raster layer to draw."),
-        status: :limited,
-        issues: [undocumented_events],
+        status: :stable,
         example_note:
           gettext(
             "No openly licensed video could be found that is hosted to stay available and whose picture lines up with four points on a map."
