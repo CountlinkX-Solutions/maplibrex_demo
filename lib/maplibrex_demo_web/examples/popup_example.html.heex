@@ -1,0 +1,53 @@
+<div id="popup-example">
+  <.example_frame error={@map_error} error_id="example-popup-map-error">
+    <%!-- The map centres on the chosen place, so the popup above it is in view. --%>
+    <.map
+      id="example-popup-map"
+      center={@place.lng_lat}
+      zoom={15}
+      style="https://tiles.openfreemap.org/styles/liberty"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- The popup sits next to <.map> and names it with map_id. Where it is
+        and whether it is open are assigns; its content is the slot. The
+        Popup.open/2 and Popup.close/1 helpers need the server to echo
+        them back (#22), so this example sets assigns instead. The anchor
+        is set because the default, "auto", makes MapLibre throw when the
+        popup mounts. --%>
+  <.popup
+    id="example-popup"
+    map_id="example-popup-map"
+    lng_lat={@place.lng_lat}
+    open={@open}
+    anchor="bottom"
+  >
+    <p class="font-bold">{name(@place.id)}</p>
+    <p class="font-mono">{lng_lat(@place.lng_lat)}</p>
+  </.popup>
+
+  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[1fr_auto]">
+    <%!-- Assigns: a place moves the popup and opens it. --%>
+    <.example_group id="example-popup-places" label={gettext("Set assigns")}>
+      <.example_button
+        :for={place <- places()}
+        id={"example-popup-place-#{place.id}"}
+        pressed={@place.id == place.id}
+        phx-click="place"
+        phx-value-place={place.id}
+      >
+        {name(place.id)}
+      </.example_button>
+    </.example_group>
+
+    <.example_group id="example-popup-toggle" label="open" code>
+      <.form for={@options} id="example-popup-options" phx-change="options" class="py-1.5">
+        <.example_checkbox field={@options[:open]} label="open" />
+      </.form>
+    </.example_group>
+  </div>
+
+  <%!-- popup:opened and popup:closed keep open current. --%>
+  <.example_readout values={[place: @place.id, open: @open, last_event: @last_event || "—"]} />
+</div>

@@ -123,6 +123,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :popup,
         family: :markers,
         module: Lib.Popup,
+        example: MaplibrexDemoWeb.Examples.PopupExample,
         summary: gettext("A popup with text or HTML content, placed at a coordinate."),
         status: :limited,
         issues: [
