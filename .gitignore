@@ -38,6 +38,18 @@ maplibrex_demo-*.tar
 npm-debug.log
 /assets/node_modules/
 
-
-# Local agent tooling cache (gentle-ai skill registry).
+# Local agent / AI-harness tooling. Per-developer state, never part of the
+# project: code indexes, memory stores, session settings, task scratch files.
 /.atl/
+/.codegraph/
+/.claude/
+/CLAUDE.local.md
+/.engram/
+/.gentle-ai/
+/.opencode/
+/.codex/
+/.cursor/
+/.pi/
+/.agents/
+/odd/
+/openspec/
