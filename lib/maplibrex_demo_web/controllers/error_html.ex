@@ -54,7 +54,7 @@ defmodule MaplibrexDemoWeb.ErrorHTML do
           <div class="flex h-full items-center px-4 sm:px-6 lg:px-7">
             <a
               href={~p"/"}
-              class="rounded-ui text-[1.375rem] leading-none font-black tracking-tight text-accent-ink"
+              class="rounded-ui text-heading leading-none font-black tracking-tight text-accent-ink"
             >
               MaplibreX
             </a>

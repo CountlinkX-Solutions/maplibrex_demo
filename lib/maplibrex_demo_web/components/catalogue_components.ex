@@ -102,7 +102,7 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
       <.link
         :for={name <- @names}
         navigate={~p"/components/#{name}"}
-        class="rounded-[4px] bg-surface px-1.5 py-0.5 font-mono text-label text-ink hover:bg-surface-hover hover:text-accent-ink"
+        class="rounded-inline bg-surface px-1.5 py-0.5 text-label font-bold text-ink hover:bg-surface-hover hover:text-accent-ink"
       >
         {name}
       </.link>
@@ -289,7 +289,7 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
         type="button"
         aria-expanded="false"
         aria-controls={"#{@id}-source"}
-        class="flex h-10 w-full cursor-pointer items-center justify-center gap-1.5 border-t border-code-line text-label font-bold text-code-muted hover:bg-white/5 hover:text-code-ink focus-visible:-outline-offset-2"
+        class="flex h-10 w-full cursor-pointer items-center justify-center gap-1.5 border-t border-code-line text-label font-bold text-code-muted hover:bg-code-hover hover:text-code-ink focus-visible:-outline-offset-2"
         phx-click={
           JS.dispatch("app:code-toggle")
           |> JS.toggle_attribute({"aria-expanded", "true", "false"})
@@ -329,7 +329,7 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
     ~H"""
     <button
       type="button"
-      class="group inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-ui px-2 text-label font-bold text-code-muted hover:bg-white/8 hover:text-code-ink"
+      class="group inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-ui px-2 text-label font-bold text-code-muted hover:bg-code-hover hover:text-code-ink"
       data-copy-target={@target}
       phx-click={JS.dispatch("app:copy")}
     >

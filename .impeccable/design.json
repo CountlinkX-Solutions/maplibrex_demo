@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-26T09:10:26+00:00",
+  "generatedAt": "2026-11-26T19:24:09+00:00",
   "title": "Design System: MaplibreX Demo",
   "extensions": {
     "colorMeta": {
@@ -308,6 +308,23 @@
         ],
         "darkValue": "#262a36"
       },
+      "code-hover": {
+        "role": "secondary",
+        "displayName": "Code Hover",
+        "canonical": "#313541",
+        "oklch": "oklch(33.0% 0.022 270.7)",
+        "tonalRamp": [
+          "#0a0b0f",
+          "#23252c",
+          "#3f424c",
+          "#5d616d",
+          "#7e828f",
+          "#a1a5b1",
+          "#c6c9d2",
+          "#eceef5"
+        ],
+        "darkValue": "#1f2025"
+      },
       "stable": {
         "role": "tertiary",
         "displayName": "Stable Green",
@@ -580,7 +597,7 @@
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Section headings within a page; also the top-bar wordmark size."
+        "purpose": "Section headings within a page; also the size of the wordmark in the top bar, the drawer and the error pages."
       },
       "lead": {
         "displayName": "Lead",
@@ -600,11 +617,11 @@
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Status badges, captions, small control labels."
+        "purpose": "Status badges, captions, small control labels, component-name chips."
       },
       "label-caps": {
         "displayName": "Label Caps",
-        "purpose": "Uppercase group labels in the sidebar and roadmap, and the rail title."
+        "purpose": "Uppercase group labels in the sidebar and roadmap, table headers and the rail title, all at 0.1em tracking."
       },
       "source": {
         "displayName": "Source",
@@ -722,7 +739,7 @@
       "refersTo": "tree-item",
       "description": "The component tree by family; the current item is filled purple.",
       "html": "<nav class=\"ds-tree\"><p class=\"ds-tree-label\">Layers</p><a href=\"#\">geojson_layer<svg class=\"ds-tree-mark\" viewBox=\"0 0 16 16\" width=\"14\" height=\"14\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M6.701 2.25c.577-1 2.02-1 2.598 0l5.196 9a1.5 1.5 0 0 1-1.299 2.25H2.804a1.5 1.5 0 0 1-1.3-2.25l5.197-9ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 1 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z\" clip-rule=\"evenodd\"/></svg></a><a href=\"#\" aria-current=\"page\">circle_layer</a><a href=\"#\">line_layer</a></nav>",
-      "css": ".ds-tree { width: 244px; padding: 12px 18px; background: var(--color-surface, #f4f4f6); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); } .ds-tree-label { margin: 0 10px 6px; font-size: 0.75rem; line-height: 1rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ink-subtle, #63637a); } .ds-tree a { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 0.9375rem; line-height: 1.375rem; color: var(--color-ink, #1f2330); text-decoration: none; } .ds-tree a:hover { background: var(--color-surface-hover, #e8e8ee); } .ds-tree a[aria-current=page] { background: var(--color-accent, #5b3fa6); color: var(--color-on-accent, #ffffff); font-weight: 700; } .ds-tree-mark { margin-left: auto; color: var(--color-limited, #8a5300); } .ds-tree a:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; }"
+      "css": ".ds-tree { width: 248px; padding: 12px 16px; background: var(--color-surface, #f4f4f6); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); } .ds-tree-label { margin: 0 12px 6px; font-size: 0.75rem; line-height: 1rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ink-subtle, #63637a); } .ds-tree a { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 6px 12px; border-radius: 6px; box-sizing: border-box; font-size: 0.9375rem; line-height: 1.375rem; color: var(--color-ink, #1f2330); text-decoration: none; } .ds-tree a:hover { background: var(--color-surface-hover, #e8e8ee); } .ds-tree a[aria-current=page] { background: var(--color-accent, #5b3fa6); color: var(--color-on-accent, #ffffff); font-weight: 700; } .ds-tree-mark { margin-left: auto; color: var(--color-limited, #8a5300); } .ds-tree a:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; }"
     },
     {
       "name": "Component Tabs",
@@ -746,7 +763,7 @@
       "refersTo": "code-block",
       "description": "The dark figure every source appears on, with a file caption and copy button.",
       "html": "<figure class=\"ds-code\"><figcaption><span>lib/maplibrex_demo_web/examples/map_example.html.heex</span><button type=\"button\">Copy</button></figcaption><pre><code><span class=\"t-tag\">&lt;.map</span>\n  <span class=\"t-attr\">id</span>=<span class=\"t-str\">\"example-map\"</span>\n  <span class=\"t-attr\">zoom</span>={<span class=\"t-atr\">@zoom</span>}\n<span class=\"t-tag\">/&gt;</span></code></pre></figure>",
-      "css": ".ds-code { margin: 0; overflow: hidden; border: 1px solid var(--color-code-line, #343a4d); border-radius: 8px; background: var(--color-code, #1f2330); color: var(--color-code-ink, #e9e9f2); } .ds-code figcaption { display: flex; align-items: center; justify-content: space-between; height: 40px; padding: 0 6px 0 16px; border-bottom: 1px solid var(--color-code-line, #343a4d); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 0.75rem; color: var(--color-code-muted, #a3a6bd); } .ds-code button { height: 28px; padding: 0 8px; border: 0; border-radius: 6px; background: transparent; color: var(--color-code-muted, #a3a6bd); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); font-size: 0.75rem; font-weight: 700; cursor: pointer; } .ds-code button:hover { background: rgb(255 255 255 / 0.08); color: var(--color-code-ink, #e9e9f2); } .ds-code button:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; } .ds-code pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 0.875rem; line-height: 1.65; font-variant-ligatures: none; } .t-tag { color: var(--color-syntax-module, #8fb8ff); } .t-attr { color: var(--color-syntax-atom, #7fd3c8); } .t-str { color: var(--color-syntax-string, #a8d8a0); } .t-atr { color: var(--color-syntax-attribute, #f0c27f); }"
+      "css": ".ds-code { margin: 0; overflow: hidden; border: 1px solid var(--color-code-line, #343a4d); border-radius: 8px; background: var(--color-code, #1f2330); color: var(--color-code-ink, #e9e9f2); } .ds-code figcaption { display: flex; align-items: center; justify-content: space-between; height: 40px; padding: 0 6px 0 16px; border-bottom: 1px solid var(--color-code-line, #343a4d); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 0.75rem; color: var(--color-code-muted, #a3a6bd); } .ds-code button { height: 28px; padding: 0 8px; border: 0; border-radius: 6px; background: transparent; color: var(--color-code-muted, #a3a6bd); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); font-size: 0.75rem; font-weight: 700; cursor: pointer; } .ds-code button:hover { background: var(--color-code-hover, #313541); color: var(--color-code-ink, #e9e9f2); } .ds-code button:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; } .ds-code pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 0.875rem; line-height: 1.65; font-variant-ligatures: none; } .t-tag { color: var(--color-syntax-module, #8fb8ff); } .t-attr { color: var(--color-syntax-atom, #7fd3c8); } .t-str { color: var(--color-syntax-string, #a8d8a0); } .t-atr { color: var(--color-syntax-attribute, #f0c27f); }"
     },
     {
       "name": "Issue Panel",

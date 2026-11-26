@@ -88,13 +88,13 @@ defmodule MaplibrexDemoWeb.Layouts do
           <.link
             navigate={~p"/"}
             id="wordmark"
-            class="rounded-ui text-[1.375rem] leading-none font-black tracking-tight text-accent-ink"
+            class="rounded-ui text-heading leading-none font-black tracking-tight text-accent-ink"
           >
             MaplibreX
           </.link>
           <span
             id="library-version"
-            class="rounded-[5px] bg-surface px-2 py-1 font-mono text-label font-semibold text-ink-muted"
+            class="rounded-inline bg-surface px-2 py-1 font-mono text-label font-semibold text-ink-muted"
             title={gettext("Version of the MaplibreX library this demo runs")}
           >
             v{@version}
@@ -128,7 +128,7 @@ defmodule MaplibrexDemoWeb.Layouts do
     <div class="lg:grid lg:grid-cols-[var(--spacing-sidebar)_minmax(0,1fr)]">
       <aside
         id="sidebar"
-        class="sticky top-topbar hidden h-[calc(100dvh-var(--spacing-topbar))] overflow-y-auto border-r border-line bg-surface px-[18px] pt-5 pb-12 lg:block"
+        class="sticky top-topbar hidden h-[calc(100dvh-var(--spacing-topbar))] overflow-y-auto border-r border-line bg-surface px-4 pt-5 pb-12 lg:block"
       >
         <.component_tree
           id="sidebar"
@@ -139,7 +139,7 @@ defmodule MaplibrexDemoWeb.Layouts do
         />
       </aside>
 
-      <main id="main" class="min-w-0 px-4 pt-8 pb-24 sm:px-8 lg:px-12 lg:pt-[34px]">
+      <main id="main" class="min-w-0 px-4 pt-8 pb-24 sm:px-8 lg:px-12">
         <%= if @page_sections == [] do %>
           <div class="max-w-page">
             {render_slot(@inner_block)}
@@ -162,9 +162,9 @@ defmodule MaplibrexDemoWeb.Layouts do
       phx-mounted={JS.ignore_attributes(["open"])}
       data-close-on-backdrop
     >
-      <div class="flex min-h-full flex-col px-[18px] pt-3 pb-8">
+      <div class="flex min-h-full flex-col px-4 pt-3 pb-8">
         <div class="flex h-12 items-center justify-between">
-          <span class="text-[1.25rem] font-black tracking-tight text-accent-ink">MaplibreX</span>
+          <span class="text-heading leading-none font-black tracking-tight text-accent-ink">MaplibreX</span>
           <button
             id="nav-drawer-close"
             type="button"
@@ -183,7 +183,7 @@ defmodule MaplibrexDemoWeb.Layouts do
             navigate={path}
             aria-current={@section == section && "page"}
             class={[
-              "rounded-ui px-2.5 py-[7px] text-nav",
+              "flex min-h-9 items-center rounded-ui px-3 py-1.5 text-nav",
               if(@section == section,
                 do: "bg-accent-soft font-bold text-accent-ink",
                 else: "text-ink hover:bg-surface-hover"
@@ -254,7 +254,7 @@ defmodule MaplibrexDemoWeb.Layouts do
       >
         <p
           id="page-rail-title"
-          class="text-label font-bold tracking-[0.1em] text-ink-subtle uppercase"
+          class="text-label font-bold tracking-caps text-ink-subtle uppercase"
         >
           {gettext("On this page")}
         </p>
@@ -329,7 +329,7 @@ defmodule MaplibrexDemoWeb.Layouts do
       <section :for={family <- @families} id={"#{@id}-family-#{family.id}"} class="mt-5">
         <h2
           id={"#{@id}-family-#{family.id}-label"}
-          class="mx-2.5 mb-1.5 text-label font-bold tracking-[0.1em] text-ink-subtle uppercase"
+          class="mx-3 mb-1.5 text-label font-bold tracking-caps text-ink-subtle uppercase"
         >
           {family.label}
         </h2>
@@ -360,7 +360,7 @@ defmodule MaplibrexDemoWeb.Layouts do
       <div
         :if={@families == []}
         id={"#{@id}-empty"}
-        class="mx-2.5 mt-5 rounded-panel border border-dashed border-line-strong px-3 py-4 text-ui text-ink-muted"
+        class="mx-3 mt-5 rounded-panel border border-dashed border-line-strong px-3 py-4 text-ui text-ink-muted"
       >
         <p>{gettext("No component name contains “%{query}”.", query: @query)}</p>
         <button
@@ -376,11 +376,11 @@ defmodule MaplibrexDemoWeb.Layouts do
   end
 
   defp tree_link_class(true) do
-    "flex items-center gap-2 rounded-ui bg-accent px-2.5 py-[7px] text-nav font-bold text-on-accent"
+    "flex min-h-9 items-center gap-2 rounded-ui bg-accent px-3 py-1.5 text-nav font-bold text-on-accent"
   end
 
   defp tree_link_class(false) do
-    "flex items-center gap-2 rounded-ui px-2.5 py-[7px] text-nav text-ink hover:bg-surface-hover"
+    "flex min-h-9 items-center gap-2 rounded-ui px-3 py-1.5 text-nav text-ink hover:bg-surface-hover"
   end
 
   @doc """
@@ -422,7 +422,7 @@ defmodule MaplibrexDemoWeb.Layouts do
       />
       <kbd
         :if={@shortcut}
-        class="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 rounded-[4px] border border-line bg-surface px-1.5 font-mono text-label leading-5 text-ink-subtle"
+        class="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 rounded-inline border border-line bg-surface px-1.5 font-mono text-label leading-5 text-ink-subtle"
         title={gettext("Press / to search")}
       >
         /
@@ -455,9 +455,9 @@ defmodule MaplibrexDemoWeb.Layouts do
         title={name}
         aria-current={@locale == code && "true"}
         class={[
-          "inline-flex h-7 min-w-9 items-center justify-center rounded-[5px] px-2 text-label font-bold",
+          "inline-flex h-7 min-w-9 items-center justify-center rounded-inline px-2 text-label font-bold",
           if(@locale == code,
-            do: "bg-canvas text-ink shadow-sm",
+            do: "bg-canvas text-ink ring-1 ring-line",
             else: "text-ink-subtle hover:text-ink"
           )
         ]}
@@ -492,7 +492,7 @@ defmodule MaplibrexDemoWeb.Layouts do
         aria-label={label}
         title={label}
         class={[
-          "inline-flex size-7 cursor-pointer items-center justify-center rounded-[5px] text-ink-subtle hover:text-ink",
+          "inline-flex size-7 cursor-pointer items-center justify-center rounded-inline text-ink-subtle hover:text-ink",
           theme_pressed_class(choice)
         ]}
       >
@@ -513,15 +513,15 @@ defmodule MaplibrexDemoWeb.Layouts do
   # Written out in full so Tailwind finds every class.
   defp theme_pressed_class("system"),
     do:
-      "[html:not([data-theme])_&]:bg-canvas [html:not([data-theme])_&]:text-ink [html:not([data-theme])_&]:shadow-sm"
+      "[html:not([data-theme])_&]:bg-canvas [html:not([data-theme])_&]:text-ink [html:not([data-theme])_&]:ring-1 [html:not([data-theme])_&]:ring-line"
 
   defp theme_pressed_class("light"),
     do:
-      "[html[data-theme=light]_&]:bg-canvas [html[data-theme=light]_&]:text-ink [html[data-theme=light]_&]:shadow-sm"
+      "[html[data-theme=light]_&]:bg-canvas [html[data-theme=light]_&]:text-ink [html[data-theme=light]_&]:ring-1 [html[data-theme=light]_&]:ring-line"
 
   defp theme_pressed_class("dark"),
     do:
-      "[html[data-theme=dark]_&]:bg-canvas [html[data-theme=dark]_&]:text-ink [html[data-theme=dark]_&]:shadow-sm"
+      "[html[data-theme=dark]_&]:bg-canvas [html[data-theme=dark]_&]:text-ink [html[data-theme=dark]_&]:ring-1 [html[data-theme=dark]_&]:ring-line"
 
   @doc """
   Shows the flash group with standard titles and content, including the
