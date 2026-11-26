@@ -164,6 +164,7 @@ msgstr "Atributo"
 msgid "Attributes"
 msgstr "Atributos"
 
+#: lib/maplibrex_demo_web/controllers/error_html/404.html.heex:12
 #: lib/maplibrex_demo_web/live/overview_live.ex:117
 #, elixir-autogen, elixir-format
 msgid "Browse the components"
@@ -1321,3 +1322,44 @@ msgstr "`show_user_heading` oculta el punto de ubicación en lugar de mostrar la
 #, elixir-autogen, elixir-format
 msgid "maplibre-gl 6 starts its worker from separate files that esbuild does not emit. Serve `maplibre-gl-worker.mjs` and `maplibre-gl-shared.mjs` from `node_modules/maplibre-gl/dist/` next to your bundle, or no vector data draws."
 msgstr "maplibre-gl 6 arranca su worker desde archivos aparte que esbuild no genera. Sirve `maplibre-gl-worker.mjs` y `maplibre-gl-shared.mjs` de `node_modules/maplibre-gl/dist/` junto a tu bundle, o no se dibuja ningún dato vectorial."
+
+#: lib/maplibrex_demo_web/controllers/error_html/404.html.heex:7
+#, elixir-autogen, elixir-format
+msgid "A component's page is named after it, such as `/components/map`; the component index lists them all."
+msgstr "La página de un componente lleva su nombre, como `/components/map`; el índice de componentes los lista todos."
+
+#: lib/maplibrex_demo_web/controllers/error_html/404.html.heex:13
+#: lib/maplibrex_demo_web/controllers/error_html/500.html.heex:11
+#, elixir-autogen, elixir-format
+msgid "Go to the overview"
+msgstr "Ir al inicio"
+
+#: lib/maplibrex_demo_web/controllers/error_html/500.html.heex:7
+#, elixir-autogen, elixir-format
+msgid "It raised an error while rendering. The error and its stack trace are in the log of the terminal that runs the demo."
+msgstr "Se produjo un error al generarla. El error y su traza están en el registro de la terminal que ejecuta la demo."
+
+#: lib/maplibrex_demo_web/controllers/error_html/404.html.heex:4
+#, elixir-autogen, elixir-format
+msgid "Nothing in this demo lives at `%{path}`."
+msgstr "No hay nada en esta demo en `%{path}`."
+
+#: lib/maplibrex_demo_web/controllers/error_html/404.html.heex:1
+#, elixir-autogen, elixir-format
+msgid "Page not found"
+msgstr "Página no encontrada"
+
+#: lib/maplibrex_demo_web/controllers/error_html/500.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Server error"
+msgstr "Error del servidor"
+
+#: lib/maplibrex_demo_web/controllers/error_html/500.html.heex:3
+#, elixir-autogen, elixir-format
+msgid "The server could not build this page"
+msgstr "El servidor no pudo generar esta página"
+
+#: lib/maplibrex_demo_web/controllers/error_html.ex:72
+#, elixir-autogen, elixir-format
+msgid "Ways back"
+msgstr "Formas de volver"

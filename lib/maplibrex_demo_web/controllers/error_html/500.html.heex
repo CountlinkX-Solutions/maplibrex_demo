@@ -1,0 +1,12 @@
+<.error_page
+  title={gettext("Server error")}
+  heading={gettext("The server could not build this page")}
+  conn={assigns[:conn]}
+>
+  <p>
+    {gettext(
+      "It raised an error while rendering. The error and its stack trace are in the log of the terminal that runs the demo."
+    )}
+  </p>
+  <:action href={~p"/"}>{gettext("Go to the overview")}</:action>
+</.error_page>
