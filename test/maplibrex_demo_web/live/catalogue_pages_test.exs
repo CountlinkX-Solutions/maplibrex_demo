@@ -3,7 +3,7 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
 
   import Phoenix.LiveViewTest
 
-  alias MaplibrexDemoWeb.{Catalogue, LibraryDocs, OverviewLive}
+  alias MaplibrexDemoWeb.{Catalogue, LibraryDocs, OverviewLive, RoadmapLive}
 
   defp render_note(component, assigns),
     do: component |> render_component(assigns) |> LazyHTML.from_fragment()
@@ -145,6 +145,34 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
   end
 
   describe "roadmap" do
+    test "leads with the release on Hex and the version the demo runs", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/roadmap")
+
+      version = LibraryDocs.version()
+      state = if Catalogue.unreleased?(version), do: "unreleased", else: "released"
+      lead = ~s(#roadmap-lead[data-state="#{state}"])
+
+      assert has_element?(view, lead, Catalogue.hex_release())
+      assert has_element?(view, lead, version)
+    end
+
+    test "names main's version and the Hex release while main is ahead of it" do
+      lead = render_note(&RoadmapLive.lead/1, version: "0.2.0", hex: "0.1.1")
+
+      assert count(lead, ~s(#roadmap-lead[data-state="unreleased"])) == 1
+      assert text(lead, "#roadmap-lead") =~ "MaplibreX 0.2.0"
+      assert text(lead, "#roadmap-lead") =~ "main branch"
+      assert text(lead, "#roadmap-lead") =~ "release on Hex is 0.1.1"
+    end
+
+    test "says main has nothing unreleased once Hex has caught up" do
+      lead = render_note(&RoadmapLive.lead/1, version: "0.2.0", hex: "0.2.0")
+
+      assert count(lead, ~s(#roadmap-lead[data-state="released"])) == 1
+      assert text(lead, "#roadmap-lead") =~ "MaplibreX 0.2.0, the latest release on Hex"
+      assert text(lead, "#roadmap-lead") =~ "nothing unreleased"
+    end
+
     test "lists every limited and planned component and no stable one", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/roadmap")
 

@@ -684,19 +684,22 @@ defmodule MaplibrexDemoWeb.Catalogue do
   it closes (#3 only for layers, sources and terrain).
 
   `state` is `:merged` while the release is on the library's `main` branch
-  but not yet published on Hex; the demo follows `main`, so the statuses
-  above already reflect it. Source: the library's 0.2.0 changelog and its
-  closed issues. No dates: the library has not announced one.
+  but not yet published on Hex (`hex`, by default `hex_release/0`), and
+  `:published` once Hex has it; the demo follows `main`, so the statuses
+  already reflect it. Source: the library's 0.2.0 changelog and its closed
+  issues. No dates: the library has not announced one.
   """
-  @spec next_release() :: %{
+  @spec next_release(String.t()) :: %{
           version: String.t(),
-          state: :merged,
+          state: :merged | :published,
           items: [%{issues: [pos_integer()], text: String.t()}]
         }
-  def next_release do
+  def next_release(hex \\ @hex_release) do
+    version = "0.2.0"
+
     %{
-      version: "0.2.0",
-      state: :merged,
+      version: version,
+      state: if(unreleased?(version, hex), do: :merged, else: :published),
       items: [
         %{
           issues: [3],

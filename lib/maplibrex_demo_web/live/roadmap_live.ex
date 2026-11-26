@@ -1,10 +1,12 @@
 defmodule MaplibrexDemoWeb.RoadmapLive do
   @moduledoc """
-  What does not fully work yet, and what the library's next release fixes.
+  What does not fully work yet, and what the library's `main` branch fixes
+  that the release on Hex does not have.
 
   The list is the catalogue filtered to limited and planned components, so it
-  changes whenever a status does. The next-release section comes from
-  `MaplibrexDemoWeb.Catalogue.next_release/0`.
+  changes whenever a status does. The lead compares the version the demo runs
+  with `MaplibrexDemoWeb.Catalogue.hex_release/0`; the next-release section
+  comes from `MaplibrexDemoWeb.Catalogue.next_release/0`.
   """
   use MaplibrexDemoWeb, :live_view
 
@@ -42,13 +44,7 @@ defmodule MaplibrexDemoWeb.RoadmapLive do
     >
       <header class="max-w-measure">
         <h1 class="text-display font-black tracking-tight">{gettext("Roadmap")}</h1>
-        <p class="mt-3 text-lead text-ink-muted">
-          {gettext(
-            "What does not fully work in MaplibreX %{version}, and what version %{next} fixes. Every status that is not stable links to the library issue that explains it.",
-            version: @version,
-            next: @next_release.version
-          )}
-        </p>
+        <.lead version={@version} hex={Catalogue.hex_release()} />
       </header>
 
       <section id="statuses" class="mt-10" aria-labelledby="statuses-heading">
@@ -118,10 +114,17 @@ defmodule MaplibrexDemoWeb.RoadmapLive do
           data-state={@next_release.state}
           class="mt-2 max-w-measure text-body text-ink-muted"
         >
-          {gettext(
-            "MaplibreX %{version} reworks how layers, sources and terrain join and leave the map. It is merged on the library's main branch but not yet published on Hex, and no release date has been announced. This demo follows main, so the statuses above already include these fixes.",
-            version: @next_release.version
-          )}
+          <%= if @next_release.state == :merged do %>
+            {gettext(
+              "MaplibreX %{version} reworks how layers, sources and terrain join and leave the map. It is merged on the library's main branch but not yet published on Hex, and no release date has been announced. This demo follows main, so the statuses above already include these fixes.",
+              version: @next_release.version
+            )}
+          <% else %>
+            {gettext(
+              "MaplibreX %{version} reworks how layers, sources and terrain join and leave the map. It is published on Hex.",
+              version: @next_release.version
+            )}
+          <% end %>
         </p>
         <ul class="mt-4 max-w-measure space-y-2.5 text-body">
           <li
@@ -150,6 +153,40 @@ defmodule MaplibrexDemoWeb.RoadmapLive do
         </p>
       </section>
     </Layouts.app>
+    """
+  end
+
+  @doc """
+  The page's lead, given the `version` the demo runs and the `hex` release.
+  While the library's `main` is ahead of Hex it names both, and says the
+  fixes Hex lacks are at the end; otherwise it says `main` has nothing
+  unreleased.
+  """
+  attr :version, :string, required: true
+  attr :hex, :string, required: true
+
+  def lead(assigns) do
+    assigns = assign(assigns, :unreleased, Catalogue.unreleased?(assigns.version, assigns.hex))
+
+    ~H"""
+    <p
+      id="roadmap-lead"
+      data-state={if(@unreleased, do: "unreleased", else: "released")}
+      class="mt-3 text-lead text-ink-muted"
+    >
+      <%= if @unreleased do %>
+        {gettext(
+          "What does not fully work yet in MaplibreX %{version}, which this demo runs from the library's main branch. The latest release on Hex is %{hex}; the fixes it lacks are listed at the end. Every status that is not stable links to the library issue that explains it.",
+          version: @version,
+          hex: @hex
+        )}
+      <% else %>
+        {gettext(
+          "What does not fully work yet in MaplibreX %{version}, the latest release on Hex. The library's main branch, which this demo runs, has nothing unreleased beyond it. Every status that is not stable links to the library issue that explains it.",
+          version: @hex
+        )}
+      <% end %>
+    </p>
     """
   end
 
