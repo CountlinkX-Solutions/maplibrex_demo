@@ -533,16 +533,15 @@ defmodule MaplibrexDemoWeb.Catalogue do
       },
       %{
         id: :buildings,
-        title: gettext("3D buildings"),
+        title: gettext("Extruded buildings"),
         summary:
           gettext(
-            "Extruded building footprints whose height, opacity and colours are set from the server."
+            "A synthetic grid of blocks extruded in 3D, whose height, opacity and colours are set from the server. They are not real buildings."
           ),
         components: [:map, :geojson_layer, :navigation_control],
         sample_data: true,
-        module: nil,
-        notes: [],
-        legacy_path: "/buildings"
+        module: MaplibrexDemoWeb.Scenarios.BuildingsScenario,
+        notes: []
       },
       %{
         id: :particles,
