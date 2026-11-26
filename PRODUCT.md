@@ -32,7 +32,7 @@ The map is declared in HEEx and driven from the server: assigns change the map, 
 - Phoenix 1.8, LiveView 1.2, Tailwind CSS 4. Repository rules for building pages are in `AGENTS.md`.
 - MaplibreX 0.1.1 ships 32 components in these families: map; markers and popups; layers (GeoJSON plus nine typed layers); sources (vector, raster, raster DEM, image, video); controls (navigation, scale, attribution, fullscreen, geolocate, terrain control, and custom-control building blocks); 3D (terrain, sky); advanced (deck.gl layers, custom WebGL layers). As of 2026-11-26 the demo uses 29 of them, 27 with an interactive example of their own; `deckgl_layer` and `custom_layer` appear in scenarios.
 - Features that do not work yet, or are planned, appear in the demo's index with a status (stable, limited, planned) linked to the library issue; only working features get an interactive page. (Owner decision, 2026-11-25.)
-- Known limits in the library at the time of writing: `sky` cannot render (library issue #14); `terrain_control` has lifecycle faults (#19); deck.gl requires maplibre-gl 5 (#11); the 0.2.0 lifecycle work (style changes, component order, reactive assigns) is in progress.
+- Known limits in the library at the time of writing: `sky` cannot render (library issue #14); `terrain_control` has lifecycle faults (#19); deck.gl requires maplibre-gl 5 (#11); the 0.2.0 lifecycle work (style changes, component order, reactive assigns) is merged on the library's `main` but not yet released.
 - The demo follows the library's `main` branch. Source examples use public services that work after a clone; `/ogc` is removed as a page and the separate tile server becomes optional. Structure: a catalogue organised by library family, plus a section of full scenarios that combine components. (Owner decisions, 2026-11-25.)
 - Undecided: whether sample data stays synthetic or moves to real datasets.
 
@@ -45,7 +45,7 @@ The map is declared in HEEx and driven from the server: assigns change the map, 
 ## Evidence on Hand
 
 - A catalogue of the 32 components at `/components`, 27 of them with an interactive example, and five scenarios at `/scenarios` (3D terrain, heatmap, buildings, particles, deck.gl). The nine old pages are gone; their URLs redirect to the catalogue and the scenarios.
-- Sample data on `/heatmap`, `/buildings` and `/deckgl` is generated, not real; it must be labelled as sample data and never described as real measurements.
+- Sample data on `/scenarios/heatmap`, `/scenarios/buildings` and `/scenarios/deckgl` is generated, not real; it must be labelled as sample data and never described as real measurements.
 - There are no testimonials, usage numbers, benchmarks or customer names; none may be invented.
 
 ## Product Principles
