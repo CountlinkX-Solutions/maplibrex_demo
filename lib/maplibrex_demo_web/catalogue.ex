@@ -521,14 +521,15 @@ defmodule MaplibrexDemoWeb.Catalogue do
       },
       %{
         id: :heatmap,
-        title: gettext("Heatmap"),
+        title: gettext("Earthquake-style heatmap"),
         summary:
-          gettext("A heatmap whose radius, intensity and opacity are set from the server."),
+          gettext(
+            "Sample points around six seismic zones of the United States, drawn as a heatmap whose radius, intensity and opacity are set from the server."
+          ),
         components: [:map, :geojson_layer, :navigation_control],
         sample_data: true,
-        module: nil,
-        notes: [],
-        legacy_path: "/heatmap"
+        module: MaplibrexDemoWeb.Scenarios.HeatmapScenario,
+        notes: []
       },
       %{
         id: :buildings,
