@@ -11,34 +11,22 @@ msgstr ""
 msgid "1,000 particles animated via custom GLSL vertex & fragment shaders"
 msgstr "1.000 partículas animadas con shaders GLSL personalizados (vertex y fragment)"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:122
-#, elixir-autogen, elixir-format
-msgid "3D ArcLayer, HexagonLayer density and ScatterplotLayer with integrated deck.gl"
-msgstr "ArcLayer 3D, HexagonLayer de densidad y ScatterplotLayer con deck.gl integrado"
-
 ## -- Deck.GL --
 #: lib/maplibrex_demo_web/live/deckgl_live.ex:34
 #, elixir-autogen, elixir-format
 msgid "3D ArcLayer, HexagonLayer, and ScatterplotLayer visualizations"
 msgstr "Visualizaciones ArcLayer 3D, HexagonLayer y ScatterplotLayer"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:108
 #: lib/maplibrex_demo_web/live/buildings_live.ex:45
 #, elixir-autogen, elixir-format
 msgid "3D Buildings"
 msgstr "Edificios 3D"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:106
-#: lib/maplibrex_demo_web/live/terrain_live.ex:43
-#: lib/maplibrex_demo_web/live/terrain_live.ex:94
+#: lib/maplibrex_demo_web/live/terrain_live.ex:44
+#: lib/maplibrex_demo_web/live/terrain_live.ex:100
 #, elixir-autogen, elixir-format
 msgid "3D Terrain"
 msgstr "Terreno 3D"
-
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:128
-#, elixir-autogen, elixir-format
-msgid "500 seismic points on a heatmap with adjustable radius, intensity and opacity"
-msgstr "500 puntos sísmicos en mapa de calor con radio, intensidad y opacidad ajustables"
 
 ## -- Heatmap --
 #: lib/maplibrex_demo_web/live/heatmap_live.ex:40
@@ -51,7 +39,7 @@ msgstr "Visualización de densidad de 500 puntos sísmicos en EE.UU."
 msgid "About"
 msgstr "Acerca de"
 
-#: lib/maplibrex_demo_web/components/core_components.ex:342
+#: lib/maplibrex_demo_web/components/core_components.ex:354
 #: lib/maplibrex_demo_web/live/ogc_features_live.ex:101
 #, elixir-autogen, elixir-format
 msgid "Actions"
@@ -62,7 +50,7 @@ msgstr "Acciones"
 msgid "Add Marker"
 msgstr "Agregar Marcador"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:100
+#: lib/maplibrex_demo_web/catalogue.ex:420
 #, elixir-autogen, elixir-format
 msgid "Advanced"
 msgstr "Avanzado"
@@ -77,32 +65,22 @@ msgstr "Todos"
 msgid "ArcLayer renders animated arcs connecting source and target positions. Ideal for visualizing flight routes, migrations, or connections between locations."
 msgstr "ArcLayer renderiza arcos animados conectando posiciones de origen y destino. Ideal para visualizar rutas aéreas, migraciones o conexiones entre lugares."
 
-#: lib/maplibrex_demo_web/components/layouts.ex:102
-#: lib/maplibrex_demo_web/components/layouts.ex:114
-#, elixir-autogen, elixir-format
-msgid "Attempting to reconnect"
-msgstr "Intentando reconectar"
-
 #: lib/maplibrex_demo_web/live/tiles_live.ex:36
 #, elixir-autogen, elixir-format
 msgid "Auto-generated with all sources"
 msgstr "Auto-generado con todas las fuentes"
 
 ## -- Common --
-#: lib/maplibrex_demo_web/components/demo_components.ex:117
+#: lib/maplibrex_demo_web/components/demo_components.ex:119
 #, elixir-autogen, elixir-format
 msgid "Back to Demos"
 msgstr "← Volver a Demos"
 
-#: lib/maplibrex_demo_web/live/terrain_live.ex:135
+#: lib/maplibrex_demo_web/live/terrain_live.ex:125
+#: lib/maplibrex_demo_web/live/terrain_live.ex:149
 #, elixir-autogen, elixir-format
 msgid "Bearing"
 msgstr "Orientación"
-
-#: lib/maplibrex_demo_web/controllers/page_html/home.html.heex:156
-#, elixir-autogen, elixir-format
-msgid "Built with Phoenix LiveView"
-msgstr "Creado con Phoenix LiveView"
 
 #: lib/maplibrex_demo_web/live/buildings_live.ex:141
 #, elixir-autogen, elixir-format
@@ -113,11 +91,6 @@ msgstr "Por Altura"
 #, elixir-autogen, elixir-format
 msgid "By Type"
 msgstr "Por Tipo"
-
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:134
-#, elixir-autogen, elixir-format
-msgid "Category markers with real-time filtering and drag to update coordinates"
-msgstr "Marcadores por categoría con filtrado en tiempo real y arrastre para actualizar coords"
 
 ## -- Markers & Filters --
 #: lib/maplibrex_demo_web/live/markers_live.ex:52
@@ -132,7 +105,7 @@ msgstr "Gestión de marcadores por categoría con actualización de posición po
 msgid "Center"
 msgstr "Centro"
 
-#: lib/maplibrex_demo_web/components/demo_components.ex:446
+#: lib/maplibrex_demo_web/components/demo_components.ex:466
 #, elixir-autogen, elixir-format
 msgid "Checking server…"
 msgstr "Comprobando servidor…"
@@ -157,22 +130,16 @@ msgstr "Limpiar Todo"
 msgid "Color Scheme"
 msgstr "Esquema de Color"
 
-## -- Home page --
-#: lib/maplibrex_demo_web/controllers/page_html/home.html.heex:33
-#, elixir-autogen, elixir-format
-msgid "Component Library · v0.1"
-msgstr "Librería de Componentes · v0.1"
-
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:88
+#: lib/maplibrex_demo_web/components/layouts.ex:105
+#: lib/maplibrex_demo_web/components/layouts.ex:208
+#: lib/maplibrex_demo_web/components/layouts.ex:264
+#: lib/maplibrex_demo_web/live/components_live.ex:12
+#: lib/maplibrex_demo_web/live/components_live.ex:33
+#: lib/maplibrex_demo_web/live/overview_live.ex:223
+#: lib/maplibrex_demo_web/live/overview_live.ex:269
 #, elixir-autogen, elixir-format
 msgid "Components"
 msgstr "Componentes"
-
-## -- Demo card labels --
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:95
-#, elixir-autogen, elixir-format
-msgid "Core"
-msgstr "Core"
 
 #: lib/maplibrex_demo_web/live/markers_live.ex:90
 #, elixir-autogen, elixir-format
@@ -184,23 +151,17 @@ msgstr "Posición Actual"
 msgid "Dark theme with glow effects"
 msgstr "Tema oscuro con efectos de brillo"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:105
 #: lib/maplibrex_demo_web/live/deckgl_live.ex:33
 #, elixir-autogen, elixir-format
 msgid "Deck.GL Layers"
 msgstr "Capas Deck.GL"
-
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:89
-#, elixir-autogen, elixir-format
-msgid "Demos"
-msgstr "Demos"
 
 #: lib/maplibrex_demo_web/live/particles_live.ex:190
 #, elixir-autogen, elixir-format
 msgid "Direction"
 msgstr "Dirección"
 
-#: lib/maplibrex_demo_web/live/terrain_live.ex:91
+#: lib/maplibrex_demo_web/live/terrain_live.ex:97
 #, elixir-autogen, elixir-format
 msgid "Disabled"
 msgstr "Deshabilitado"
@@ -220,59 +181,33 @@ msgstr "Arrastrable"
 msgid "Draggable Marker"
 msgstr "Marcador Arrastrable"
 
-## -- Demo card descriptions --
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:113
-#, elixir-autogen, elixir-format
-msgid "Draggable markers, GeoJSON layers, real-time style switching"
-msgstr "Marcadores arrastrables, capas GeoJSON, cambio de estilos en tiempo real"
-
 #: lib/maplibrex_demo_web/live/deckgl_live.ex:130
 #, elixir-autogen, elixir-format
 msgid "Earthquake Density"
 msgstr "Densidad Sísmica"
 
 ## -- Terrain --
-#: lib/maplibrex_demo_web/live/terrain_live.ex:44
+#: lib/maplibrex_demo_web/live/terrain_live.ex:45
 #, elixir-autogen, elixir-format
 msgid "Elevation rendering with DEM sources"
 msgstr "Renderizado de elevación con fuentes DEM"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:125
-#, elixir-autogen, elixir-format
-msgid "Elevation rendering with DEM sources, hillshade and extruded terrain up to 3x"
-msgstr "Renderizado de elevación con fuentes DEM, hillshade y terreno extruido hasta 3x"
-
-#: lib/maplibrex_demo_web/live/terrain_live.ex:90
+#: lib/maplibrex_demo_web/live/terrain_live.ex:96
 #, elixir-autogen, elixir-format
 msgid "Enabled"
 msgstr "Habilitado"
 
-#: lib/maplibrex_demo_web/live/terrain_live.ex:98
-#: lib/maplibrex_demo_web/live/terrain_live.ex:137
+#: lib/maplibrex_demo_web/live/terrain_live.ex:104
+#: lib/maplibrex_demo_web/live/terrain_live.ex:151
 #, elixir-autogen, elixir-format
 msgid "Exaggeration"
 msgstr "Exageración"
-
-#: lib/maplibrex_demo_web/controllers/page_html/home.html.heex:55
-#, elixir-autogen, elixir-format
-msgid "Explore Demos"
-msgstr "Explorar Demos"
-
-#: lib/maplibrex_demo_web/controllers/page_html/home.html.heex:104
-#, elixir-autogen, elixir-format
-msgid "Explore the capabilities"
-msgstr "Explora las capacidades"
 
 ## -- Buildings --
 #: lib/maplibrex_demo_web/live/buildings_live.ex:46
 #, elixir-autogen, elixir-format
 msgid "Extruded NYC building geometry with real-time height and color controls"
 msgstr "Geometría de edificios de NYC extruida con controles de altura y color en tiempo real"
-
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:131
-#, elixir-autogen, elixir-format
-msgid "Extruded New York buildings with configurable color schemes and height"
-msgstr "Edificios extruados de Nueva York con esquemas de color y altura configurables"
 
 #: lib/maplibrex_demo_web/live/ogc_features_live.ex:127
 #, elixir-autogen, elixir-format
@@ -334,11 +269,11 @@ msgstr "Capa GeoJSON"
 msgid "Gradient"
 msgstr "Gradiente"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:107
+#: lib/maplibrex_demo_web/catalogue.ex:506
 #: lib/maplibrex_demo_web/live/heatmap_live.ex:39
 #, elixir-autogen, elixir-format
 msgid "Heatmap"
-msgstr "Mapa de Calor"
+msgstr "Mapa de calor"
 
 #: lib/maplibrex_demo_web/live/buildings_live.ex:114
 #, elixir-autogen, elixir-format
@@ -371,28 +306,11 @@ msgstr "Alto"
 msgid "Intensity"
 msgstr "Intensidad"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:99
-#, elixir-autogen, elixir-format
-msgid "Interactive"
-msgstr "Interactivo"
-
 ## -- Demo card titles --
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:102
 #: lib/maplibrex_demo_web/live/map_live.ex:74
 #, elixir-autogen, elixir-format
 msgid "Interactive Map"
 msgstr "Mapa Interactivo"
-
-## -- Demo card titles --
-#: lib/maplibrex_demo_web/controllers/page_html/home.html.heex:38
-#, elixir-autogen, elixir-format
-msgid "Interactive Maps"
-msgstr "Mapas Interactivos"
-
-#: lib/maplibrex_demo_web/controllers/page_html/home.html.heex:101
-#, elixir-autogen, elixir-format
-msgid "Interactive demos"
-msgstr "Demos interactivos"
 
 #: lib/maplibrex_demo_web/live/heatmap_live.ex:67
 #, elixir-autogen, elixir-format
@@ -415,6 +333,7 @@ msgstr "Capa"
 msgid "Layer opacity"
 msgstr "Opacidad de la capa"
 
+#: lib/maplibrex_demo_web/catalogue.ex:416
 #: lib/maplibrex_demo_web/live/map_live.ex:140
 #, elixir-autogen, elixir-format
 msgid "Layers"
@@ -431,7 +350,7 @@ msgid "Live tile rendering from a self-hosted vector tile server"
 msgstr "Renderizado de teselas desde un servidor de teselas vectoriales propio"
 
 #: lib/maplibrex_demo_web/live/buildings_live.ex:112
-#: lib/maplibrex_demo_web/live/terrain_live.ex:115
+#: lib/maplibrex_demo_web/live/terrain_live.ex:129
 #, elixir-autogen, elixir-format
 msgid "Location"
 msgstr "Ubicación"
@@ -447,18 +366,12 @@ msgstr "Bajo"
 msgid "Map Style"
 msgstr "Estilo de Mapa"
 
-#: lib/maplibrex_demo_web/controllers/page_html/home.html.heex:45
-#, elixir-autogen, elixir-format
-msgid "MaplibreX wraps MapLibre GL JS as native LiveView components. Real-time maps, zero custom JavaScript."
-msgstr "MaplibreX envuelve MapLibre GL JS como componentes nativos de LiveView. Mapas en tiempo real, sin JavaScript personalizado."
-
 #: lib/maplibrex_demo_web/live/map_live.ex:151
 #: lib/maplibrex_demo_web/live/map_live.ex:160
 #, elixir-autogen, elixir-format
 msgid "Markers"
 msgstr "Marcadores"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:109
 #: lib/maplibrex_demo_web/live/markers_live.ex:51
 #, elixir-autogen, elixir-format
 msgid "Markers & Filters"
@@ -479,15 +392,11 @@ msgstr "Tema claro minimalista"
 msgid "Museums"
 msgstr "Museos"
 
+#: lib/maplibrex_demo_web/components/layouts.ex:146
 #: lib/maplibrex_demo_web/live/map_live.ex:128
 #, elixir-autogen, elixir-format
 msgid "Navigation"
 msgstr "Navegación"
-
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:119
-#, elixir-autogen, elixir-format
-msgid "OGC API Features conformance against real geographic data"
-msgstr "Conformidad OGC API Features con datos geográficos reales"
 
 ## -- OGC Features --
 #: lib/maplibrex_demo_web/live/ogc_features_live.ex:63
@@ -495,7 +404,6 @@ msgstr "Conformidad OGC API Features con datos geográficos reales"
 msgid "OGC API Features conformance test against a self-hosted server"
 msgstr "Prueba de conformidad OGC API Features contra un servidor propio"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:104
 #: lib/maplibrex_demo_web/live/ogc_features_live.ex:62
 #, elixir-autogen, elixir-format
 msgid "OGC Features"
@@ -514,11 +422,6 @@ msgstr "Corrientes Oceánicas"
 #, elixir-autogen, elixir-format
 msgid "Opacity"
 msgstr "Opacidad"
-
-#: lib/maplibrex_demo_web/controllers/page_html/home.html.heex:145
-#, elixir-autogen, elixir-format
-msgid "Open demo →"
-msgstr "Abrir demo →"
 
 #: lib/maplibrex_demo_web/live/markers_live.ex:172
 #, elixir-autogen, elixir-format
@@ -540,7 +443,8 @@ msgstr "Partículas"
 msgid "Pass"
 msgstr "Correcto"
 
-#: lib/maplibrex_demo_web/live/terrain_live.ex:134
+#: lib/maplibrex_demo_web/live/terrain_live.ex:124
+#: lib/maplibrex_demo_web/live/terrain_live.ex:148
 #, elixir-autogen, elixir-format
 msgid "Pitch"
 msgstr "Inclinación"
@@ -598,7 +502,6 @@ msgstr "Restaurantes"
 msgid "ScatterplotLayer efficiently renders thousands of points with customizable size and color. Ideal for showing individual geographic locations."
 msgstr "ScatterplotLayer renderiza eficientemente miles de puntos con tamaño y color personalizables. Ideal para mostrar ubicaciones geográficas individuales."
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:96
 #: lib/maplibrex_demo_web/live/ogc_features_live.ex:133
 #, elixir-autogen, elixir-format
 msgid "Server"
@@ -609,12 +512,12 @@ msgstr "Servidor"
 msgid "Server Links"
 msgstr "Enlaces del Servidor"
 
-#: lib/maplibrex_demo_web/components/demo_components.ex:444
+#: lib/maplibrex_demo_web/components/demo_components.ex:464
 #, elixir-autogen, elixir-format
 msgid "Server online"
 msgstr "Servidor en línea"
 
-#: lib/maplibrex_demo_web/components/demo_components.ex:445
+#: lib/maplibrex_demo_web/components/demo_components.ex:465
 #, elixir-autogen, elixir-format
 msgid "Server unreachable"
 msgstr "Servidor no disponible"
@@ -639,11 +542,6 @@ msgstr "Se muestra un mapa base público. Levanta el servidor de teselas, o apun
 msgid "Size"
 msgstr "Tamaño"
 
-#: lib/maplibrex_demo_web/components/layouts.ex:109
-#, elixir-autogen, elixir-format
-msgid "Something went wrong!"
-msgstr "Algo salió mal"
-
 #: lib/maplibrex_demo_web/live/tiles_live.ex:121
 #, elixir-autogen, elixir-format
 msgid "Source"
@@ -653,11 +551,6 @@ msgstr "Origen"
 #, elixir-autogen, elixir-format
 msgid "Speed"
 msgstr "Velocidad"
-
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:97
-#, elixir-autogen, elixir-format
-msgid "Standards"
-msgstr "Estándares"
 
 #: lib/maplibrex_demo_web/live/ogc_features_live.ex:93
 #, elixir-autogen, elixir-format
@@ -680,12 +573,7 @@ msgstr "Estilo"
 msgid "Style JSON"
 msgstr "Style JSON"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:137
-#, elixir-autogen, elixir-format
-msgid "System of 1,000 animated particles with custom GLSL shaders (vertex + fragment)"
-msgstr "Sistema de 1.000 partículas animadas con shaders GLSL propios (vertex + fragment)"
-
-#: lib/maplibrex_demo_web/live/terrain_live.ex:87
+#: lib/maplibrex_demo_web/live/terrain_live.ex:93
 #, elixir-autogen, elixir-format
 msgid "Terrain"
 msgstr "Terreno"
@@ -715,23 +603,13 @@ msgstr "Azul Uniforme"
 msgid "Vector Layers"
 msgstr "Capas Vectoriales"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:103
-#, elixir-autogen, elixir-format
-msgid "Vector Tiles"
-msgstr "Tiles Vectoriales"
-
 #: lib/maplibrex_demo_web/live/tiles_live.ex:59
 #, elixir-autogen, elixir-format
 msgid "Vector Tiles Server"
 msgstr "Servidor de teselas vectoriales"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:116
-#, elixir-autogen, elixir-format
-msgid "Vector tile rendering from a self-hosted tile server, with a public fallback"
-msgstr "Teselas vectoriales desde un servidor propio, con respaldo público"
-
 #: lib/maplibrex_demo_web/live/buildings_live.ex:84
-#: lib/maplibrex_demo_web/live/terrain_live.ex:100
+#: lib/maplibrex_demo_web/live/terrain_live.ex:106
 #, elixir-autogen, elixir-format
 msgid "Vertical scale"
 msgstr "Escala vertical"
@@ -741,18 +619,11 @@ msgstr "Escala vertical"
 msgid "Visible"
 msgstr "Visible"
 
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:98
 #: lib/maplibrex_demo_web/live/deckgl_live.ex:114
 #, elixir-autogen, elixir-format
 msgid "Visualization"
 msgstr "Visualización"
 
-#: lib/maplibrex_demo_web/components/layouts.ex:97
-#, elixir-autogen, elixir-format
-msgid "We can't find the internet"
-msgstr "No encontramos conexión a internet"
-
-#: lib/maplibrex_demo_web/controllers/page_controller.ex:110
 #: lib/maplibrex_demo_web/live/particles_live.ex:91
 #, elixir-autogen, elixir-format
 msgid "WebGL Particles"
@@ -776,7 +647,8 @@ msgstr "Con expresiones y estilos avanzados"
 #: lib/maplibrex_demo_web/live/buildings_live.ex:113
 #: lib/maplibrex_demo_web/live/map_live.ex:159
 #: lib/maplibrex_demo_web/live/markers_live.ex:141
-#: lib/maplibrex_demo_web/live/terrain_live.ex:136
+#: lib/maplibrex_demo_web/live/terrain_live.ex:123
+#: lib/maplibrex_demo_web/live/terrain_live.ex:150
 #: lib/maplibrex_demo_web/live/tiles_live.ex:119
 #, elixir-autogen, elixir-format
 msgid "Zoom"
@@ -787,7 +659,7 @@ msgstr "Zoom"
 msgid "cities"
 msgstr "ciudades"
 
-#: lib/maplibrex_demo_web/components/core_components.ex:74
+#: lib/maplibrex_demo_web/components/core_components.ex:81
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr "cerrar"
@@ -806,11 +678,6 @@ msgstr "eventos"
 #, elixir-autogen, elixir-format
 msgid "fallback"
 msgstr "respaldo"
-
-#: lib/maplibrex_demo_web/controllers/page_html/home.html.heex:40
-#, elixir-autogen, elixir-format
-msgid "for Phoenix LiveView"
-msgstr "para Phoenix LiveView"
 
 #: lib/maplibrex_demo_web/live/ogc_features_live.ex:209
 #, elixir-autogen, elixir-format
@@ -831,3 +698,912 @@ msgstr "rutas"
 #, elixir-autogen, elixir-format
 msgid "tile server"
 msgstr "servidor de teselas"
+
+#: lib/maplibrex_demo_web/live/components_live.ex:52
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:66
+#, elixir-autogen, elixir-format
+msgid "1 component"
+msgid_plural "%{count} components"
+msgstr[0] "1 componente"
+msgstr[1] "%{count} componentes"
+
+#: lib/maplibrex_demo_web/catalogue.ex:419
+#, elixir-autogen, elixir-format
+msgid "3D"
+msgstr "3D"
+
+#: lib/maplibrex_demo_web/catalogue.ex:516
+#, elixir-autogen, elixir-format
+msgid "3D buildings"
+msgstr "Edificios 3D"
+
+#: lib/maplibrex_demo_web/catalogue.ex:494
+#, elixir-autogen, elixir-format
+msgid "3D terrain"
+msgstr "Terreno 3D"
+
+#: lib/maplibrex_demo_web/catalogue.ex:77
+#, elixir-autogen, elixir-format
+msgid "A MapLibre GL JS map whose center, zoom, pitch, bearing and style follow the LiveView's assigns."
+msgstr "Un mapa de MapLibre GL JS cuyo centro, zoom, inclinación, rumbo y estilo siguen los assigns del LiveView."
+
+#: lib/maplibrex_demo_web/catalogue.ex:287
+#, elixir-autogen, elixir-format
+msgid "A button that centres the map on the user's location, with optional tracking."
+msgstr "Un botón que centra el mapa en la ubicación del usuario, con seguimiento opcional."
+
+#: lib/maplibrex_demo_web/catalogue.ex:278
+#, elixir-autogen, elixir-format
+msgid "A button that shows the map in full screen."
+msgstr "Un botón que muestra el mapa a pantalla completa."
+
+#: lib/maplibrex_demo_web/catalogue.ex:302
+#, elixir-autogen, elixir-format
+msgid "A button that turns 3D terrain on and off."
+msgstr "Un botón que activa y desactiva el terreno 3D."
+
+#: lib/maplibrex_demo_web/catalogue.ex:572
+#, elixir-autogen, elixir-format
+msgid "A component appears whatever its place in the template and whenever it mounts."
+msgstr "Un componente aparece sea cual sea su lugar en la plantilla y cuando sea que se monte."
+
+#: lib/maplibrex_demo_web/catalogue.ex:388
+#, elixir-autogen, elixir-format
+msgid "A custom WebGL layer drawn with your own GLSL shaders or a built-in preset."
+msgstr "Una capa WebGL personalizada, dibujada con tus propios shaders GLSL o con un preset incluido."
+
+#: lib/maplibrex_demo_web/catalogue.ex:508
+#, elixir-autogen, elixir-format
+msgid "A heatmap whose radius, intensity and opacity are set from the server."
+msgstr "Un mapa de calor cuyo radio, intensidad y opacidad se fijan desde el servidor."
+
+#: lib/maplibrex_demo_web/catalogue.ex:325
+#, elixir-autogen, elixir-format
+msgid "A map control button with an icon or your own content, and an active state."
+msgstr "Un botón de control del mapa con un icono o contenido propio, y un estado activo."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:276
+#, elixir-autogen, elixir-format
+msgid "A map whose camera is driven from the server, with client-side commands and its events."
+msgstr "Un mapa cuya cámara se controla desde el servidor, con comandos en el cliente y sus eventos."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:194
+#, elixir-autogen, elixir-format
+msgid "A map, a navigation control and one marker per city. When the visitor pans or zooms, map:moved updates the assigns."
+msgstr "Un mapa, un control de navegación y un marcador por ciudad. Cuando el visitante desplaza o acerca el mapa, map:moved actualiza los assigns."
+
+#: lib/maplibrex_demo_web/catalogue.ex:98
+#, elixir-autogen, elixir-format
+msgid "A marker at a coordinate, with an optional popup and dragging that reports the new position."
+msgstr "Un marcador en una coordenada, con popup opcional y arrastre que informa de la nueva posición."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:192
+#, elixir-autogen, elixir-format
+msgid "A minimal map"
+msgstr "Un mapa mínimo"
+
+#: lib/maplibrex_demo_web/catalogue.ex:107
+#, elixir-autogen, elixir-format
+msgid "A popup with text or HTML content, placed at a coordinate."
+msgstr "Un popup con contenido de texto o HTML, situado en una coordenada."
+
+#: lib/maplibrex_demo_web/catalogue.ex:270
+#, elixir-autogen, elixir-format
+msgid "A scale bar for the current zoom level."
+msgstr "Una barra de escala para el nivel de zoom actual."
+
+#: lib/maplibrex_demo_web/live/scenarios_live.ex:32
+#, elixir-autogen, elixir-format
+msgid "A scenario combines several components into one working map, with the code that produces it. These are being rebuilt in the catalogue; until then, each links to the page that shows it today."
+msgstr "Un escenario combina varios componentes en un mapa que funciona, junto con el código que lo produce. Se están reconstruyendo en el catálogo; mientras tanto, cada uno enlaza a la página que lo muestra hoy."
+
+#: lib/maplibrex_demo_web/catalogue.ex:84
+#, elixir-autogen, elixir-format
+msgid "A style given as a map rather than a URL is applied again on every update, which removes component layers."
+msgstr "Un estilo pasado como mapa en lugar de URL se vuelve a aplicar en cada actualización, lo que elimina las capas de los componentes."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:137
+#, elixir-autogen, elixir-format
+msgid "Add the dependency to mix.exs"
+msgstr "Añade la dependencia a mix.exs"
+
+#: lib/maplibrex_demo_web/catalogue.ex:236
+#, elixir-autogen, elixir-format
+msgid "Adds elevation tiles for hillshading and 3D terrain."
+msgstr "Añade teselas de elevación para sombreado del relieve y terreno 3D."
+
+#: lib/maplibrex_demo_web/catalogue.ex:228
+#, elixir-autogen, elixir-format
+msgid "Adds raster image tiles for a raster layer to draw."
+msgstr "Añade teselas de imagen ráster para que las dibuje una capa ráster."
+
+#: lib/maplibrex_demo_web/catalogue.ex:218
+#, elixir-autogen, elixir-format
+msgid "Adds vector tiles, from a TileJSON URL or a tile template, for layers to draw."
+msgstr "Añade teselas vectoriales, desde una URL TileJSON o una plantilla de teselas, para que las dibujen las capas."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:253
+#, elixir-autogen, elixir-format
+msgid "All families"
+msgstr "Todas las familias"
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:136
+#, elixir-autogen, elixir-format
+msgid "All open issues of the library"
+msgstr "Todas las incidencias abiertas de la librería"
+
+#: lib/maplibrex_demo_web/catalogue.ex:530
+#, elixir-autogen, elixir-format
+msgid "Animated particles drawn by a custom WebGL layer with its own shaders."
+msgstr "Partículas animadas dibujadas por una capa WebGL personalizada con sus propios shaders."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:401
+#, elixir-autogen, elixir-format
+msgid "Any other HTML attribute, passed on to the component's element."
+msgstr "Cualquier otro atributo HTML, que se pasa al elemento del componente."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:371
+#, elixir-autogen, elixir-format
+msgid "Attribute"
+msgstr "Atributo"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:231
+#, elixir-autogen, elixir-format
+msgid "Attributes"
+msgstr "Atributos"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:117
+#, elixir-autogen, elixir-format
+msgid "Browse the components"
+msgstr "Ver los componentes"
+
+#: lib/maplibrex_demo_web/examples/map_example.ex:100
+#, elixir-autogen, elixir-format
+msgid "Buenos Aires"
+msgstr "Buenos Aires"
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:150
+#, elixir-autogen, elixir-format
+msgid "Cannot be used yet; its issue tracks the fix."
+msgstr "Aún no se puede usar; su incidencia sigue la corrección."
+
+#: lib/maplibrex_demo_web/catalogue.ex:59
+#, elixir-autogen, elixir-format
+msgid "Changes to `paint`, `layout`, `filter` or the zoom range after mount are not applied."
+msgstr "Los cambios en `paint`, `layout`, `filter` o el rango de zoom después del montaje no se aplican."
+
+#: lib/maplibrex_demo_web/catalogue.ex:65
+#, elixir-autogen, elixir-format
+msgid "Changes to a source's attributes after mount are not applied."
+msgstr "Los cambios en los atributos de una fuente después del montaje no se aplican."
+
+#: lib/maplibrex_demo_web/catalogue.ex:67
+#, elixir-autogen, elixir-format
+msgid "Changing `position` after mount has no effect."
+msgstr "Cambiar `position` después del montaje no tiene efecto."
+
+#: lib/maplibrex_demo_web/components/layouts.ex:316
+#, elixir-autogen, elixir-format
+msgid "Clear the filter"
+msgstr "Borrar el filtro"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:158
+#, elixir-autogen, elixir-format
+msgid "Close navigation"
+msgstr "Cerrar la navegación"
+
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:23
+#, elixir-autogen, elixir-format
+msgid "Coming"
+msgstr "Próximamente"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:105
+#, elixir-autogen, elixir-format
+msgid "Component sections"
+msgstr "Secciones del componente"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:209
+#, elixir-autogen, elixir-format
+msgid "Components by family"
+msgstr "Componentes por familia"
+
+#: lib/maplibrex_demo_web/catalogue.ex:579
+#, elixir-autogen, elixir-format
+msgid "Components placed inside `<.map>` update like the ones placed next to it."
+msgstr "Los componentes colocados dentro de `<.map>` se actualizan como los colocados a su lado."
+
+#: lib/maplibrex_demo_web/components/layouts.ex:495
+#, elixir-autogen, elixir-format
+msgid "Connection lost"
+msgstr "Conexión perdida"
+
+#: lib/maplibrex_demo_web/catalogue.ex:418
+#, elixir-autogen, elixir-format
+msgid "Controls"
+msgstr "Controles"
+
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:213
+#, elixir-autogen, elixir-format
+msgid "Copied"
+msgstr "Copiado"
+
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:212
+#, elixir-autogen, elixir-format
+msgid "Copy"
+msgstr "Copiar"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:373
+#, elixir-autogen, elixir-format
+msgid "Default"
+msgstr "Valor por defecto"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:374
+#, elixir-autogen, elixir-format
+msgid "Description"
+msgstr "Descripción"
+
+#: lib/maplibrex_demo_web/catalogue.ex:125
+#, elixir-autogen, elixir-format
+msgid "Draws GeoJSON data as a fill, line, circle, symbol, heatmap or fill-extrusion layer, with optional clustering and feature events."
+msgstr "Dibuja datos GeoJSON como capa fill, line, circle, symbol, heatmap o fill-extrusion, con agrupación opcional y eventos de elementos."
+
+#: lib/maplibrex_demo_web/catalogue.ex:151
+#, elixir-autogen, elixir-format
+msgid "Draws lines from a source, such as roads, routes or boundaries."
+msgstr "Dibuja líneas de una fuente, como carreteras, rutas o límites."
+
+#: lib/maplibrex_demo_web/catalogue.ex:143
+#, elixir-autogen, elixir-format
+msgid "Draws points from a source as circles."
+msgstr "Dibuja los puntos de una fuente como círculos."
+
+#: lib/maplibrex_demo_web/catalogue.ex:496
+#, elixir-autogen, elixir-format
+msgid "Elevation from a public DEM drawn as hillshading and 3D terrain, with the exaggeration set from the server."
+msgstr "Elevación de un DEM público dibujada como sombreado del relieve y terreno 3D, con la exageración fijada desde el servidor."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:230
+#, elixir-autogen, elixir-format
+msgid "Events"
+msgstr "Eventos"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:270
+#, elixir-autogen, elixir-format
+msgid "Every component by family, with its attributes, events and status."
+msgstr "Todos los componentes por familia, con sus atributos, eventos y estado."
+
+#: lib/maplibrex_demo_web/catalogue.ex:518
+#, elixir-autogen, elixir-format
+msgid "Extruded building footprints whose height, opacity and colours are set from the server."
+msgstr "Huellas de edificios extruidas cuya altura, opacidad y colores se fijan desde el servidor."
+
+#: lib/maplibrex_demo_web/catalogue.ex:183
+#, elixir-autogen, elixir-format
+msgid "Extrudes polygons from a source into 3D shapes, such as buildings."
+msgstr "Extruye polígonos de una fuente en formas 3D, como edificios."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:222
+#, elixir-autogen, elixir-format
+msgid "Family"
+msgstr "Familia"
+
+#: lib/maplibrex_demo_web/catalogue.ex:159
+#, elixir-autogen, elixir-format
+msgid "Fills polygons from a source."
+msgstr "Rellena polígonos de una fuente."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:363
+#, elixir-autogen, elixir-format
+msgid "Generated from the component's definition in the library, so it always matches the version this demo runs."
+msgstr "Generado a partir de la definición del componente en la librería, así que siempre coincide con la versión que ejecuta esta demo."
+
+#: lib/maplibrex_demo_web/catalogue.ex:332
+#, elixir-autogen, elixir-format
+msgid "Groups several controls into one map control."
+msgstr "Agrupa varios controles en un solo control del mapa."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:180
+#, elixir-autogen, elixir-format
+msgid "Import the components"
+msgstr "Importa los componentes"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:171
+#, elixir-autogen, elixir-format
+msgid "Import the stylesheets"
+msgstr "Importa las hojas de estilo"
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:113
+#, elixir-autogen, elixir-format
+msgid "In progress for %{version}"
+msgstr "En curso para %{version}"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:131
+#, elixir-autogen, elixir-format
+msgid "Install"
+msgstr "Instalación"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:146
+#, elixir-autogen, elixir-format
+msgid "Install MapLibre GL JS"
+msgstr "Instala MapLibre GL JS"
+
+#: lib/maplibrex_demo_web/catalogue.ex:361
+#, elixir-autogen, elixir-format
+msgid "It adds a layer type that MapLibre does not have, so no sky appears. The fix changes its attributes."
+msgstr "Añade un tipo de capa que MapLibre no tiene, así que no aparece ningún cielo. La corrección cambia sus atributos."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:258
+#, elixir-autogen, elixir-format
+msgid "Its interactive example comes in a later update of the demo. Its events and attributes are already listed."
+msgstr "Su ejemplo interactivo llegará en una actualización posterior de la demo. Sus eventos y atributos ya están listados."
+
+#: lib/maplibrex_demo_web/components/layouts.ex:391
+#, elixir-autogen, elixir-format
+msgid "Language"
+msgstr "Idioma"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:330
+#, elixir-autogen, elixir-format
+msgid "Last payload received"
+msgstr "Último payload recibido"
+
+#: lib/maplibrex_demo_web/catalogue.ex:563
+#, elixir-autogen, elixir-format
+msgid "Layers and sources apply changes to their assigns after mount."
+msgstr "Las capas y fuentes aplican los cambios de sus assigns después del montaje."
+
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:128
+#, elixir-autogen, elixir-format
+msgid "Library issue %{number} (opens GitHub)"
+msgstr "Incidencia %{number} de la librería (abre GitHub)"
+
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:21
+#, elixir-autogen, elixir-format
+msgid "Limited"
+msgstr "Limitado"
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:75
+#, elixir-autogen, elixir-format
+msgid "Limited and planned components"
+msgstr "Componentes limitados y planificados"
+
+#: lib/maplibrex_demo_web/examples/example_components.ex:31
+#, elixir-autogen, elixir-format
+msgid "Loading the map"
+msgstr "Cargando el mapa"
+
+#: lib/maplibrex_demo_web/examples/map_example.ex:99
+#, elixir-autogen, elixir-format
+msgid "Madrid"
+msgstr "Madrid"
+
+#: lib/maplibrex_demo_web/catalogue.ex:414
+#, elixir-autogen, elixir-format
+msgid "Map"
+msgstr "Mapa"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:100
+#, elixir-autogen, elixir-format
+msgid "MapLibre GL JS as declarative Phoenix LiveView components. The map is declared in HEEx and driven from the server: assigns change the map, map events arrive in handle_event/3, and the application writes no JavaScript."
+msgstr "MapLibre GL JS como componentes declarativos de Phoenix LiveView. El mapa se declara en HEEx y se controla desde el servidor: los assigns cambian el mapa, los eventos del mapa llegan a handle_event/3 y la aplicación no escribe JavaScript."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:148
+#, elixir-autogen, elixir-format
+msgid "MaplibreX does not bundle MapLibre GL JS; your application owns its version. MaplibreX supports maplibre-gl 5 and 6, except deckgl_layer, which needs 5."
+msgstr "MaplibreX no incluye MapLibre GL JS; tu aplicación decide su versión. MaplibreX admite maplibre-gl 5 y 6, salvo deckgl_layer, que necesita la 5."
+
+#: lib/maplibrex_demo_web/catalogue.ex:415
+#, elixir-autogen, elixir-format
+msgid "Markers & popups"
+msgstr "Marcadores y popups"
+
+#: lib/maplibrex_demo_web/catalogue.ex:356
+#, elixir-autogen, elixir-format
+msgid "Meant to add an atmospheric sky to 3D views; it cannot render yet."
+msgstr "Pensado para añadir un cielo atmosférico a las vistas 3D; todavía no puede renderizarse."
+
+#: lib/maplibrex_demo_web/examples/map_example.ex:101
+#, elixir-autogen, elixir-format
+msgid "Nairobi"
+msgstr "Nairobi"
+
+#: lib/maplibrex_demo_web/catalogue.ex:379
+#, elixir-autogen, elixir-format
+msgid "Needs maplibre-gl 5; version 6 is not supported yet."
+msgstr "Necesita maplibre-gl 5; la versión 6 aún no está soportada."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:213
+#, elixir-autogen, elixir-format
+msgid "Next"
+msgstr "Siguiente"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:310
+#, elixir-autogen, elixir-format
+msgid "No component name contains “%{query}”."
+msgstr "Ningún nombre de componente contiene «%{query}»."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:250
+#, elixir-autogen, elixir-format
+msgid "No example yet"
+msgstr "Aún no hay ejemplo"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:404
+#, elixir-autogen, elixir-format
+msgid "Not documented by the library."
+msgstr "La librería no lo documenta."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:339
+#, elixir-autogen, elixir-format
+msgid "Not received yet."
+msgstr "Aún no recibido."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:407
+#, elixir-autogen, elixir-format
+msgid "One of"
+msgstr "Uno de"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:76
+#, elixir-autogen, elixir-format
+msgid "Open navigation"
+msgstr "Abrir la navegación"
+
+#: lib/maplibrex_demo_web/live/scenarios_live.ex:76
+#, elixir-autogen, elixir-format
+msgid "Open the current page"
+msgstr "Abrir la página actual"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:125
+#, elixir-autogen, elixir-format
+msgid "Open the map example"
+msgstr "Abrir el ejemplo de map"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:427
+#, elixir-autogen, elixir-format
+msgid "Optional."
+msgstr "Opcional."
+
+#: lib/maplibrex_demo_web/components/layouts.ex:271
+#: lib/maplibrex_demo_web/live/overview_live.ex:67
+#, elixir-autogen, elixir-format
+msgid "Overview"
+msgstr "Inicio"
+
+#: lib/maplibrex_demo_web/catalogue.ex:191
+#, elixir-autogen, elixir-format
+msgid "Paints the map background with a colour or a pattern."
+msgstr "Pinta el fondo del mapa con un color o un patrón."
+
+#: lib/maplibrex_demo_web/catalogue.ex:252
+#, elixir-autogen, elixir-format
+msgid "Places a video at four coordinates for a raster layer to draw."
+msgstr "Coloca un vídeo en cuatro coordenadas para que lo dibuje una capa ráster."
+
+#: lib/maplibrex_demo_web/catalogue.ex:244
+#, elixir-autogen, elixir-format
+msgid "Places an image at four coordinates for a raster layer to draw."
+msgstr "Coloca una imagen en cuatro coordenadas para que la dibuje una capa ráster."
+
+#: lib/maplibrex_demo_web/catalogue.ex:167
+#, elixir-autogen, elixir-format
+msgid "Places icons and text labels from a source."
+msgstr "Coloca iconos y etiquetas de texto de una fuente."
+
+#: lib/maplibrex_demo_web/catalogue.ex:317
+#, elixir-autogen, elixir-format
+msgid "Places your own HEEx content in a corner of the map as a control."
+msgstr "Coloca tu propio contenido HEEx en una esquina del mapa como control."
+
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:22
+#, elixir-autogen, elixir-format
+msgid "Planned"
+msgstr "Planificado"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:371
+#, elixir-autogen, elixir-format
+msgid "Press / to search"
+msgstr "Pulsa / para buscar"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:228
+#, elixir-autogen, elixir-format
+msgid "Preview"
+msgstr "Vista previa"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:202
+#, elixir-autogen, elixir-format
+msgid "Previous"
+msgstr "Anterior"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:193
+#, elixir-autogen, elixir-format
+msgid "Previous and next component"
+msgstr "Componente anterior y siguiente"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:511
+#, elixir-autogen, elixir-format
+msgid "Reconnecting. If the demo server was stopped, start it again with mix phx.server."
+msgstr "Reconectando. Si el servidor de la demo se detuvo, vuelve a iniciarlo con mix phx.server."
+
+#: lib/maplibrex_demo_web/components/layouts.ex:500
+#, elixir-autogen, elixir-format
+msgid "Reconnecting. The page cannot update until the connection is back."
+msgstr "Reconectando. La página no puede actualizarse hasta que vuelva la conexión."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:155
+#, elixir-autogen, elixir-format
+msgid "Register the hooks"
+msgstr "Registra los hooks"
+
+#: lib/maplibrex_demo_web/catalogue.ex:583
+#, elixir-autogen, elixir-format
+msgid "Removing a source together with its layers leaves nothing on the map."
+msgstr "Quitar una fuente junto con sus capas no deja nada en el mapa."
+
+#: lib/maplibrex_demo_web/catalogue.ex:349
+#, elixir-autogen, elixir-format
+msgid "Renders 3D terrain from a raster DEM source, with adjustable exaggeration."
+msgstr "Renderiza terreno 3D a partir de una fuente DEM ráster, con exageración ajustable."
+
+#: lib/maplibrex_demo_web/catalogue.ex:374
+#, elixir-autogen, elixir-format
+msgid "Renders a deck.gl layer over the map; deck.gl is loaded the first time one mounts."
+msgstr "Renderiza una capa de deck.gl sobre el mapa; deck.gl se carga la primera vez que se monta una."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:426
+#, elixir-autogen, elixir-format
+msgid "Required."
+msgstr "Obligatorio."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:133
+#, elixir-autogen, elixir-format
+msgid "Requires Elixir 1.15 or later and Phoenix LiveView 1.0 or later."
+msgstr "Requiere Elixir 1.15 o posterior y Phoenix LiveView 1.0 o posterior."
+
+#: lib/maplibrex_demo_web/components/layouts.ex:111
+#: lib/maplibrex_demo_web/components/layouts.ex:210
+#: lib/maplibrex_demo_web/live/overview_live.ex:288
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:15
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:44
+#, elixir-autogen, elixir-format
+msgid "Roadmap"
+msgstr "Hoja de ruta"
+
+#: lib/maplibrex_demo_web/examples/map_example.html.heex:64
+#, elixir-autogen, elixir-format
+msgid "Run commands"
+msgstr "Ejecutar comandos"
+
+#: lib/maplibrex_demo_web/live/scenarios_live.ex:51
+#, elixir-autogen, elixir-format
+msgid "Sample data"
+msgstr "Datos de ejemplo"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:108
+#: lib/maplibrex_demo_web/components/layouts.ex:209
+#: lib/maplibrex_demo_web/live/overview_live.ex:283
+#: lib/maplibrex_demo_web/live/scenarios_live.ex:14
+#: lib/maplibrex_demo_web/live/scenarios_live.ex:30
+#, elixir-autogen, elixir-format
+msgid "Scenarios"
+msgstr "Escenarios"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:361
+#: lib/maplibrex_demo_web/components/layouts.ex:362
+#, elixir-autogen, elixir-format
+msgid "Search components"
+msgstr "Buscar componentes"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:99
+#: lib/maplibrex_demo_web/components/layouts.ex:165
+#, elixir-autogen, elixir-format
+msgid "Sections"
+msgstr "Secciones"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:266
+#, elixir-autogen, elixir-format
+msgid "See its attributes"
+msgstr "Ver sus atributos"
+
+#: lib/maplibrex_demo_web/examples/map_example.html.heex:16
+#, elixir-autogen, elixir-format
+msgid "Set assigns"
+msgstr "Cambiar assigns"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:284
+#, elixir-autogen, elixir-format
+msgid "Several components combined into one working map."
+msgstr "Varios componentes combinados en un mapa que funciona."
+
+#: lib/maplibrex_demo_web/catalogue.ex:199
+#, elixir-autogen, elixir-format
+msgid "Shades relief from a raster DEM source."
+msgstr "Sombrea el relieve a partir de una fuente DEM ráster."
+
+#: lib/maplibrex_demo_web/catalogue.ex:339
+#, elixir-autogen, elixir-format
+msgid "Shows its content only between a minimum and a maximum zoom level."
+msgstr "Muestra su contenido solo entre un nivel de zoom mínimo y uno máximo."
+
+#: lib/maplibrex_demo_web/catalogue.ex:207
+#, elixir-autogen, elixir-format
+msgid "Shows raster tiles, an image or a video from a source."
+msgstr "Muestra teselas ráster, una imagen o un vídeo de una fuente."
+
+#: lib/maplibrex_demo_web/catalogue.ex:294
+#, elixir-autogen, elixir-format
+msgid "Shows the attribution of the map's sources."
+msgstr "Muestra la atribución de las fuentes del mapa."
+
+#: lib/maplibrex_demo_web/catalogue.ex:175
+#, elixir-autogen, elixir-format
+msgid "Shows the density of points from a source as a heatmap."
+msgstr "Muestra la densidad de los puntos de una fuente como mapa de calor."
+
+#: lib/maplibrex_demo_web/components/layouts.ex:66
+#, elixir-autogen, elixir-format
+msgid "Skip to content"
+msgstr "Saltar al contenido"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:419
+#, elixir-autogen, elixir-format
+msgid "Slots"
+msgstr "Slots"
+
+#: lib/maplibrex_demo_web/catalogue.ex:417
+#, elixir-autogen, elixir-format
+msgid "Sources"
+msgstr "Fuentes"
+
+#: lib/maplibrex_demo_web/catalogue.ex:567
+#, elixir-autogen, elixir-format
+msgid "Sources, layers and terrain survive a change of map style."
+msgstr "Las fuentes, capas y el terreno sobreviven a un cambio de estilo del mapa."
+
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:20
+#, elixir-autogen, elixir-format
+msgid "Stable"
+msgstr "Estable"
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:54
+#, elixir-autogen, elixir-format
+msgid "Statuses"
+msgstr "Estados"
+
+#: lib/maplibrex_demo_web/live/components_live.ex:35
+#, elixir-autogen, elixir-format
+msgid "The %{count} components of MaplibreX %{version}, in the families the library groups them in. Each page lists the component's attributes and events, and runs its example when there is one."
+msgstr "Los %{count} componentes de MaplibreX %{version}, en las familias en que los agrupa la librería. Cada página lista los atributos y eventos del componente, y ejecuta su ejemplo cuando lo hay."
+
+#: lib/maplibrex_demo_web/catalogue.ex:112
+#, elixir-autogen, elixir-format
+msgid "The JS helpers `open/1`, `close/1`, `toggle/1` and `set_location/2` do nothing unless the server echoes them back."
+msgstr "Los helpers JS `open/1`, `close/1`, `toggle/1` y `set_location/2` no hacen nada salvo que el servidor los devuelva."
+
+#: lib/maplibrex_demo_web/catalogue.ex:132
+#, elixir-autogen, elixir-format
+msgid "The JS helpers such as `set_paint_property/3`, `set_data/2`, `show/1` and `hide/1` do nothing unless the server echoes them back."
+msgstr "Los helpers JS como `set_paint_property/3`, `set_data/2`, `show/1` y `hide/1` no hacen nada salvo que el servidor los devuelva."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:158
+#, elixir-autogen, elixir-format
+msgid "The bare `\"maplibrex\"` import resolves through `NODE_PATH`, which a generated Phoenix application already sets for esbuild."
+msgstr "El import directo de `\"maplibrex\"` se resuelve mediante `NODE_PATH`, que una aplicación Phoenix generada ya define para esbuild."
+
+#: lib/maplibrex_demo_web/examples/example_components.ex:45
+#, elixir-autogen, elixir-format
+msgid "The basemap comes from tiles.openfreemap.org, so the preview needs an internet connection."
+msgstr "El mapa base viene de tiles.openfreemap.org, así que la vista previa necesita conexión a internet."
+
+#: lib/maplibrex_demo_web/catalogue.ex:88
+#, elixir-autogen, elixir-format
+msgid "The documented `debug={true}` does not turn on debug logging."
+msgstr "El `debug={true}` documentado no activa los registros de depuración."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:310
+#, elixir-autogen, elixir-format
+msgid "The events this component sends to the LiveView, as the library documents them. Each arrives in handle_event/3."
+msgstr "Los eventos que este componente envía al LiveView, tal como los documenta la librería. Cada uno llega a handle_event/3."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:162
+#, elixir-autogen, elixir-format
+msgid "The example's template and LiveView, read from the files that run in the preview."
+msgstr "La plantilla y el LiveView del ejemplo, leídos de los archivos que se ejecutan en la vista previa."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:359
+#, elixir-autogen, elixir-format
+msgid "The library does not describe this component's attributes."
+msgstr "La librería no describe los atributos de este componente."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:298
+#, elixir-autogen, elixir-format
+msgid "The library's documentation is not available in this build, so its events cannot be listed."
+msgstr "La documentación de la librería no está disponible en esta compilación, así que no se pueden listar sus eventos."
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:116
+#, elixir-autogen, elixir-format
+msgid "The library's next release reworks how layers, sources and terrain join and leave the map. The work is under way in the library repository; no release date has been announced."
+msgstr "La próxima versión de la librería rehace cómo las capas, las fuentes y el terreno entran y salen del mapa. El trabajo está en marcha en el repositorio de la librería; no se ha anunciado fecha de publicación."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:274
+#, elixir-autogen, elixir-format
+msgid "The map example"
+msgstr "El ejemplo de map"
+
+#: lib/maplibrex_demo_web/examples/example_components.ex:42
+#, elixir-autogen, elixir-format
+msgid "The map reported an error:"
+msgstr "El mapa informó de un error:"
+
+#: lib/maplibrex_demo_web/live/scenarios_live.ex:58
+#, elixir-autogen, elixir-format
+msgid "The page draws data generated for the demo, not real measurements."
+msgstr "La página dibuja datos generados para la demo, no mediciones reales."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:213
+#, elixir-autogen, elixir-format
+msgid "The roadmap"
+msgstr "La hoja de ruta"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:506
+#, elixir-autogen, elixir-format
+msgid "The server is not responding"
+msgstr "El servidor no responde"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:429
+#, elixir-autogen, elixir-format
+msgid "Theme"
+msgstr "Tema"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:254
+#, elixir-autogen, elixir-format
+msgid "This component cannot render yet, so it gets no example until its issue is fixed."
+msgstr "Este componente aún no puede renderizarse, así que no tendrá ejemplo hasta que se corrija su incidencia."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:158
+#, elixir-autogen, elixir-format
+msgid "This component has no example yet, so there is no source to show."
+msgstr "Este componente aún no tiene ejemplo, así que no hay código que mostrar."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:304
+#, elixir-autogen, elixir-format
+msgid "This component sends no events of its own. Bindings such as phx-click on its content work as usual."
+msgstr "Este componente no envía eventos propios. Los bindings como phx-click en su contenido funcionan como siempre."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:105
+#, elixir-autogen, elixir-format
+msgid "This demo runs MaplibreX %{version}. It lists all %{count} components with their status, and shows each working example next to the code that produces it."
+msgstr "Esta demo ejecuta MaplibreX %{version}. Lista los %{count} componentes con su estado y muestra cada ejemplo que funciona junto al código que lo produce."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:372
+#, elixir-autogen, elixir-format
+msgid "Type"
+msgstr "Tipo"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:454
+#, elixir-autogen, elixir-format
+msgid "Use the dark theme"
+msgstr "Usar el tema oscuro"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:453
+#, elixir-autogen, elixir-format
+msgid "Use the light theme"
+msgstr "Usar el tema claro"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:314
+#, elixir-autogen, elixir-format
+msgid "Use the preview; the last payload of each event the example receives appears here."
+msgstr "Usa la vista previa; aquí aparece el último payload de cada evento que recibe el ejemplo."
+
+#: lib/maplibrex_demo_web/components/layouts.ex:452
+#, elixir-autogen, elixir-format
+msgid "Use the system theme"
+msgstr "Usar el tema del sistema"
+
+#: lib/maplibrex_demo_web/live/scenarios_live.ex:62
+#, elixir-autogen, elixir-format
+msgid "Uses"
+msgstr "Usa"
+
+#: lib/maplibrex_demo_web/components/layouts.ex:93
+#, elixir-autogen, elixir-format
+msgid "Version of the MaplibreX library this demo runs"
+msgstr "Versión de la librería MaplibreX que ejecuta esta demo"
+
+#: lib/maplibrex_demo_web/live/terrain_live.ex:121
+#, elixir-autogen, elixir-format
+msgid "View"
+msgstr "Vista"
+
+#: lib/maplibrex_demo_web/catalogue.ex:528
+#, elixir-autogen, elixir-format
+msgid "WebGL particles"
+msgstr "Partículas WebGL"
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:46
+#, elixir-autogen, elixir-format
+msgid "What does not fully work in MaplibreX %{version}, and what the library is working on next. Every status that is not stable links to the library issue that explains it."
+msgstr "Lo que no funciona del todo en MaplibreX %{version} y en qué trabaja la librería a continuación. Cada estado que no es estable enlaza a la incidencia de la librería que lo explica."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:289
+#, elixir-autogen, elixir-format
+msgid "What is limited or planned, and what the next library release fixes."
+msgstr "Lo que está limitado o planificado, y lo que corrige la próxima versión de la librería."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:265
+#, elixir-autogen, elixir-format
+msgid "Where to go next"
+msgstr "Por dónde seguir"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:237
+#, elixir-autogen, elixir-format
+msgid "Why it is limited"
+msgstr "Por qué está limitado"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:238
+#, elixir-autogen, elixir-format
+msgid "Why it is planned"
+msgstr "Por qué está planificado"
+
+#: lib/maplibrex_demo_web/catalogue.ex:307
+#, elixir-autogen, elixir-format
+msgid "With `enabled={true}` at mount it fails before the style has loaded, and removing it leaves terrain on."
+msgstr "Con `enabled={true}` al montarse falla antes de que cargue el estilo, y al quitarlo deja el terreno activado."
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:145
+#, elixir-autogen, elixir-format
+msgid "Works as documented."
+msgstr "Funciona como está documentado."
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:148
+#, elixir-autogen, elixir-format
+msgid "Works, but an open issue documents a part of its behaviour that does not."
+msgstr "Funciona, pero una incidencia abierta documenta una parte de su comportamiento que no."
+
+#: lib/maplibrex_demo_web/catalogue.ex:262
+#, elixir-autogen, elixir-format
+msgid "Zoom buttons and a compass."
+msgstr "Botones de zoom y una brújula."
+
+#: lib/maplibrex_demo_web/catalogue.ex:380
+#, elixir-autogen, elixir-format
+msgid "`before_id` is accepted but has no effect."
+msgstr "`before_id` se acepta pero no tiene efecto."
+
+#: lib/maplibrex_demo_web/catalogue.ex:136
+#, elixir-autogen, elixir-format
+msgid "`layer:source_loaded` is often never sent."
+msgstr "`layer:source_loaded` a menudo no llega a enviarse."
+
+#: lib/maplibrex_demo_web/catalogue.ex:587
+#, elixir-autogen, elixir-format
+msgid "`layer:source_loaded` is sent once the layer's source has loaded."
+msgstr "`layer:source_loaded` se envía cuando la fuente de la capa ha cargado."
+
+#: lib/maplibrex_demo_web/catalogue.ex:539
+#, elixir-autogen, elixir-format
+msgid "deck.gl arc, hexagon and scatterplot layers drawn over the map."
+msgstr "Capas de arcos, hexágonos y dispersión de deck.gl dibujadas sobre el mapa."
+
+#: lib/maplibrex_demo_web/catalogue.ex:538
+#, elixir-autogen, elixir-format
+msgid "deck.gl layers"
+msgstr "Capas de deck.gl"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:215
+#, elixir-autogen, elixir-format
+msgid "explains each status that is not stable, with its library issue."
+msgstr "explica cada estado que no es estable, con su incidencia en la librería."
+
+#: lib/maplibrex_demo_web/live/component_live.ex:443
+#, elixir-autogen, elixir-format
+msgid "global attributes"
+msgstr "atributos globales"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:395
+#, elixir-autogen, elixir-format
+msgid "none"
+msgstr "ninguno"
+
+#: lib/maplibrex_demo_web/live/component_live.ex:386
+#, elixir-autogen, elixir-format
+msgid "required"
+msgstr "obligatorio"
