@@ -3,7 +3,7 @@ This is a web application written using the Phoenix web framework.
 ## Project guidelines
 
 - Use `mix precommit` alias when you are done with all changes and fix any pending issues
-- Use the already included and available `:req` (`Req`) library for HTTP requests, **avoid** `:httpoison`, `:tesla`, and `:httpc`. Req is included by default and is the preferred HTTP client for Phoenix apps
+- This app makes no HTTP requests of its own, so it ships no HTTP client. If one is ever needed, add `:req` (`Req`), the preferred HTTP client for Phoenix apps, and **avoid** `:httpoison`, `:tesla`, and `:httpc`
 ### Phoenix v1.8 guidelines
 
 - **Always** begin your LiveView templates with `<Layouts.app flash={@flash} ...>` which wraps all inner content
