@@ -6,9 +6,6 @@ defmodule MaplibrexDemoWeb.Layouts do
     * `app/1` — the catalogue shell: top bar, component sidebar (a drawer on
       narrow screens) and the main column. Every page of the `:catalogue`
       live session renders inside it.
-
-  The pages that predate the catalogue render their own full-screen chrome
-  (`MaplibrexDemoWeb.DemoComponents.demo_page/1`) until they are migrated.
   """
   use MaplibrexDemoWeb, :html
 

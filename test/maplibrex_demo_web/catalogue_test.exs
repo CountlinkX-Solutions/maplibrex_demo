@@ -188,17 +188,13 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       end
     end
 
-    test "the scenarios moved from the old pages are rebuilt" do
-      rebuilt = %{
-        terrain_3d: MaplibrexDemoWeb.Scenarios.TerrainScenario,
-        heatmap: MaplibrexDemoWeb.Scenarios.HeatmapScenario,
-        buildings: MaplibrexDemoWeb.Scenarios.BuildingsScenario,
-        particles: MaplibrexDemoWeb.Scenarios.ParticlesScenario,
-        deckgl: MaplibrexDemoWeb.Scenarios.DeckglScenario
-      }
+    test "every scenario of the old pages is rebuilt" do
+      assert Enum.map(Catalogue.scenarios(), & &1.id) ==
+               [:terrain_3d, :heatmap, :buildings, :particles, :deckgl]
 
-      for {id, module} <- rebuilt do
-        assert {:ok, %{module: ^module}} = Catalogue.fetch_scenario(Atom.to_string(id))
+      for scenario <- Catalogue.scenarios() do
+        assert scenario.module, "#{scenario.id} has no page"
+        refute Map.has_key?(scenario, :legacy_path)
       end
     end
   end

@@ -41,4 +41,34 @@ defmodule MaplibrexDemoWeb.RoutingTest do
   test "an unknown scenario is a 404", %{conn: conn} do
     assert_error_sent 404, fn -> get(conn, "/scenarios/no_such_scenario") end
   end
+
+  # The pages that predate the catalogue. A bookmark lands on the page that
+  # shows the same thing now; the tile server pages, removed, on the index.
+  @old_pages [
+    {"/map", "/components/map"},
+    {"/markers", "/components/marker"},
+    {"/terrain", "/scenarios/terrain_3d"},
+    {"/heatmap", "/scenarios/heatmap"},
+    {"/buildings", "/scenarios/buildings"},
+    {"/particles", "/scenarios/particles"},
+    {"/deckgl", "/scenarios/deckgl"},
+    {"/tiles", "/components"},
+    {"/ogc", "/components"}
+  ]
+
+  for {old, new} <- @old_pages do
+    test "#{old}, replaced by the catalogue, redirects permanently to #{new}", %{conn: conn} do
+      conn = get(conn, unquote(old))
+
+      assert redirected_to(conn, 301) == unquote(new)
+      assert {:ok, _view, _html} = live(build_conn(), unquote(new))
+    end
+  end
+
+  test "the old pages and their chrome are gone" do
+    for name <- ~w(MapLive TilesLive OgcFeaturesLive DeckglLive TerrainLive HeatmapLive
+                   BuildingsLive MarkersLive ParticlesLive DemoComponents) do
+      refute Code.ensure_loaded?(Module.concat(MaplibrexDemoWeb, name)), "#{name} still exists"
+    end
+  end
 end
