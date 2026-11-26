@@ -54,8 +54,8 @@ defmodule MaplibrexDemoWeb.ShellTest do
       {:ok, view, _html} = live(conn, ~p"/components")
 
       assert has_element?(view, ~s(#sidebar-item-sky [data-status-mark="planned"]))
-      assert has_element?(view, ~s(#sidebar-item-circle_layer [data-status-mark="limited"]))
-      refute has_element?(view, "#sidebar-item-marker [data-status-mark]")
+      assert has_element?(view, ~s(#sidebar-item-popup [data-status-mark="limited"]))
+      refute has_element?(view, "#sidebar-item-circle_layer [data-status-mark]")
     end
 
     test "is repeated in the drawer used on narrow screens", %{conn: conn} do

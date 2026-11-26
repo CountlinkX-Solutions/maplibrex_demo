@@ -33,7 +33,7 @@ defmodule MaplibrexDemoWeb.LocaleControllerTest do
              "Dibuja los puntos de una fuente como círculos."
            )
 
-    assert has_element?(view, ~s(#component-status[data-status="limited"]), "Limitado")
+    assert has_element?(view, ~s(#component-status[data-status="stable"]), "Estable")
     assert has_element?(view, "#tab-preview", "Vista previa")
     assert has_element?(view, "#sidebar-family-markers-label", "Marcadores y popups")
   end

@@ -1,6 +1,6 @@
 defmodule MaplibrexDemoWeb.RoadmapLive do
   @moduledoc """
-  What does not fully work yet, and what the library is working on next.
+  What does not fully work yet, and what the library's next release fixes.
 
   The list is the catalogue filtered to limited and planned components, so it
   changes whenever a status does. The next-release section comes from
@@ -44,7 +44,7 @@ defmodule MaplibrexDemoWeb.RoadmapLive do
         <h1 class="text-display font-black tracking-tight">{gettext("Roadmap")}</h1>
         <p class="mt-3 text-lead text-ink-muted">
           {gettext(
-            "What does not fully work in MaplibreX %{version}, and what the library is working on next. Every status that is not stable links to the library issue that explains it.",
+            "What does not fully work in MaplibreX %{version}, and what its next release fixes. Every status that is not stable links to the library issue that explains it.",
             version: @version
           )}
         </p>
@@ -110,16 +110,21 @@ defmodule MaplibrexDemoWeb.RoadmapLive do
 
       <section id="next-release" class="mt-12" aria-labelledby="next-release-heading">
         <h2 id="next-release-heading" class="text-heading font-black">
-          {gettext("In progress for %{version}", version: @next_release.version)}
+          {gettext("Fixed in %{version}", version: @next_release.version)}
         </h2>
-        <p class="mt-2 max-w-measure text-body text-ink-muted">
+        <p
+          id="next-release-state"
+          data-state={@next_release.state}
+          class="mt-2 max-w-measure text-body text-ink-muted"
+        >
           {gettext(
-            "The library's next release reworks how layers, sources and terrain join and leave the map. The work is under way in the library repository; no release date has been announced."
+            "MaplibreX %{version} reworks how layers, sources and terrain join and leave the map. It is merged on the library's main branch but not yet published on Hex, and no release date has been announced. This demo follows main, so the statuses above already include these fixes.",
+            version: @next_release.version
           )}
         </p>
         <ul class="mt-4 max-w-measure space-y-2.5 text-body">
           <li :for={item <- @next_release.items} class="flex flex-wrap items-baseline gap-x-2">
-            <.icon name="hero-arrow-path-micro" class="size-4 shrink-0 self-center text-ink-subtle" />
+            <.icon name="hero-check-micro" class="size-4 shrink-0 self-center text-ink-subtle" />
             <span><.rich_text text={item.text} /></span>
             <span class="inline-flex gap-1.5">
               <.issue_link :for={number <- item.issues} number={number} />

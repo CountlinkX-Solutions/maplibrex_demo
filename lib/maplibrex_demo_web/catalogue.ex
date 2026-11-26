@@ -20,9 +20,9 @@ defmodule MaplibrexDemoWeb.Catalogue do
       behaviour that does not. The issue is linked.
     * `:planned` — cannot be used yet; the linked issue tracks the fix.
 
-  Problems that affect every component the same way (style changes, the order
-  components mount in) do not change individual statuses; the roadmap lists
-  them as the library's next release work.
+  Statuses follow the library's `main` branch, derived from its open issues.
+  Problems that affect every component the same way do not change individual
+  statuses; the roadmap lists what the library's next release fixes.
 
   Text is translated when these functions are called, so call them per render
   rather than caching their result across locales.
@@ -53,18 +53,18 @@ defmodule MaplibrexDemoWeb.Catalogue do
   @doc "Every component, in catalogue order (family by family)."
   @spec components() :: [Component.t()]
   def components do
-    reactive_layer =
+    reactive_control = issue(3, gettext("Changing `position` after mount has no effect."))
+
+    undocumented_events =
       issue(
-        3,
+        28,
         gettext(
-          "Changes to `paint`, `layout`, `filter` or the zoom range after mount are not applied."
+          "The events its documentation lists are never sent; `source:added`, `source:error` and `source:removed` arrive instead."
         )
       )
 
-    reactive_source =
-      issue(3, gettext("Changes to a source's attributes after mount are not applied."))
-
-    reactive_control = issue(3, gettext("Changing `position` after mount has no effect."))
+    reactive_custom_control =
+      issue(3, gettext("Changes to `position` or `class` after mount are not applied."))
 
     [
       # Map
@@ -79,13 +79,19 @@ defmodule MaplibrexDemoWeb.Catalogue do
           ),
         status: :limited,
         issues: [
+          issue(21, gettext("The documented `debug={true}` does not turn on debug logging.")),
           issue(
-            16,
+            25,
             gettext(
-              "A style given as a map rather than a URL is applied again on every update, which removes component layers."
+              "Without `center`, `zoom` or `style`, the defaults configured for the library are not used."
             )
           ),
-          issue(21, gettext("The documented `debug={true}` does not turn on debug logging."))
+          issue(
+            26,
+            gettext(
+              "Changes to `bounds`, `max_bounds`, the zoom and pitch limits, `interactive` or `attribution_control` after mount are not applied."
+            )
+          )
         ]
       },
 
@@ -99,7 +105,19 @@ defmodule MaplibrexDemoWeb.Catalogue do
           gettext(
             "A marker at a coordinate, with an optional popup and dragging that reports the new position."
           ),
-        status: :stable
+        status: :limited,
+        issues: [
+          issue(
+            35,
+            gettext("Its popup opens on top of the marker instead of above it.")
+          ),
+          issue(
+            36,
+            gettext(
+              "A popup cannot be added, removed or emptied after mount, only changed to another non-empty text."
+            )
+          )
+        ]
       },
       %Component{
         name: :popup,
@@ -134,8 +152,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
             gettext(
               "The JS helpers such as `set_paint_property/3`, `set_data/2`, `show/1` and `hide/1` do nothing unless the server echoes them back."
             )
-          ),
-          issue(20, gettext("`layer:source_loaded` is often never sent."))
+          )
         ]
       },
       %Component{
@@ -143,56 +160,49 @@ defmodule MaplibrexDemoWeb.Catalogue do
         family: :layers,
         module: Lib.CircleLayer,
         summary: gettext("Draws points from a source as circles."),
-        status: :limited,
-        issues: [reactive_layer]
+        status: :stable
       },
       %Component{
         name: :line_layer,
         family: :layers,
         module: Lib.LineLayer,
         summary: gettext("Draws lines from a source, such as roads, routes or boundaries."),
-        status: :limited,
-        issues: [reactive_layer]
+        status: :stable
       },
       %Component{
         name: :fill_layer,
         family: :layers,
         module: Lib.FillLayer,
         summary: gettext("Fills polygons from a source."),
-        status: :limited,
-        issues: [reactive_layer]
+        status: :stable
       },
       %Component{
         name: :symbol_layer,
         family: :layers,
         module: Lib.SymbolLayer,
         summary: gettext("Places icons and text labels from a source."),
-        status: :limited,
-        issues: [reactive_layer]
+        status: :stable
       },
       %Component{
         name: :heatmap_layer,
         family: :layers,
         module: Lib.HeatmapLayer,
         summary: gettext("Shows the density of points from a source as a heatmap."),
-        status: :limited,
-        issues: [reactive_layer]
+        status: :stable
       },
       %Component{
         name: :fill_extrusion_layer,
         family: :layers,
         module: Lib.FillExtrusionLayer,
         summary: gettext("Extrudes polygons from a source into 3D shapes, such as buildings."),
-        status: :limited,
-        issues: [reactive_layer]
+        status: :stable
       },
       %Component{
         name: :background_layer,
         family: :layers,
         module: Lib.BackgroundLayer,
         summary: gettext("Paints the map background with a colour or a pattern."),
-        status: :limited,
-        issues: [reactive_layer]
+        status: :stable
       },
       %Component{
         name: :hillshade_layer,
@@ -200,16 +210,14 @@ defmodule MaplibrexDemoWeb.Catalogue do
         module: Lib.HillshadeLayer,
         example: MaplibrexDemoWeb.Examples.HillshadeLayerExample,
         summary: gettext("Shades relief from a raster DEM source."),
-        status: :limited,
-        issues: [reactive_layer]
+        status: :stable
       },
       %Component{
         name: :raster_layer,
         family: :layers,
         module: Lib.RasterLayer,
         summary: gettext("Shows raster tiles, an image or a video from a source."),
-        status: :limited,
-        issues: [reactive_layer]
+        status: :stable
       },
 
       # Sources
@@ -221,8 +229,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
           gettext(
             "Adds vector tiles, from a TileJSON URL or a tile template, for layers to draw."
           ),
-        status: :limited,
-        issues: [reactive_source]
+        status: :stable
       },
       %Component{
         name: :raster_tile_source,
@@ -230,7 +237,12 @@ defmodule MaplibrexDemoWeb.Catalogue do
         module: Lib.RasterTileSource,
         summary: gettext("Adds raster image tiles for a raster layer to draw."),
         status: :limited,
-        issues: [reactive_source]
+        issues: [
+          issue(
+            24,
+            gettext("The documented `tms` attribute has no effect; `scheme=\"tms\"` works.")
+          )
+        ]
       },
       %Component{
         name: :raster_dem_source,
@@ -238,8 +250,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         module: Lib.RasterDEMSource,
         example: MaplibrexDemoWeb.Examples.RasterDemSourceExample,
         summary: gettext("Adds elevation tiles for hillshading and 3D terrain."),
-        status: :limited,
-        issues: [reactive_source]
+        status: :stable
       },
       %Component{
         name: :image_source,
@@ -247,7 +258,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         module: Lib.ImageSource,
         summary: gettext("Places an image at four coordinates for a raster layer to draw."),
         status: :limited,
-        issues: [reactive_source]
+        issues: [undocumented_events]
       },
       %Component{
         name: :video_source,
@@ -255,7 +266,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         module: Lib.VideoSource,
         summary: gettext("Places a video at four coordinates for a raster layer to draw."),
         status: :limited,
-        issues: [reactive_source]
+        issues: [undocumented_events]
       },
 
       # Controls
@@ -322,7 +333,8 @@ defmodule MaplibrexDemoWeb.Catalogue do
         family: :controls,
         module: Lib.Control,
         summary: gettext("Places your own HEEx content in a corner of the map as a control."),
-        status: :stable
+        status: :limited,
+        issues: [reactive_custom_control]
       },
       %Component{
         name: :control_button,
@@ -337,14 +349,23 @@ defmodule MaplibrexDemoWeb.Catalogue do
         family: :controls,
         module: Lib.ControlGroup,
         summary: gettext("Groups several controls into one map control."),
-        status: :stable
+        status: :limited,
+        issues: [reactive_custom_control]
       },
       %Component{
         name: :zoom_range,
         family: :controls,
         module: Lib.ZoomRange,
         summary: gettext("Shows its content only between a minimum and a maximum zoom level."),
-        status: :stable
+        status: :limited,
+        issues: [
+          issue(
+            3,
+            gettext(
+              "After `min` or `max` changes, zooming still uses the range it was mounted with."
+            )
+          )
+        ]
       },
 
       # 3D
@@ -394,7 +415,16 @@ defmodule MaplibrexDemoWeb.Catalogue do
         module: Lib.CustomLayer,
         summary:
           gettext("A custom WebGL layer drawn with your own GLSL shaders or a built-in preset."),
-        status: :stable
+        status: :limited,
+        issues: [
+          issue(
+            34,
+            gettext(
+              "Changes to `uniforms` and its other attributes after mount never reach the browser."
+            )
+          ),
+          issue(27, gettext("After a change of map style it is drawn under the basemap."))
+        ]
       }
     ]
   end
@@ -599,21 +629,30 @@ defmodule MaplibrexDemoWeb.Catalogue do
   end
 
   @doc """
-  What the library's next release is working on, each item with the issues
-  it closes. Source: the open issues and the 0.2.0 lifecycle work recorded in
-  PRODUCT.md. No dates: the library has not announced one.
+  The library's next release and what it fixes, each item with the issues
+  it closes (#3 only for layers, sources and terrain).
+
+  `state` is `:merged` while the release is on the library's `main` branch
+  but not yet published on Hex; the demo follows `main`, so the statuses
+  above already reflect it. Source: the library's 0.2.0 changelog and its
+  closed issues. No dates: the library has not announced one.
   """
   @spec next_release() :: %{
           version: String.t(),
+          state: :merged,
           items: [%{issues: [pos_integer()], text: String.t()}]
         }
   def next_release do
     %{
       version: "0.2.0",
+      state: :merged,
       items: [
         %{
           issues: [3],
-          text: gettext("Layers and sources apply changes to their assigns after mount.")
+          text:
+            gettext(
+              "Layers, sources and terrain apply changes to their assigns after mount. Controls do not yet."
+            )
         },
         %{
           issues: [4, 16],
@@ -623,7 +662,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
           issues: [5, 12, 17],
           text:
             gettext(
-              "A component appears whatever its place in the template and whenever it mounts."
+              "A layer, source or terrain appears whatever its place in the template and whenever it mounts."
             )
         },
         %{

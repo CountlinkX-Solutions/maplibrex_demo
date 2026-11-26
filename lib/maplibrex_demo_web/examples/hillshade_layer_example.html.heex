@@ -19,11 +19,10 @@
     url="https://tiles.mapterhorn.com/tilejson.json"
   />
 
-  <%!-- MaplibreX 0.1 reads a layer's paint when it mounts (#3). The look is
-        part of the id, so a new look mounts a new layer in its place. --%>
+  <%!-- A new look is a new paint: the layer repaints in place. --%>
   <.hillshade_layer
     :if={@visible}
-    id={"example-hillshade-#{@look}"}
+    id="example-hillshade-layer"
     map_id="example-hillshade-map"
     source_id="example-hillshade-dem"
     paint={paint(@look)}
@@ -51,5 +50,5 @@
   </div>
 
   <%!-- layer:added and layer:removed keep on_map current. --%>
-  <.example_readout values={[look: @look, visible: @visible, on_map: @on_map || "—"]} />
+  <.example_readout values={[look: @look, visible: @visible, on_map: @on_map]} />
 </div>

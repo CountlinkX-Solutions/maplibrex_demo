@@ -94,8 +94,8 @@ defmodule MaplibrexDemoWeb.Examples.MarkerExample do
   def handle_event("marker:" <> _event, _payload, socket), do: {:noreply, socket}
   def handle_event("map:" <> _event, _payload, socket), do: {:noreply, socket}
 
-  # A popup is created with the marker, so a blank text keeps the last one
-  # rather than removing it.
+  # A marker's popup cannot be removed after mount (#36), so a blank text
+  # keeps the last one.
   defp assign_popup_text(socket, ""), do: socket
   defp assign_popup_text(socket, text), do: assign(socket, :popup_text, text)
 
