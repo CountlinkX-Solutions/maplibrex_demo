@@ -47,7 +47,7 @@ msgid "close"
 msgstr "cerrar"
 
 #: lib/maplibrex_demo_web/live/components_live.ex:52
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:67
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:63
 #, elixir-autogen, elixir-format
 msgid "1 component"
 msgid_plural "%{count} components"
@@ -144,7 +144,7 @@ msgstr "Añade teselas vectoriales, desde una URL TileJSON o una plantilla de te
 msgid "All families"
 msgstr "Todas las familias"
 
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:147
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:150
 #, elixir-autogen, elixir-format
 msgid "All open issues of the library"
 msgstr "Todas las incidencias abiertas de la librería"
@@ -175,7 +175,7 @@ msgstr "Ver los componentes"
 msgid "Buenos Aires"
 msgstr "Buenos Aires"
 
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:161
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:198
 #, elixir-autogen, elixir-format
 msgid "Cannot be used yet; its issue tracks the fix."
 msgstr "Aún no se puede usar; su incidencia sigue la corrección."
@@ -205,7 +205,7 @@ msgstr "Secciones del componente"
 msgid "Components by family"
 msgstr "Componentes por familia"
 
-#: lib/maplibrex_demo_web/catalogue.ex:722
+#: lib/maplibrex_demo_web/catalogue.ex:725
 #, elixir-autogen, elixir-format
 msgid "Components placed inside `<.map>` update like the ones placed next to it."
 msgstr "Los componentes colocados dentro de `<.map>` se actualizan como los colocados a su lado."
@@ -340,7 +340,7 @@ msgstr "Incidencia %{number} de la librería (abre GitHub)"
 msgid "Limited"
 msgstr "Limitado"
 
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:76
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:72
 #, elixir-autogen, elixir-format
 msgid "Limited and planned components"
 msgstr "Componentes limitados y planificados"
@@ -506,7 +506,7 @@ msgstr "Reconectando. La página no puede actualizarse hasta que vuelva la conex
 msgid "Register the hooks"
 msgstr "Registra los hooks"
 
-#: lib/maplibrex_demo_web/catalogue.ex:726
+#: lib/maplibrex_demo_web/catalogue.ex:729
 #, elixir-autogen, elixir-format
 msgid "Removing a source together with its layers leaves nothing on the map."
 msgstr "Quitar una fuente junto con sus capas no deja nada en el mapa."
@@ -534,8 +534,8 @@ msgstr "Requiere Elixir 1.15 o posterior y Phoenix LiveView 1.0 o posterior."
 #: lib/maplibrex_demo_web/components/layouts.ex:108
 #: lib/maplibrex_demo_web/components/layouts.ex:207
 #: lib/maplibrex_demo_web/live/overview_live.ex:302
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:15
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:44
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:17
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:46
 #, elixir-autogen, elixir-format
 msgid "Roadmap"
 msgstr "Hoja de ruta"
@@ -648,7 +648,7 @@ msgstr "Slots"
 msgid "Sources"
 msgstr "Fuentes"
 
-#: lib/maplibrex_demo_web/catalogue.ex:710
+#: lib/maplibrex_demo_web/catalogue.ex:713
 #, elixir-autogen, elixir-format
 msgid "Sources, layers and terrain survive a change of map style."
 msgstr "Las fuentes, capas y el terreno sobreviven a un cambio de estilo del mapa."
@@ -658,7 +658,7 @@ msgstr "Las fuentes, capas y el terreno sobreviven a un cambio de estilo del map
 msgid "Stable"
 msgstr "Estable"
 
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:55
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:51
 #, elixir-autogen, elixir-format
 msgid "Statuses"
 msgstr "Estados"
@@ -818,12 +818,12 @@ msgstr "Por qué está planificado"
 msgid "With `enabled={true}` at mount it fails before the style has loaded, and removing it leaves terrain on."
 msgstr "Con `enabled={true}` al montarse falla antes de que cargue el estilo, y al quitarlo deja el terreno activado."
 
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:156
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:193
 #, elixir-autogen, elixir-format
 msgid "Works as documented."
 msgstr "Funciona como está documentado."
 
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:159
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:196
 #, elixir-autogen, elixir-format
 msgid "Works, but an open issue documents a part of its behaviour that does not."
 msgstr "Funciona, pero una incidencia abierta documenta una parte de su comportamiento que no."
@@ -838,7 +838,7 @@ msgstr "Botones de zoom y una brújula."
 msgid "`before_id` is accepted but has no effect."
 msgstr "`before_id` se acepta pero no tiene efecto."
 
-#: lib/maplibrex_demo_web/catalogue.ex:730
+#: lib/maplibrex_demo_web/catalogue.ex:733
 #, elixir-autogen, elixir-format
 msgid "`layer:source_loaded` is sent once the layer's source has loaded."
 msgstr "`layer:source_loaded` se envía cuando la fuente de la capa ha cargado."
@@ -1028,7 +1028,7 @@ msgstr "deck.gl se carga la primera vez que se monta una capa. Necesita maplibre
 msgid "deck.gl needs maplibre-gl 5, which this demo pins; MaplibreX does not support it on maplibre-gl 6 yet."
 msgstr "deck.gl necesita maplibre-gl 5, la versión que fija esta demo; MaplibreX aún no lo admite con maplibre-gl 6."
 
-#: lib/maplibrex_demo_web/catalogue.ex:715
+#: lib/maplibrex_demo_web/catalogue.ex:718
 #, elixir-autogen, elixir-format
 msgid "A layer, source or terrain appears whatever its place in the template and whenever it mounts."
 msgstr "Una capa, una fuente o el terreno aparecen sea cual sea su lugar en la plantilla y cuando sea que se monten."
@@ -1063,7 +1063,7 @@ msgstr "Los cambios en `position` o `class` después del montaje no se aplican."
 msgid "Changes to `uniforms` and its other attributes after mount never reach the browser."
 msgstr "Los cambios en `uniforms` y en sus demás atributos después del montaje nunca llegan al navegador."
 
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:114
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:110
 #, elixir-autogen, elixir-format
 msgid "Fixed in %{version}"
 msgstr "Corregido en %{version}"
@@ -1073,12 +1073,12 @@ msgstr "Corregido en %{version}"
 msgid "Its popup opens on top of the marker instead of above it."
 msgstr "Su popup se abre encima del marcador, tapándolo, en lugar de sobre él."
 
-#: lib/maplibrex_demo_web/catalogue.ex:704
+#: lib/maplibrex_demo_web/catalogue.ex:707
 #, elixir-autogen, elixir-format
 msgid "Layers, sources and terrain apply changes to their assigns after mount. Controls do not yet."
 msgstr "Las capas, las fuentes y el terreno aplican los cambios de sus assigns después del montaje. Los controles todavía no."
 
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:121
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:118
 #, elixir-autogen, elixir-format
 msgid "MaplibreX %{version} reworks how layers, sources and terrain join and leave the map. It is merged on the library's main branch but not yet published on Hex, and no release date has been announced. This demo follows main, so the statuses above already include these fixes."
 msgstr "MaplibreX %{version} rehace cómo las capas, las fuentes y el terreno entran en el mapa y salen de él. Está integrada en la rama main de la librería pero aún no se ha publicado en Hex, y no se ha anunciado fecha de publicación. Esta demo sigue main, así que los estados de arriba ya incluyen estas correcciones."
@@ -1293,11 +1293,6 @@ msgstr "Puntos de interés del centro de París según OpenStreetMap, en las tes
 msgid "No openly licensed video could be found that is hosted to stay available and whose picture lines up with four points on a map."
 msgstr "No se ha encontrado ningún vídeo con licencia abierta, alojado de forma que siga disponible, cuya imagen encaje con cuatro puntos de un mapa."
 
-#: lib/maplibrex_demo_web/live/roadmap_live.ex:46
-#, elixir-autogen, elixir-format
-msgid "What does not fully work in MaplibreX %{version}, and what version %{next} fixes. Every status that is not stable links to the library issue that explains it."
-msgstr "Lo que no funciona del todo en MaplibreX %{version} y lo que corrige la versión %{next}. Cada estado que no es estable enlaza a la incidencia de la librería que lo explica."
-
 #: lib/maplibrex_demo_web/catalogue.ex:397
 #, elixir-autogen, elixir-format
 msgid "A `<.control_button>` placed inside it is added to the map as a separate control; plain buttons work."
@@ -1378,3 +1373,18 @@ msgstr "La demo usa la rama main de la librería; MaplibreX %{hex}, la última v
 #, elixir-autogen, elixir-format
 msgid "the roadmap"
 msgstr "la hoja de ruta"
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:123
+#, elixir-autogen, elixir-format
+msgid "MaplibreX %{version} reworks how layers, sources and terrain join and leave the map. It is published on Hex."
+msgstr "MaplibreX %{version} rehace cómo las capas, las fuentes y el terreno entran en el mapa y salen de él. Está publicada en Hex."
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:184
+#, elixir-autogen, elixir-format
+msgid "What does not fully work yet in MaplibreX %{version}, the latest release on Hex. The library's main branch, which this demo runs, has nothing unreleased beyond it. Every status that is not stable links to the library issue that explains it."
+msgstr "Lo que aún no funciona del todo en MaplibreX %{version}, la última versión publicada en Hex. La rama main de la librería, que es la que ejecuta esta demo, no tiene nada sin publicar más allá de ella. Cada estado que no es estable enlaza a la incidencia de la librería que lo explica."
+
+#: lib/maplibrex_demo_web/live/roadmap_live.ex:178
+#, elixir-autogen, elixir-format
+msgid "What does not fully work yet in MaplibreX %{version}, which this demo runs from the library's main branch. The latest release on Hex is %{hex}; the fixes it lacks are listed at the end. Every status that is not stable links to the library issue that explains it."
+msgstr "Lo que aún no funciona del todo en MaplibreX %{version}, que esta demo ejecuta desde la rama main de la librería. La última versión publicada en Hex es la %{hex}; las correcciones que le faltan aparecen al final. Cada estado que no es estable enlaza a la incidencia de la librería que lo explica."

@@ -284,6 +284,11 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       assert release.items |> Enum.flat_map(& &1.issues) |> Enum.sort() ==
                [3, 4, 5, 12, 15, 16, 17, 18, 20]
     end
+
+    test "reports the release as published once Hex has it" do
+      assert Catalogue.next_release("0.1.1").state == :merged
+      assert Catalogue.next_release("0.2.0").state == :published
+    end
   end
 
   describe "hex_release/0 and unreleased?/2" do
