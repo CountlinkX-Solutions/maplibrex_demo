@@ -220,12 +220,12 @@ msgstr "Conexión perdida"
 msgid "Controls"
 msgstr "Controles"
 
-#: lib/maplibrex_demo_web/components/catalogue_components.ex:290
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:340
 #, elixir-autogen, elixir-format
 msgid "Copied"
 msgstr "Copiado"
 
-#: lib/maplibrex_demo_web/components/catalogue_components.ex:289
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:339
 #, elixir-autogen, elixir-format
 msgid "Copy"
 msgstr "Copiar"
@@ -1388,3 +1388,13 @@ msgstr "Lo que aún no funciona del todo en MaplibreX %{version}, la última ver
 #, elixir-autogen, elixir-format
 msgid "What does not fully work yet in MaplibreX %{version}, which this demo runs from the library's main branch. The latest release on Hex is %{hex}; the fixes it lacks are listed at the end. Every status that is not stable links to the library issue that explains it."
 msgstr "Lo que aún no funciona del todo en MaplibreX %{version}, que esta demo ejecuta desde la rama main de la librería. La última versión publicada en Hex es la %{hex}; las correcciones que le faltan aparecen al final. Cada estado que no es estable enlaza a la incidencia de la librería que lo explica."
+
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:299
+#, elixir-autogen, elixir-format
+msgid "Show full source"
+msgstr "Ver el código completo"
+
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:301
+#, elixir-autogen, elixir-format
+msgid "Show less"
+msgstr "Ver menos"

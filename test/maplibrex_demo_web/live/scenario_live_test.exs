@@ -23,6 +23,15 @@ defmodule MaplibrexDemoWeb.ScenarioLiveTest do
     end
   end
 
+  test "caps its long sources behind a control", %{conn: conn} do
+    {:ok, view, _html} = live(conn, ~p"/scenarios/heatmap")
+
+    for file <- ["heatmap_scenario-html-heex", "heatmap_scenario-ex"] do
+      assert has_element?(view, "#scenario-source-#{file}[data-collapsible]")
+      assert has_element?(view, ~s(#scenario-source-#{file}-toggle[aria-expanded="false"]))
+    end
+  end
+
   test "shows the title, summary and the components it uses", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/scenarios/terrain_3d")
     {:ok, scenario} = Catalogue.fetch_scenario("terrain_3d")

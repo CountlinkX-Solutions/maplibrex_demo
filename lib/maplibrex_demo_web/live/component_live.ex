@@ -144,7 +144,7 @@ defmodule MaplibrexDemoWeb.ComponentLive do
             html={file.html}
             language={:heex}
             title={file.path}
-            max_height="max-h-[30rem]"
+            collapse
             class="mt-[18px]"
           />
         <% else %>

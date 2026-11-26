@@ -226,12 +226,12 @@ msgstr ""
 msgid "Controls"
 msgstr ""
 
-#: lib/maplibrex_demo_web/components/catalogue_components.ex:290
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:340
 #, elixir-autogen, elixir-format
 msgid "Copied"
 msgstr ""
 
-#: lib/maplibrex_demo_web/components/catalogue_components.ex:289
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:339
 #, elixir-autogen, elixir-format
 msgid "Copy"
 msgstr ""
@@ -1393,4 +1393,14 @@ msgstr ""
 #: lib/maplibrex_demo_web/live/roadmap_live.ex:178
 #, elixir-autogen, elixir-format
 msgid "What does not fully work yet in MaplibreX %{version}, which this demo runs from the library's main branch. The latest release on Hex is %{hex}; the fixes it lacks are listed at the end. Every status that is not stable links to the library issue that explains it."
+msgstr ""
+
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:299
+#, elixir-autogen, elixir-format
+msgid "Show full source"
+msgstr ""
+
+#: lib/maplibrex_demo_web/components/catalogue_components.ex:301
+#, elixir-autogen, elixir-format
+msgid "Show less"
 msgstr ""
