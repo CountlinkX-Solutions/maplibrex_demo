@@ -192,6 +192,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :heatmap_layer,
         family: :layers,
         module: Lib.HeatmapLayer,
+        example: MaplibrexDemoWeb.Examples.HeatmapLayerExample,
         summary: gettext("Shows the density of points from a source as a heatmap."),
         status: :stable
       },
@@ -199,6 +200,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :fill_extrusion_layer,
         family: :layers,
         module: Lib.FillExtrusionLayer,
+        example: MaplibrexDemoWeb.Examples.FillExtrusionLayerExample,
         summary: gettext("Extrudes polygons from a source into 3D shapes, such as buildings."),
         status: :stable
       },
@@ -206,6 +208,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :background_layer,
         family: :layers,
         module: Lib.BackgroundLayer,
+        example: MaplibrexDemoWeb.Examples.BackgroundLayerExample,
         summary: gettext("Paints the map background with a colour or a pattern."),
         status: :stable
       },
@@ -221,6 +224,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :raster_layer,
         family: :layers,
         module: Lib.RasterLayer,
+        example: MaplibrexDemoWeb.Examples.RasterLayerExample,
         summary: gettext("Shows raster tiles, an image or a video from a source."),
         status: :stable
       },

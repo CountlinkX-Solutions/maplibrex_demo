@@ -1,0 +1,61 @@
+<div id="fill-extrusion-layer-example">
+  <.example_frame error={@map_error} error_id="example-extrusion-map-error">
+    <.map
+      id="example-extrusion-map"
+      center={[-73.9845, 40.7565]}
+      zoom={15}
+      pitch={55}
+      bearing={-25}
+      style="https://tiles.openfreemap.org/styles/positron"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- OpenFreeMap's TileJSON: OpenStreetMap in the OpenMapTiles schema. --%>
+  <.vector_tile_source
+    id="example-extrusion-osm"
+    map_id="example-extrusion-map"
+    url="https://tiles.openfreemap.org/planet"
+  />
+
+  <.fill_extrusion_layer
+    id="example-extrusion-buildings"
+    map_id="example-extrusion-map"
+    source_id="example-extrusion-osm"
+    source_layer="building"
+    paint={paint(@color, @scale)}
+  />
+
+  <div class="space-y-3 border-t border-line px-4 py-4">
+    <.example_group id="example-extrusion-assigns" label={gettext("Set assigns")}>
+      <.example_button
+        :for={{name, hex} <- colors()}
+        id={"example-extrusion-color-#{name}"}
+        code
+        pressed={@color == hex}
+        phx-click="color"
+        phx-value-color={hex}
+      >
+        <.example_swatch color={hex} />{hex}
+      </.example_button>
+
+      <.form
+        for={@options}
+        id="example-extrusion-options"
+        phx-change="options"
+        class="w-full pt-2 sm:max-w-xs"
+      >
+        <.example_range field={@options[:scale]} label="scale" min="0" max="3" step="0.1" />
+      </.form>
+    </.example_group>
+
+    <.example_note id="example-extrusion-data" icon="hero-cursor-arrow-rays-micro">
+      {gettext(
+        "Buildings in Midtown Manhattan from OpenStreetMap, in OpenFreeMap's tiles, at the height recorded for each, times the scale. Click one."
+      )}
+    </.example_note>
+  </div>
+
+  <%!-- layer:feature_clicked sets selected. --%>
+  <.example_readout values={[color: @color, scale: @scale, selected: @selected || "—"]} />
+</div>

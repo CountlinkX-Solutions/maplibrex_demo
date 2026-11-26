@@ -153,7 +153,11 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
         circle_layer: MaplibrexDemoWeb.Examples.CircleLayerExample,
         line_layer: MaplibrexDemoWeb.Examples.LineLayerExample,
         fill_layer: MaplibrexDemoWeb.Examples.FillLayerExample,
-        symbol_layer: MaplibrexDemoWeb.Examples.SymbolLayerExample
+        symbol_layer: MaplibrexDemoWeb.Examples.SymbolLayerExample,
+        heatmap_layer: MaplibrexDemoWeb.Examples.HeatmapLayerExample,
+        fill_extrusion_layer: MaplibrexDemoWeb.Examples.FillExtrusionLayerExample,
+        background_layer: MaplibrexDemoWeb.Examples.BackgroundLayerExample,
+        raster_layer: MaplibrexDemoWeb.Examples.RasterLayerExample
       }
 
       for {name, example} <- examples do
