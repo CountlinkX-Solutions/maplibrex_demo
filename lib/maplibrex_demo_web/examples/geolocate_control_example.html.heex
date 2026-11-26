@@ -1,0 +1,65 @@
+<div id="geolocate-control-example">
+  <.example_frame error={@map_error} error_id="example-geolocate-map-error">
+    <.map
+      id="example-geolocate-map"
+      center={[0, 25]}
+      zoom={1.2}
+      style="https://tiles.openfreemap.org/styles/liberty"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- With track_user_location the button keeps the map on the position as
+        it changes; pressing it again stops tracking. --%>
+  <.geolocate_control
+    id="example-geolocate"
+    map_id="example-geolocate-map"
+    track_user_location={true}
+    fit_bounds_options={%{"maxZoom" => 14}}
+  />
+
+  <div class="border-t border-line px-4 py-4">
+    <.example_note
+      :if={@status == "waiting"}
+      id="example-geolocate-hint"
+      icon="hero-cursor-arrow-rays-micro"
+    >
+      {gettext(
+        "Press the location button in the map's top-right corner. The browser asks for permission first; the position it shares arrives in this LiveView as an event."
+      )}
+    </.example_note>
+
+    <%!-- geolocate:location_error: the browser did not share a position. --%>
+    <div
+      :if={@error}
+      id="example-geolocate-error"
+      role="status"
+      class="flex items-start gap-2.5 rounded-ui border border-danger/40 bg-danger-soft px-3 py-2.5 text-ui"
+    >
+      <.icon name="hero-map-pin-mini" class="mt-px size-5 shrink-0 text-danger" />
+      <p>
+        <span class="font-bold">{gettext("Your location is not available.")}</span>
+        {explain(@error)}
+        <span class="mt-0.5 block font-mono text-label text-ink-muted">
+          {@error.code}: {@error.message}
+        </span>
+      </p>
+    </div>
+
+    <.example_note
+      :if={@status == "found"}
+      id="example-geolocate-found"
+      icon="hero-check-circle-micro"
+    >
+      {gettext("The browser shared its position. Press the button again to stop tracking it.")}
+    </.example_note>
+  </div>
+
+  <%!-- The control's events keep these current. --%>
+  <.example_readout values={[
+    status: @status,
+    tracking: @tracking,
+    location: location(@location),
+    accuracy: accuracy(@accuracy)
+  ]} />
+</div>

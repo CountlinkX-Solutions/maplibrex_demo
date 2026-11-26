@@ -140,7 +140,9 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
 
     test "the components whose examples came with the 0.2.0 statuses have them" do
       examples = %{
-        popup: MaplibrexDemoWeb.Examples.PopupExample
+        popup: MaplibrexDemoWeb.Examples.PopupExample,
+        attribution_control: MaplibrexDemoWeb.Examples.AttributionControlExample,
+        geolocate_control: MaplibrexDemoWeb.Examples.GeolocateControlExample
       }
 
       for {name, example} <- examples do
