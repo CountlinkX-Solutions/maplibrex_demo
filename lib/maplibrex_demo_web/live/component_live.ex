@@ -121,7 +121,7 @@ defmodule MaplibrexDemoWeb.ComponentLive do
           {tab_label(tab)}
           <span
             :if={count = tab_count(tab, assigns)}
-            class="hidden rounded-[4px] bg-surface px-1.5 text-label text-ink-subtle tabular-nums sm:inline"
+            class="hidden rounded-inline bg-surface px-1.5 text-label text-ink-subtle tabular-nums sm:inline"
           >
             {count}
           </span>
@@ -145,7 +145,7 @@ defmodule MaplibrexDemoWeb.ComponentLive do
             language={:heex}
             title={file.path}
             collapse
-            class="mt-[18px]"
+            class="mt-4"
           />
         <% else %>
           <.example_coming component={@component} />
@@ -353,7 +353,7 @@ defmodule MaplibrexDemoWeb.ComponentLive do
         </p>
         <div class="mt-5 overflow-x-auto rounded-panel border border-line">
           <table id="attributes-table" class="w-full min-w-[42rem] text-left text-ui">
-            <thead class="bg-surface text-label font-bold tracking-[0.06em] text-ink-subtle uppercase">
+            <thead class="bg-surface text-label font-bold tracking-caps text-ink-subtle uppercase">
               <tr>
                 <th scope="col" class="px-4 py-2.5">{gettext("Attribute")}</th>
                 <th scope="col" class="px-4 py-2.5">{gettext("Type")}</th>
@@ -368,7 +368,7 @@ defmodule MaplibrexDemoWeb.ComponentLive do
                   <span
                     :if={attr.required}
                     data-required
-                    class="ml-1.5 rounded-[4px] bg-accent-soft px-1.5 py-px text-label font-bold text-accent-ink"
+                    class="ml-1.5 rounded-inline bg-accent-soft px-1.5 py-px text-label font-bold text-accent-ink"
                   >
                     {gettext("required")}
                   </span>

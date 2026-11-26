@@ -81,7 +81,7 @@ defmodule MaplibrexDemoWeb.RoadmapLive do
         >
           <h3
             id={"roadmap-family-#{family.id}-heading"}
-            class="text-label font-bold tracking-[0.1em] text-ink-subtle uppercase"
+            class="text-label font-bold tracking-caps text-ink-subtle uppercase"
           >
             {family.label}
           </h3>

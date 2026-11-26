@@ -366,7 +366,7 @@ defmodule MaplibrexDemoWeb.OverviewLive do
                as mark and number, under each family's name. --%>
           <div class="mt-5 overflow-x-auto rounded-panel border border-line">
             <table id="family-table" class="w-full text-left text-ui tabular-nums">
-              <thead class="bg-surface text-label font-bold tracking-[0.06em] text-ink-subtle uppercase">
+              <thead class="bg-surface text-label font-bold tracking-caps text-ink-subtle uppercase">
                 <tr>
                   <th scope="col" class="px-4 py-2.5">{gettext("Family")}</th>
                   <th scope="col" class="px-4 py-2.5 text-right">{gettext("Components")}</th>

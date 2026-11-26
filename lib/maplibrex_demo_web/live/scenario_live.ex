@@ -93,7 +93,7 @@ defmodule MaplibrexDemoWeb.ScenarioLive do
           language={file.language}
           title={file.path}
           collapse
-          class="mt-[18px]"
+          class="mt-4"
         />
       </section>
 

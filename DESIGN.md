@@ -20,6 +20,7 @@ colors:
   code-ink: "#e9e9f2"
   code-muted: "#a3a6bd"
   code-line: "#343a4d"
+  code-hover: "#313541"
   stable: "#17723a"
   stable-soft: "#e7f6ec"
   limited: "#8a5300"
@@ -146,7 +147,8 @@ components:
     textColor: "{colors.ink}"
     typography: "{typography.nav}"
     rounded: "{rounded.ui}"
-    padding: "7px 10px"
+    padding: "6px 12px"
+    height: "36px"
   tree-item-hover:
     backgroundColor: "{colors.surface-hover}"
   tree-item-current:
@@ -190,7 +192,7 @@ components:
   chip:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
-    typography: "{typography.mono-label}"
+    typography: "{typography.label}"
     rounded: "{rounded.inline}"
     padding: "2px 6px"
   panel:
@@ -232,7 +234,7 @@ A neutral, slightly cool palette of greys and blue-cast ink, with one saturated 
 - **On Purple** (on-accent): text and icons on the purple fill, white in both themes.
 
 ### Secondary
-- **Night Code** (code): the ground of every code block, in both themes (dark: `#0b0d12`). With **Code Ink** (code-ink) for source text, **Code Mist** (code-muted) for the file caption and the copy and expand buttons, and **Code Rule** (code-line) for the block's border and inner dividers.
+- **Night Code** (code): the ground of every code block, in both themes (dark: `#0b0d12`). With **Code Ink** (code-ink) for source text, **Code Mist** (code-muted) for the file caption and the copy and expand buttons, **Code Rule** (code-line) for the block's border and inner dividers, and **Code Hover** (code-hover) for the hover fill of the copy button and the full-source toggle (dark: `#1f2025`).
 - **Syntax set** (syntax-comment, syntax-string, syntax-atom, syntax-attribute, syntax-module, syntax-number, syntax-keyword, syntax-punct): pastel token colours tuned for the code ground of either theme; they never appear outside a code block.
 
 ### Tertiary
@@ -269,13 +271,13 @@ A neutral, slightly cool palette of greys and blue-cast ink, with one saturated 
 
 ### Hierarchy
 - **Display** (900, 2.25rem, 1.1, tracking -0.025em): the single page title: the library name on the overview, a component's name, Components, Scenarios, Roadmap, error pages.
-- **Headline** (900, 1.375rem, 1.3): section headings within a page (Install, Components by family, a family on the components index, a scenario's name). The top-bar wordmark uses the same size and weight in accent ink.
+- **Headline** (900, 1.375rem, 1.3): section headings within a page (Install, Components by family, a family on the components index, a scenario's name). The wordmark in the top bar, the navigation drawer and the error pages uses the same size and weight in accent ink.
 - **Lead** (400, 1.0625rem, 1.6): the one-sentence summary under the page title, in muted ink, within the 34rem measure.
 - **Body** (400, 1rem, 1.625): prose paragraphs, held to the 34rem measure. Sub-headings (h3) use this size at 700.
 - **Nav** (400, 0.9375rem, 1.375rem line): sidebar tree items and top-bar section links; 700 when current.
 - **UI** (400, 0.875rem, 1.25rem line): controls, tabs (700), table cells, notices, list descriptions.
 - **Label** (700, 0.75rem, 1rem line): status badges, captions, button labels in small controls, "Previous" and "Next".
-- **Label Caps** (700, 0.75rem, 0.1em tracking, uppercase): family group labels in the sidebar and on the roadmap, and the "On this page" rail title. Table headers use the same role at 0.06em.
+- **Label Caps** (700, 0.75rem, 0.1em tracking, uppercase): family group labels in the sidebar and on the roadmap, table headers, and the "On this page" rail title; the tracking is the `caps` token.
 - **Source** (JetBrains Mono 400, 0.875rem, 1.65): code blocks.
 - **Mono Label** (JetBrains Mono, 0.75rem): file captions, assign names and values, attribute and event names, the version badge, issue numbers, labels of controls named after an assign.
 
@@ -292,7 +294,7 @@ A three-column documentation shell on wide screens. A sticky 60 px top bar spans
 
 The main column has 16 px side padding on phones, 32 px from 640 px and 48 px from 1024 px, with about 32 px above and 96 px below. Content is capped at 66rem (1056 px); prose, leads and notes are capped at the 34rem (544 px) measure. From 1280 px, pages with sections add a 208 px "On this page" rail beside the content, separated by a 48 px gap, sticky under the top bar.
 
-The component page is the signature composition: title and status badge, lead, an optional "why" panel, the tab row (Preview, HEEx, Events, Attributes), the 360 px map preview framed directly under the tabs, the example's controls and assign readout, then the template's code block about 18 px below. Scenarios use a 512 px preview from 640 px. Sections within a page are separated by 48 to 56 px; headings reached through a link stop 1.5rem below the top bar.
+The component page is the signature composition: title and status badge, lead, an optional "why" panel, the tab row (Preview, HEEx, Events, Attributes), the 360 px map preview framed directly under the tabs, the example's controls and assign readout, then the template's code block 16 px below. Scenarios use a 512 px preview from 640 px. Sections within a page are separated by 48 to 56 px; headings reached through a link stop 1.5rem below the top bar.
 
 Spacing otherwise follows Tailwind's 4 px rhythm: 6 px gaps inside control rows, 12 to 16 px inside panels, 20 px between a heading and its content.
 
@@ -311,7 +313,7 @@ The system is flat. Depth is conveyed by one-pixel hairlines and by the tonal st
 
 ## Shapes
 
-Corners are small and consistent. Controls (buttons, inputs, tree items, badges, switches) use a gently rounded 6 px corner; containers (code blocks, panels, tables, the pager, the preview's bottom edge) use 8 px. Inline elements nested in text or inside controls (inline code, chips, count pills, the key hint) use a tight 4 px corner. Full rounding is kept for small circles: install step numbers, colour swatches and the heatmap legend. The preview frame is square-topped where it meets the tab row and rounded at its bottom corners, so tabs, map, controls and readout read as one object.
+Corners are small and consistent. Controls (buttons, inputs, tree items, badges, switches) use a gently rounded 6 px corner; containers (code blocks, panels, tables, the pager, the preview's bottom edge) use 8 px. Inline elements nested in text or inside controls (inline code, chips, count pills, the key hint, the version badge, the segments of a switch, a changed assign's highlight) use a tight 4 px corner, the `inline` radius. Full rounding is kept for small circles: install step numbers, colour swatches and the heatmap legend. The preview frame is square-topped where it meets the tab row and rounded at its bottom corners, so tabs, map, controls and readout read as one object.
 
 Borders are always one pixel. The current tab and the current top-bar section carry a 2 px underline in accent ink; the current rail entry carries a one-pixel left rule in accent ink.
 
@@ -327,7 +329,7 @@ Restrained and compact; the purple fill is spent on one action per view.
 - **Icon buttons:** 36 px square (28 px in small groups), subtle ink, filling with surface on hover.
 
 ### Chips
-- **Style:** component-name chips on the grey surface with a 4 px corner, mono label size, ink text; hover fills with surface-hover and turns the text accent ink.
+- **Style:** component-name chips on the grey surface with a 4 px corner, Label type (Lato 700, as component names are everywhere else), ink text; hover fills with surface-hover and turns the text accent ink.
 - **Sample-data badge:** a strong-hairline outline badge with a beaker mark and the words "Sample data", in muted ink.
 
 ### Status Badges
@@ -349,10 +351,10 @@ Restrained and compact; the purple fill is spent on one action per view.
 
 ### Navigation
 - **Top bar:** section links at nav size in muted ink; the current section is accent ink at 700 with a 2 px accent underline sitting on the bar's bottom hairline.
-- **Sidebar tree:** family labels in Label Caps; items at nav size in ink with 7 px by 10 px padding and a 6 px corner; hover fills with surface-hover; the current item is filled purple with white bold text.
+- **Sidebar tree:** family labels in Label Caps; items at nav size in ink, at least 36 px tall with 12 px side padding (their text lines up with the top bar's wordmark) and a 6 px corner; hover fills with surface-hover; the current item is filled purple with white bold text.
 - **Tabs:** UI size at 700 in subtle ink with a 2 px underline that is transparent at rest and accent ink when current; Events and Attributes show their count in a small surface pill.
 - **"On this page" rail:** UI-size links in muted ink on a hairline left rule; the section being read turns accent ink and bold with an accent rule.
-- **Segmented switches** (language, theme): a surface-filled group with a hairline border and 2 px padding; the chosen segment sits on the ground in ink.
+- **Segmented switches** (language, theme): a surface-filled group with a hairline border and 2 px padding; the chosen segment sits on the ground in ink, ringed by a hairline, with a 4 px corner.
 - **Mobile:** the sidebar becomes a drawer sliding in from the left (240 ms, ease-out-expo) over an ink backdrop.
 
 ### Code Block (signature)

@@ -204,7 +204,7 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
         <dd id={"assign-#{name}"} class="truncate font-mono text-label text-ink tabular-nums">
           <span
             id={"assign-#{name}-#{:erlang.phash2(value)}"}
-            class="-mx-1 rounded-[3px] px-1 motion-safe:animate-[assign-changed_1.4s_var(--ease-out-expo)]"
+            class="-mx-1 rounded-inline px-1 motion-safe:animate-[assign-changed_1.4s_var(--ease-out-expo)]"
           >
             {value}
           </span>
