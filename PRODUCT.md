@@ -24,13 +24,13 @@ The map is declared in HEEx and driven from the server: assigns change the map, 
 
 - Runs locally only: `mix setup` and `mix phx.server` (dev port 4003). There is no public deployment and none is planned.
 - Resolves the library from GitHub by default, or from a local checkout with `MAPLIBREX_PATH=../maplibrex`.
-- Basemaps and data come from public services (MapLibre demo tiles, OpenFreeMap, CARTO, Mapterhorn DEM). The `/tiles` and `/ogc` pages additionally need a tile server at `TILE_SERVER_URL` (default `http://localhost:4000`) and degrade with a visible notice without it.
+- Basemaps and data come from public services (OpenFreeMap, MapLibre demo tiles, Mapterhorn DEM, NASA GIBS imagery, sample images from the MapLibre GL JS documentation). No tile server of its own is needed; the old `/tiles` and `/ogc` pages are gone and their URLs redirect to the catalogue.
 - Interface copy is bilingual, English and Spanish, through Gettext.
 
 ## Capabilities and Constraints
 
 - Phoenix 1.8, LiveView 1.2, Tailwind CSS 4. Repository rules for building pages are in `AGENTS.md`.
-- MaplibreX 0.1.1 ships 32 components in these families: map; markers and popups; layers (GeoJSON plus nine typed layers); sources (vector, raster, raster DEM, image, video); controls (navigation, scale, attribution, fullscreen, geolocate, terrain control, and custom-control building blocks); 3D (terrain, sky); advanced (deck.gl layers, custom WebGL layers). As of 2026-11-25 the demo uses 11 of them.
+- MaplibreX 0.1.1 ships 32 components in these families: map; markers and popups; layers (GeoJSON plus nine typed layers); sources (vector, raster, raster DEM, image, video); controls (navigation, scale, attribution, fullscreen, geolocate, terrain control, and custom-control building blocks); 3D (terrain, sky); advanced (deck.gl layers, custom WebGL layers). As of 2026-11-26 the demo uses 29 of them, 27 with an interactive example of their own; `deckgl_layer` and `custom_layer` appear in scenarios.
 - Features that do not work yet, or are planned, appear in the demo's index with a status (stable, limited, planned) linked to the library issue; only working features get an interactive page. (Owner decision, 2026-11-25.)
 - Known limits in the library at the time of writing: `sky` cannot render (library issue #14); `terrain_control` has lifecycle faults (#19); deck.gl requires maplibre-gl 5 (#11); the 0.2.0 lifecycle work (style changes, component order, reactive assigns) is in progress.
 - The demo follows the library's `main` branch. Source examples use public services that work after a clone; `/ogc` is removed as a page and the separate tile server becomes optional. Structure: a catalogue organised by library family, plus a section of full scenarios that combine components. (Owner decisions, 2026-11-25.)
@@ -44,7 +44,7 @@ The map is declared in HEEx and driven from the server: assigns change the map, 
 
 ## Evidence on Hand
 
-- Nine working demo pages: `/map`, `/tiles`, `/ogc`, `/deckgl`, `/terrain`, `/heatmap`, `/buildings`, `/markers`, `/particles`.
+- A catalogue of the 32 components at `/components`, 27 of them with an interactive example, and five scenarios at `/scenarios` (3D terrain, heatmap, buildings, particles, deck.gl). The nine old pages are gone; their URLs redirect to the catalogue and the scenarios.
 - Sample data on `/heatmap`, `/buildings` and `/deckgl` is generated, not real; it must be labelled as sample data and never described as real measurements.
 - There are no testimonials, usage numbers, benchmarks or customer names; none may be invented.
 
