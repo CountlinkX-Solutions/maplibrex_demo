@@ -90,7 +90,8 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
         scale_control: MaplibrexDemoWeb.Examples.ScaleControlExample,
         fullscreen_control: MaplibrexDemoWeb.Examples.FullscreenControlExample,
         raster_dem_source: MaplibrexDemoWeb.Examples.RasterDemSourceExample,
-        hillshade_layer: MaplibrexDemoWeb.Examples.HillshadeLayerExample
+        hillshade_layer: MaplibrexDemoWeb.Examples.HillshadeLayerExample,
+        terrain: MaplibrexDemoWeb.Examples.TerrainExample
       }
 
       for {name, example} <- examples do

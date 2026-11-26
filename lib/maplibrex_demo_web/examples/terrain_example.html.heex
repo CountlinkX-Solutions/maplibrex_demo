@@ -1,0 +1,62 @@
+<div id="terrain-example">
+  <.example_frame
+    error={@map_error}
+    error_id="example-terrain-map-error"
+    hosts={["tiles.openfreemap.org", "tiles.mapterhorn.com"]}
+  >
+    <%!-- max_pitch lets the camera tilt past MapLibre's default of 60. --%>
+    <.map
+      id="example-terrain-map"
+      center={[11.3909, 47.2757]}
+      zoom={12}
+      pitch={@pitch}
+      bearing={-20}
+      max_pitch={85}
+      style="https://tiles.openfreemap.org/styles/liberty"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <.raster_dem_source
+    id="example-terrain-dem"
+    map_id="example-terrain-map"
+    url="https://tiles.mapterhorn.com/tilejson.json"
+  />
+
+  <.terrain
+    :if={@enabled}
+    map_id="example-terrain-map"
+    source_id="example-terrain-dem"
+    exaggeration={@exaggeration}
+  />
+
+  <div class="border-t border-line px-4 py-4">
+    <%!-- Assigns: each control changes an assign; terrain and map follow. --%>
+    <.example_group id="example-terrain-assigns" label={gettext("Set assigns")}>
+      <.form
+        for={@options}
+        id="example-terrain-options"
+        phx-change="options"
+        class="grid w-full gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end"
+      >
+        <.example_range
+          field={@options[:exaggeration]}
+          label="exaggeration"
+          min="0.5"
+          max="3"
+          step="0.1"
+        />
+        <.example_range field={@options[:pitch]} label="pitch" min="0" max="85" />
+        <.example_checkbox field={@options[:enabled]} label=":if" />
+      </.form>
+    </.example_group>
+  </div>
+
+  <%!-- terrain:enabled and terrain:disabled keep status current. --%>
+  <.example_readout values={[
+    exaggeration: @exaggeration,
+    pitch: @pitch,
+    enabled: @enabled,
+    status: @status
+  ]} />
+</div>
