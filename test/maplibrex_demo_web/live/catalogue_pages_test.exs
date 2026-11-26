@@ -45,7 +45,7 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
         render_note(&OverviewLive.install_dependency/1, version: "0.3.0", hex: "0.3.0")
 
       code = text(step, "#install-dependency code")
-      assert code =~ ~s({:maplibrex, "~> 0.3"})
+      assert code =~ ~s({:maplibrex, "~> 0.3.0"})
       refute code =~ "github:"
 
       assert count(step, ~s(#install-hex-release[data-state="released"])) == 1
