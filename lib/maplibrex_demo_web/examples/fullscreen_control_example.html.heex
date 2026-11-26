@@ -1,0 +1,55 @@
+<div id="fullscreen-example" class="bg-canvas">
+  <.example_frame error={@map_error} error_id="example-fullscreen-map-error">
+    <.map
+      id="example-fullscreen-map"
+      center={[18.4232, -33.9188]}
+      zoom={12}
+      style="https://tiles.openfreemap.org/styles/liberty"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- MaplibreX 0.1 reads a control's options when it mounts (#3). They are
+        part of the id, so new options mount a new control in their place. --%>
+  <.fullscreen_control
+    id={"example-fullscreen-#{@position}-#{@container_id || "map"}"}
+    map_id="example-fullscreen-map"
+    position={@position}
+    container_id={@container_id}
+  />
+
+  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[auto_1fr]">
+    <.example_group id="example-fullscreen-positions" label="position">
+      <.example_button
+        :for={position <- positions()}
+        id={"example-fullscreen-position-#{position}"}
+        code
+        pressed={@position == position}
+        phx-click="position"
+        phx-value-position={position}
+      >
+        {position}
+      </.example_button>
+    </.example_group>
+
+    <.example_group id="example-fullscreen-containers" label="container_id">
+      <.example_button
+        :for={{name, id} <- containers()}
+        id={"example-fullscreen-container-#{name}"}
+        code
+        pressed={@container_id == id}
+        phx-click="container"
+        phx-value-container={name}
+      >
+        {inspect(id)}
+      </.example_button>
+    </.example_group>
+  </div>
+
+  <%!-- fullscreen:entered and fullscreen:exited keep fullscreen current. --%>
+  <.example_readout values={[
+    position: @position,
+    container_id: inspect(@container_id),
+    fullscreen: @fullscreen
+  ]} />
+</div>

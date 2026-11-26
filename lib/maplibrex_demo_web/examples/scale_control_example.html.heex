@@ -1,0 +1,69 @@
+<div id="scale-control-example">
+  <.example_frame error={@map_error} error_id="example-scale-map-error">
+    <.map
+      id="example-scale-map"
+      center={[-0.1276, 51.5072]}
+      zoom={@zoom}
+      style="https://tiles.openfreemap.org/styles/liberty"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- MaplibreX 0.1 reads a control's options when it mounts (#3). They are
+        part of the id, so new options mount a new control in their place. --%>
+  <.scale_control
+    id={"example-scale-#{@unit}-#{@max_width}-#{@position}"}
+    map_id="example-scale-map"
+    unit={@unit}
+    max_width={@max_width}
+    position={@position}
+  />
+
+  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[auto_1fr]">
+    <.example_group id="example-scale-units" label="unit">
+      <.example_button
+        :for={unit <- units()}
+        id={"example-scale-unit-#{unit}"}
+        code
+        pressed={@unit == unit}
+        phx-click="unit"
+        phx-value-unit={unit}
+      >
+        {unit}
+      </.example_button>
+    </.example_group>
+
+    <.example_group id="example-scale-positions" label="position">
+      <.example_button
+        :for={position <- positions()}
+        id={"example-scale-position-#{position}"}
+        code
+        pressed={@position == position}
+        phx-click="position"
+        phx-value-position={position}
+      >
+        {position}
+      </.example_button>
+    </.example_group>
+
+    <.example_group id="example-scale-assigns" label={gettext("Set assigns")}>
+      <.form
+        for={@options}
+        id="example-scale-options"
+        phx-change="options"
+        class="grid w-full gap-4 sm:max-w-lg sm:grid-cols-2"
+      >
+        <.example_range
+          field={@options[:max_width]}
+          label="max_width"
+          min="60"
+          max="240"
+          step="20"
+        />
+        <.example_range field={@options[:zoom]} label="zoom" min="2" max="18" step="0.5" />
+      </.form>
+    </.example_group>
+  </div>
+
+  <.example_readout values={[unit: @unit, max_width: @max_width, position: @position, zoom: @zoom]} />
+</div>

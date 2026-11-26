@@ -1,0 +1,59 @@
+<div id="navigation-control-example">
+  <.example_frame error={@map_error} error_id="example-navigation-map-error">
+    <.map
+      id="example-navigation-map"
+      center={[-43.2096, -22.9535]}
+      zoom={11}
+      pitch={45}
+      bearing={-30}
+      style="https://tiles.openfreemap.org/styles/liberty"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- MaplibreX 0.1 reads a control's options when it mounts (#3). They are
+        part of the id, so new options mount a new control in their place. --%>
+  <.navigation_control
+    id={"example-navigation-#{@position}-#{@show_compass}-#{@show_zoom}-#{@visualize_pitch}"}
+    map_id="example-navigation-map"
+    position={@position}
+    show_compass={@show_compass}
+    show_zoom={@show_zoom}
+    visualize_pitch={@visualize_pitch}
+  />
+
+  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[auto_1fr]">
+    <.example_group id="example-navigation-positions" label="position">
+      <.example_button
+        :for={position <- positions()}
+        id={"example-navigation-position-#{position}"}
+        code
+        pressed={@position == position}
+        phx-click="position"
+        phx-value-position={position}
+      >
+        {position}
+      </.example_button>
+    </.example_group>
+
+    <.example_group id="example-navigation-assigns" label={gettext("Set assigns")}>
+      <.form
+        for={@options}
+        id="example-navigation-options"
+        phx-change="options"
+        class="flex flex-wrap gap-x-6 gap-y-2 py-1.5"
+      >
+        <.example_checkbox field={@options[:show_compass]} label="show_compass" />
+        <.example_checkbox field={@options[:show_zoom]} label="show_zoom" />
+        <.example_checkbox field={@options[:visualize_pitch]} label="visualize_pitch" />
+      </.form>
+    </.example_group>
+  </div>
+
+  <.example_readout values={[
+    position: @position,
+    show_compass: @show_compass,
+    show_zoom: @show_zoom,
+    visualize_pitch: @visualize_pitch
+  ]} />
+</div>
