@@ -1,0 +1,105 @@
+<div id="deckgl-scenario">
+  <.example_frame error={@map_error} error_id="scenario-deckgl-map-error" tall>
+    <.map
+      id="scenario-deckgl-map"
+      center={[-98.0, 38.5]}
+      zoom={3.3}
+      pitch={40}
+      style="https://tiles.openfreemap.org/styles/dark"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <.navigation_control id="scenario-deckgl-navigation" map_id="scenario-deckgl-map" />
+
+  <%!-- Accessors such as getSourcePosition name a key of each record. --%>
+  <.deckgl_layer
+    :if={@layer == "arcs"}
+    id="scenario-deckgl-arcs"
+    map_id="scenario-deckgl-map"
+    layer_type="ArcLayer"
+    data={@routes}
+    pickable
+    auto_highlight
+    props={
+      %{
+        "getSourcePosition" => "from",
+        "getTargetPosition" => "to",
+        "getSourceColor" => [255, 140, 0],
+        "getTargetColor" => [120, 200, 255],
+        "getWidth" => 2
+      }
+    }
+  />
+
+  <.deckgl_layer
+    :if={@layer == "hexagons"}
+    id="scenario-deckgl-hexagons"
+    map_id="scenario-deckgl-map"
+    layer_type="HexagonLayer"
+    data={@events}
+    pickable
+    auto_highlight
+    props={
+      %{
+        "getPosition" => "coordinates",
+        "radius" => 20_000,
+        "elevationScale" => 120,
+        "extruded" => true,
+        "coverage" => 0.9
+      }
+    }
+  />
+
+  <.deckgl_layer
+    :if={@layer == "scatter"}
+    id="scenario-deckgl-scatter"
+    map_id="scenario-deckgl-map"
+    layer_type="ScatterplotLayer"
+    data={@points}
+    pickable
+    props={
+      %{
+        "getPosition" => "coordinates",
+        "getRadius" => 20_000,
+        "getFillColor" => [255, 140, 0],
+        "radiusMinPixels" => 2,
+        "radiusMaxPixels" => 12
+      }
+    }
+  />
+
+  <div class="space-y-3 border-t border-line px-4 py-4">
+    <.example_group id="scenario-deckgl-layers" label="layer_type">
+      <.example_button
+        :for={{layer, type} <- layers()}
+        id={"scenario-deckgl-layer-#{layer}"}
+        code
+        pressed={@layer == layer}
+        phx-click="layer"
+        phx-value-layer={layer}
+      >
+        {type}
+      </.example_button>
+    </.example_group>
+
+    <.example_note id="scenario-deckgl-sample-data">
+      {gettext(
+        "Sample data: connections between twenty US cities, and points generated for the demo. None of it is real. Click an arc, a hexagon or a point."
+      )}
+    </.example_note>
+    <.example_note id="scenario-deckgl-requirement" icon="hero-information-circle-micro">
+      {gettext(
+        "deck.gl is loaded the first time a layer mounts. It needs maplibre-gl 5, which this demo pins."
+      )}
+    </.example_note>
+  </div>
+
+  <%!-- deckgl:layer_loaded sets status; deckgl:click sets selected. --%>
+  <.example_readout values={[
+    layer: layer_type(@layer),
+    records: records(assigns),
+    status: @status,
+    selected: @selected || "—"
+  ]} />
+</div>
