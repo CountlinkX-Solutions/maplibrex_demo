@@ -89,6 +89,16 @@
   --color-danger: #b42318;
   --color-danger-soft: #fdecea;
 
+  /* Syntax colours, on the code ground of either theme */
+  --color-syntax-comment: #8f94ad;
+  --color-syntax-string: #a8d8a0;
+  --color-syntax-atom: #7fd3c8;
+  --color-syntax-attribute: #f0c27f;
+  --color-syntax-module: #8fb8ff;
+  --color-syntax-number: #f3a37a;
+  --color-syntax-keyword: #c9a8ff;
+  --color-syntax-punct: #a3a6bd;
+
   /* Type scale: fixed rem steps of about 1.2 */
   --text-label: 0.75rem;
   --text-label--line-height: 1rem;
@@ -246,6 +256,37 @@
     font-family: var(--font-mono);
     font-size: 0.875em;
     color: var(--color-ink);
+  }
+
+  /* Tokens of MaplibrexDemoWeb.Highlight */
+  .tok-comment {
+    color: var(--color-syntax-comment);
+  }
+  .tok-string {
+    color: var(--color-syntax-string);
+  }
+  .tok-atom,
+  .tok-attr-name {
+    color: var(--color-syntax-atom);
+  }
+  .tok-attribute {
+    color: var(--color-syntax-attribute);
+  }
+  .tok-module,
+  .tok-tag {
+    color: var(--color-syntax-module);
+  }
+  .tok-number {
+    color: var(--color-syntax-number);
+  }
+  .tok-keyword {
+    color: var(--color-syntax-keyword);
+  }
+  .tok-function {
+    font-weight: 600;
+  }
+  .tok-punct {
+    color: var(--color-syntax-punct);
   }
 
   /* The navigation drawer of narrow screens slides in from the left. */
