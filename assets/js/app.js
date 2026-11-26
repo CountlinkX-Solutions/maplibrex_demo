@@ -5,15 +5,17 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import {MapHooks} from "maplibrex"
-import {initTheme} from "./theme"
+import {initTheme, effectiveTheme, ExampleTheme} from "./theme"
 import {initShell} from "./shell"
 import {PageRail} from "./page_rail"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
-  params: {_csrf_token: csrfToken},
-  hooks: {...MapHooks, PageRail}
+  // A function, so every LiveView that joins, an example included, gets the
+  // theme in effect at that moment: its basemap starts in the right theme.
+  params: () => ({_csrf_token: csrfToken, theme: effectiveTheme()}),
+  hooks: {...MapHooks, PageRail, ExampleTheme}
 })
 
 // Show progress bar on live navigation and form submits, in the accent colour.

@@ -28,6 +28,16 @@ defmodule MaplibrexDemoWeb.Examples.SymbolLayerExampleTest do
     assert has_element?(view, layer(~s("Noto Sans Regular")))
   end
 
+  test "the halo takes the colour of the basemap's ground", %{conn: conn} do
+    view = mount_example(conn)
+
+    assert has_element?(view, layer(~s("text-halo-color":"#ffffff")))
+
+    render_hook(view, "theme", %{"theme" => "dark"})
+
+    assert has_element?(view, layer(~s("text-halo-color":"#12141b")))
+  end
+
   test "the text field and size are layout, the colour is paint", %{conn: conn} do
     view = mount_example(conn)
 

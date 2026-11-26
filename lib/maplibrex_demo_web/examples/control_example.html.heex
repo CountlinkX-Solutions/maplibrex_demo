@@ -4,19 +4,20 @@
       id="example-control-map"
       center={[-0.1276, 51.5072]}
       zoom={12}
-      style={style_url(@basemap)}
+      style={style_url(@chosen[@theme])}
       class="h-full w-full"
     />
   </.example_frame>
 
   <%!-- Anything in the slot becomes the control: here a form with radio
-        buttons. Its bindings work as anywhere else in the LiveView. --%>
+        buttons. Its bindings work as anywhere else in the LiveView, and its
+        content follows the assigns: the page's theme picks the choices. --%>
   <.control id="example-control-basemaps" map_id="example-control-map" position="top-left">
     <form id="example-control-basemap-form" phx-change="basemap" class="px-3 py-2 font-sans">
       <fieldset>
         <legend class="mb-1 text-label font-bold">{gettext("Basemap")}</legend>
         <label
-          :for={basemap <- basemaps()}
+          :for={basemap <- basemaps(@theme)}
           for={"example-control-basemap-#{basemap}"}
           class="flex cursor-pointer items-center gap-2 py-0.5 text-ui"
         >
@@ -25,7 +26,7 @@
             id={"example-control-basemap-#{basemap}"}
             name="basemap"
             value={basemap}
-            checked={@basemap == basemap}
+            checked={@chosen[@theme] == basemap}
             class="accent-accent"
           />
           {basemap_name(basemap)}
@@ -42,5 +43,5 @@
     </.example_note>
   </div>
 
-  <.example_readout values={[basemap: @basemap, style: style_url(@basemap)]} />
+  <.example_readout values={[basemap: @chosen[@theme], style: style_url(@chosen[@theme])]} />
 </div>

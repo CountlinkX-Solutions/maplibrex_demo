@@ -52,6 +52,46 @@ defmodule MaplibrexDemoWeb.Examples.ControlExampleTest do
     assert has_element?(view, "#assign-basemap", "liberty")
   end
 
+  test "in the dark theme, the control offers OpenFreeMap's dark styles", %{conn: conn} do
+    view = mount_example(conn)
+
+    render_hook(view, "theme", %{"theme" => "dark"})
+
+    assert has_element?(view, ~s(#example-control-basemap-dark[checked]))
+    assert has_element?(view, "#example-control-basemap-fiord")
+    refute has_element?(view, "#example-control-basemap-liberty")
+
+    assert has_element?(
+             view,
+             ~s(#example-control-map[data-config*="tiles.openfreemap.org/styles/dark"])
+           )
+  end
+
+  test "keeps the basemap chosen in each theme", %{conn: conn} do
+    view = mount_example(conn)
+    form = element(view, "#example-control-basemap-form")
+
+    render_change(form, %{"basemap" => "bright"})
+    render_hook(view, "theme", %{"theme" => "dark"})
+    render_change(form, %{"basemap" => "fiord"})
+
+    assert has_element?(view, "#assign-basemap", "fiord")
+
+    render_hook(view, "theme", %{"theme" => "light"})
+
+    assert has_element?(view, "#assign-basemap", "bright")
+    assert has_element?(view, ~s(#example-control-map[data-config*="styles/bright"]))
+  end
+
+  test "a style of the other theme is ignored", %{conn: conn} do
+    view = mount_example(conn)
+
+    render_hook(view, "theme", %{"theme" => "dark"})
+    render_change(view, "basemap", %{"basemap" => "positron"})
+
+    assert has_element?(view, "#assign-basemap", "dark")
+  end
+
   test "map:error is shown over the map", %{conn: conn} do
     view = mount_example(conn)
 

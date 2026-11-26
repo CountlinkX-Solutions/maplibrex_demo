@@ -677,8 +677,10 @@
       }
     ],
     "themes": {
-      "mechanism": "Same role names redefined under :root[data-theme=dark] and under prefers-color-scheme: dark when no explicit choice is stored; the choice lives in a theme cookie read by the server.",
-      "codeAndMapStayFixed": true
+      "mechanism": "Same role names redefined under :root[data-theme=dark] and under prefers-color-scheme: dark when no explicit choice is stored; the choice lives in a theme cookie read by the server. The examples' LiveViews learn the theme in effect from the LiveSocket's connect params and from a theme event when it changes.",
+      "codeStaysDark": true,
+      "mapControlsStayLight": true,
+      "basemapFollowsTheme": "Light OpenFreeMap style (Positron or Liberty) in the light theme, Dark in the dark theme, switched live; the heatmap, particles and deck.gl scenarios stay dark and the blank-style examples draw their own ground."
     }
   },
   "components": [

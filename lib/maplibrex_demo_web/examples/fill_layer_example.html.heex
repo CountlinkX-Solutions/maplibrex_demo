@@ -4,7 +4,7 @@
       id="example-fill-map"
       center={[4.8952, 52.3702]}
       zoom={13}
-      style="https://tiles.openfreemap.org/styles/positron"
+      style={basemap(@theme)}
       class="h-full w-full"
     />
   </.example_frame>
@@ -21,7 +21,7 @@
     map_id="example-fill-map"
     source_id="example-fill-osm"
     source_layer="water"
-    paint={paint(@color, @opacity, @outline)}
+    paint={paint(@color, @opacity, @outline, @theme)}
   />
 
   <div class="space-y-3 border-t border-line px-4 py-4">

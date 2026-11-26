@@ -42,7 +42,7 @@ defmodule MaplibrexDemoWeb.Examples.MarkerExampleTest do
 
     render_click(view, "color", %{"color" => "#000000"})
 
-    assert has_element?(view, "#assign-color", "#5b3fa6")
+    assert has_element?(view, "#assign-color", "#7c5cd6")
   end
 
   test "the options set scale, draggable and the popup text", %{conn: conn} do

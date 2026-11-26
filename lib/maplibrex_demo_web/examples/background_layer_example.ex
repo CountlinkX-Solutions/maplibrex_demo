@@ -25,9 +25,13 @@ defmodule MaplibrexDemoWeb.Examples.BackgroundLayerExample do
 
   @impl true
   def mount(_params, _session, socket) do
+    # The sea starts light blue in the light theme and ink in the dark one
+    # (Plumbing sets @theme); after that it is the visitor's choice.
+    color = if socket.assigns.theme == "dark", do: "#1f2330", else: "#b9d9eb"
+
     socket =
       socket
-      |> assign(color: "#b9d9eb", map_error: nil)
+      |> assign(color: color, map_error: nil)
       |> assign_opacity(1.0)
 
     {:ok, socket}
@@ -66,4 +70,8 @@ defmodule MaplibrexDemoWeb.Examples.BackgroundLayerExample do
 
   defp colors, do: @colors
   defp blank_style, do: @blank_style
+
+  # The land: white in the light theme, dark grey in the dark one.
+  defp land("dark"), do: "#3d4255"
+  defp land("light"), do: "#ffffff"
 end

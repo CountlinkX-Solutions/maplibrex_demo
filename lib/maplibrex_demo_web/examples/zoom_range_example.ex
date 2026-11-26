@@ -11,9 +11,14 @@ defmodule MaplibrexDemoWeb.Examples.ZoomRangeExample do
 
   alias MaplibreX.Components.Map, as: MapCmd
 
-  # Demo plumbing, not needed in an application: applies the page's locale
-  # and copies each map event to the page's Events tab.
+  # Demo plumbing, not needed in an application: applies the page's locale,
+  # copies each map event to the page's Events tab and keeps @theme on the
+  # page's light or dark theme.
   on_mount MaplibrexDemoWeb.Examples.Plumbing
+
+  # OpenFreeMap's basemap for the page's theme: the map's style follows @theme.
+  defp basemap("dark"), do: "https://tiles.openfreemap.org/styles/dark"
+  defp basemap("light"), do: "https://tiles.openfreemap.org/styles/positron"
 
   @ranges [
     %{id: "from", min: 12, max: nil},

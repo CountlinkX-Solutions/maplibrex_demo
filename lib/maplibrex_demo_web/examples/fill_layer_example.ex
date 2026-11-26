@@ -9,12 +9,17 @@ defmodule MaplibrexDemoWeb.Examples.FillLayerExample do
   import MaplibreX.Components
   import MaplibrexDemoWeb.Examples.ExampleComponents
 
-  # Demo plumbing, not needed in an application: applies the page's locale
-  # and copies each map event to the page's Events tab.
+  # Demo plumbing, not needed in an application: applies the page's locale,
+  # copies each map event to the page's Events tab and keeps @theme on the
+  # page's light or dark theme.
   on_mount MaplibrexDemoWeb.Examples.Plumbing
 
+  # OpenFreeMap's basemap for the page's theme: the map's style follows @theme.
+  defp basemap("dark"), do: "https://tiles.openfreemap.org/styles/dark"
+  defp basemap("light"), do: "https://tiles.openfreemap.org/styles/positron"
+
   @colors [
-    {"purple", "#5b3fa6"},
+    {"purple", "#7c5cd6"},
     {"teal", "#0f8b8d"},
     {"orange", "#d9480f"},
     {"red", "#c92a2a"}
@@ -64,11 +69,15 @@ defmodule MaplibrexDemoWeb.Examples.FillLayerExample do
   def handle_event("map:" <> _event, _payload, socket), do: {:noreply, socket}
 
   # Without an outline the property is left out, and MaplibreX sets it back
-  # to MapLibre's default: the fill colour.
-  defp paint(color, opacity, outline) do
+  # to MapLibre's default: the fill colour. The outline is dark on the light
+  # basemap and light on the dark one.
+  defp paint(color, opacity, outline, theme) do
     paint = %{"fill-color" => color, "fill-opacity" => opacity}
-    if outline, do: Map.put(paint, "fill-outline-color", "#1f2330"), else: paint
+    if outline, do: Map.put(paint, "fill-outline-color", outline_color(theme)), else: paint
   end
+
+  defp outline_color("dark"), do: "#e8e9f1"
+  defp outline_color("light"), do: "#1f2330"
 
   defp assign_options(socket, opacity, outline) do
     assign(socket,

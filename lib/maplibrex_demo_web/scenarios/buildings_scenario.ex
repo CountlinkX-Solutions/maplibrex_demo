@@ -12,9 +12,14 @@ defmodule MaplibrexDemoWeb.Scenarios.BuildingsScenario do
   import MaplibreX.Components
   import MaplibrexDemoWeb.Examples.ExampleComponents
 
-  # Demo plumbing, not needed in an application: applies the page's locale
-  # and reports each map event to the page.
+  # Demo plumbing, not needed in an application: applies the page's locale,
+  # reports each map event to the page and keeps @theme on the page's light
+  # or dark theme.
   on_mount MaplibrexDemoWeb.Examples.Plumbing
+
+  # OpenFreeMap's basemap for the page's theme: the map's style follows @theme.
+  defp basemap("dark"), do: "https://tiles.openfreemap.org/styles/dark"
+  defp basemap("light"), do: "https://tiles.openfreemap.org/styles/positron"
 
   @center [-74.006, 40.7128]
   @types ~w(residential commercial office)

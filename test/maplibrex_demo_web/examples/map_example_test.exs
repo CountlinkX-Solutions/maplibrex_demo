@@ -55,15 +55,15 @@ defmodule MaplibrexDemoWeb.Examples.MapExampleTest do
       refute has_element?(view, "#example-map #{marker("madrid")}")
     end
 
-    test "follow the assigns: the chosen place's marker takes the accent", %{conn: conn} do
+    test "follow the assigns: the chosen place's marker is purple", %{conn: conn} do
       view = mount_example(conn)
 
-      assert has_element?(view, ~s(#{marker("madrid")}[data-config*='"color":"#5b3fa6"']))
+      assert has_element?(view, ~s(#{marker("madrid")}[data-config*='"color":"#7c5cd6"']))
       assert has_element?(view, ~s(#{marker("nairobi")}[data-config*='"color":"#63637a"']))
 
       view |> element("#example-place-nairobi") |> render_click()
 
-      assert has_element?(view, ~s(#{marker("nairobi")}[data-config*='"color":"#5b3fa6"']))
+      assert has_element?(view, ~s(#{marker("nairobi")}[data-config*='"color":"#7c5cd6"']))
       assert has_element?(view, ~s(#{marker("madrid")}[data-config*='"color":"#63637a"']))
       assert has_element?(view, "#assign-place", "nairobi")
       assert has_element?(view, ~s(#example-place-nairobi[aria-pressed="true"]))

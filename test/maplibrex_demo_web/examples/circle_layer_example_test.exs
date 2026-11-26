@@ -25,7 +25,7 @@ defmodule MaplibrexDemoWeb.Examples.CircleLayerExampleTest do
     assert has_element?(view, layer(~s("sourceId":"example-circle-countries")))
     assert has_element?(view, layer(~s("sourceLayer":"centroids")))
     assert has_element?(view, layer(~s("circle-radius":6)))
-    assert has_element?(view, layer(~s("circle-color":"#5b3fa6")))
+    assert has_element?(view, layer(~s("circle-color":"#7c5cd6")))
   end
 
   test "the colour buttons and the radius slider set the paint", %{conn: conn} do
@@ -45,7 +45,7 @@ defmodule MaplibrexDemoWeb.Examples.CircleLayerExampleTest do
 
     render_click(view, "color", %{"color" => "#000000"})
 
-    assert has_element?(view, "#assign-color", "#5b3fa6")
+    assert has_element?(view, "#assign-color", "#7c5cd6")
   end
 
   test "a clicked circle comes back with its country's name", %{conn: conn} do

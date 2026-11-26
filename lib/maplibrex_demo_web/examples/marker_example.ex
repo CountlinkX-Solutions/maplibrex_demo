@@ -9,14 +9,19 @@ defmodule MaplibrexDemoWeb.Examples.MarkerExample do
   import MaplibreX.Components
   import MaplibrexDemoWeb.Examples.ExampleComponents
 
-  # Demo plumbing, not needed in an application: applies the page's locale
-  # and copies each map event to the page's Events tab.
+  # Demo plumbing, not needed in an application: applies the page's locale,
+  # copies each map event to the page's Events tab and keeps @theme on the
+  # page's light or dark theme.
   on_mount MaplibrexDemoWeb.Examples.Plumbing
+
+  # OpenFreeMap's basemap for the page's theme: the map's style follows @theme.
+  defp basemap("dark"), do: "https://tiles.openfreemap.org/styles/dark"
+  defp basemap("light"), do: "https://tiles.openfreemap.org/styles/liberty"
 
   @lisbon [-9.1393, 38.7223]
 
   @colors [
-    {"purple", "#5b3fa6"},
+    {"purple", "#7c5cd6"},
     {"teal", "#0f8b8d"},
     {"orange", "#d9480f"},
     {"red", "#c92a2a"}
@@ -27,7 +32,7 @@ defmodule MaplibrexDemoWeb.Examples.MarkerExample do
     socket =
       socket
       |> assign(home: @lisbon, view_center: @lisbon, lng_lat: @lisbon, pins: [], map_error: nil)
-      |> assign(color: "#5b3fa6", scale: 1.0, draggable: true)
+      |> assign(color: "#7c5cd6", scale: 1.0, draggable: true)
       |> assign(popup_text: gettext("Drag me to a new place."))
       |> assign_options()
 

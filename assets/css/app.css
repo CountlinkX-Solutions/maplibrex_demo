@@ -356,6 +356,14 @@
   }
 }
 
+/* MapLibre's attribution strip is half white, which over the dark basemap
+   turns grey and leaves its text under 4.5:1. Mostly white, it reads over
+   either basemap; the compact one on narrow maps is already opaque. Outside
+   the layers, so it wins over MapLibre's rule. */
+.maplibregl-ctrl.maplibregl-ctrl-attrib:not(.maplibregl-compact) {
+  background-color: rgb(255 255 255 / 0.85);
+}
+
 /* A map control button in its active state: <.control_button active> adds
    maplibregl-ctrl-active, and MapLibre styles it only for its own controls.
    Outside the layers, so it wins over MapLibre's button rules. */
