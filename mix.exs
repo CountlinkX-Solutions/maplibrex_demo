@@ -157,7 +157,7 @@ defmodule MaplibrexDemo.MixProject do
       ],
       # The dev server's esbuild and Tailwind watchers read the same link.
       "phx.server": [&link_maplibrex/1, "phx.server"],
-      precommit: ["compile --warning-as-errors", "deps.unlock --unused", "format", "test"]
+      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
     ]
   end
 end
