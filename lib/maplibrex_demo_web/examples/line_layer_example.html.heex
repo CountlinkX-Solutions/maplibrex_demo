@@ -1,0 +1,66 @@
+<div id="line-layer-example">
+  <.example_frame error={@map_error} error_id="example-line-map-error">
+    <.map
+      id="example-line-map"
+      center={[2.3522, 48.8566]}
+      zoom={11}
+      style="https://tiles.openfreemap.org/styles/positron"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- OpenFreeMap's TileJSON: OpenStreetMap in the OpenMapTiles schema. --%>
+  <.vector_tile_source
+    id="example-line-osm"
+    map_id="example-line-map"
+    url="https://tiles.openfreemap.org/planet"
+  />
+
+  <%!-- The filter keeps the main roads of the "transportation" layer. --%>
+  <.line_layer
+    id="example-line-roads"
+    map_id="example-line-map"
+    source_id="example-line-osm"
+    source_layer="transportation"
+    filter={["in", ["get", "class"], ["literal", ["motorway", "trunk", "primary"]]]}
+    layout={%{"line-cap" => "round", "line-join" => "round"}}
+    paint={paint(@color, @width, @dashed)}
+  />
+
+  <div class="space-y-3 border-t border-line px-4 py-4">
+    <.example_group id="example-line-assigns" label={gettext("Set assigns")}>
+      <.example_button
+        :for={{name, hex} <- colors()}
+        id={"example-line-color-#{name}"}
+        code
+        pressed={@color == hex}
+        phx-click="color"
+        phx-value-color={hex}
+      >
+        <.example_swatch color={hex} />{hex}
+      </.example_button>
+
+      <.form
+        for={@options}
+        id="example-line-options"
+        phx-change="options"
+        class="grid w-full gap-4 pt-2 sm:max-w-lg sm:grid-cols-[1fr_auto] sm:items-end"
+      >
+        <.example_range field={@options[:width]} label="line-width" min="1" max="10" />
+        <.example_checkbox field={@options[:dashed]} label="line-dasharray" />
+      </.form>
+    </.example_group>
+
+    <.example_note id="example-line-data" icon="hero-cursor-arrow-rays-micro">
+      {gettext("Main roads from OpenStreetMap, in OpenFreeMap's tiles. Click one.")}
+    </.example_note>
+  </div>
+
+  <%!-- layer:feature_clicked sets selected. --%>
+  <.example_readout values={[
+    color: @color,
+    width: @width,
+    dashed: @dashed,
+    selected: @selected || "—"
+  ]} />
+</div>
