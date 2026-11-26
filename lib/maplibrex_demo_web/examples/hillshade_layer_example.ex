@@ -32,7 +32,7 @@ defmodule MaplibrexDemoWeb.Examples.HillshadeLayerExample do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(look: "plain", visible: true, on_map: nil, map_error: nil)
+      |> assign(look: "plain", visible: true, on_map: false, map_error: nil)
       |> assign(:options, to_form(%{"visible" => true}))
 
     {:ok, socket}
@@ -51,19 +51,14 @@ defmodule MaplibrexDemoWeb.Examples.HillshadeLayerExample do
   end
 
   # Events from the layer: it is on the map from layer:added until
-  # layer:removed. A new look's layer can arrive before the old one leaves,
-  # so the events are matched by layer_id.
+  # layer:removed. A new paint sends neither.
 
-  def handle_event("layer:added", %{"layer_id" => id}, socket) do
-    {:noreply, assign(socket, :on_map, id)}
+  def handle_event("layer:added", _payload, socket) do
+    {:noreply, assign(socket, :on_map, true)}
   end
 
-  def handle_event("layer:removed", %{"layer_id" => id}, socket) do
-    if socket.assigns.on_map == id do
-      {:noreply, assign(socket, :on_map, nil)}
-    else
-      {:noreply, socket}
-    end
+  def handle_event("layer:removed", _payload, socket) do
+    {:noreply, assign(socket, :on_map, false)}
   end
 
   def handle_event(event, %{"error" => message}, socket)

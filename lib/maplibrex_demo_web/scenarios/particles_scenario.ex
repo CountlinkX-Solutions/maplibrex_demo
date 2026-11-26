@@ -9,9 +9,9 @@ defmodule MaplibrexDemoWeb.Scenarios.ParticlesScenario do
   direction, size, opacity) is an assign: a preset or a slider changes the
   assigns, and the layer reads the new uniforms on its next frame.
 
-  In MaplibreX 0.1 a custom layer's `uniforms` attribute is rendered when
-  the layer mounts and not again, so a later change does not reach the
-  browser by itself. The layer's hook also listens for
+  MaplibreX renders a custom layer's `uniforms` attribute when the layer
+  mounts and not again (library issue #34), so a later change does not reach
+  the browser by itself. The layer's hook also listens for
   `"update_uniforms_<id>"`, and this scenario pushes every change there.
   """
   use MaplibrexDemoWeb, :live_view
@@ -164,7 +164,8 @@ defmodule MaplibrexDemoWeb.Scenarios.ParticlesScenario do
   # The map's other events arrive too; this scenario does not use them.
   def handle_event(_library_event, _payload, socket), do: {:noreply, socket}
 
-  # The layer's hook listens for "update_uniforms_" followed by its id.
+  # The layer's hook listens for "update_uniforms_" followed by its id. Needed
+  # while later uniforms do not reach it by themselves (#34).
   defp push_uniforms(socket) do
     uniforms = uniforms(socket.assigns)
 

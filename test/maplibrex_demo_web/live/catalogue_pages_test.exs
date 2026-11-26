@@ -56,23 +56,23 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
 
   describe "component page header" do
     test "shows the name, the status as mark and word, and the summary", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/components/marker")
+      {:ok, view, _html} = live(conn, ~p"/components/circle_layer")
 
-      assert has_element?(view, "#component-title", "marker")
+      assert has_element?(view, "#component-title", "circle_layer")
       assert has_element?(view, ~s(#component-status[data-status="stable"]), "Stable")
       assert has_element?(view, ~s(#component-status [data-status-mark="stable"]))
-      assert has_element?(view, "#component-summary", Catalogue.fetch!(:marker).summary)
+      assert has_element?(view, "#component-summary", Catalogue.fetch!(:circle_layer).summary)
       refute has_element?(view, "#component-issues")
     end
 
     test "explains a limited status and links its issue", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/components/circle_layer")
+      {:ok, view, _html} = live(conn, ~p"/components/popup")
 
       assert has_element?(view, ~s(#component-status[data-status="limited"]))
 
       assert has_element?(
                view,
-               ~s(#component-issues a[href="https://github.com/CountlinkX-Solutions/maplibrex/issues/3"])
+               ~s(#component-issues a[href="https://github.com/CountlinkX-Solutions/maplibrex/issues/22"])
              )
     end
 
@@ -113,13 +113,16 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
     test "groups the items by family", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/roadmap")
 
-      assert has_element?(view, "#roadmap-family-layers #roadmap-item-circle_layer")
+      assert has_element?(view, "#roadmap-family-layers #roadmap-item-geojson_layer")
       assert has_element?(view, "#roadmap-family-three_d #roadmap-item-sky")
-      refute has_element?(view, "#roadmap-family-markers #roadmap-item-marker")
+      refute has_element?(view, "#roadmap-family-layers #roadmap-item-circle_layer")
     end
 
-    test "shows the library work in progress with its issues", %{conn: conn} do
+    test "shows what the merged, unpublished release fixes, with its issues", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/roadmap")
+
+      assert has_element?(view, "#next-release-heading", "0.2.0")
+      assert has_element?(view, ~s(#next-release-state[data-state="merged"]))
 
       for %{issues: issues} <- Catalogue.next_release().items, number <- issues do
         assert has_element?(view, ~s(#next-release a[href$="/issues/#{number}"]))

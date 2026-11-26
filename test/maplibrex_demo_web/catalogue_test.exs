@@ -63,16 +63,55 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       end
     end
 
-    test "records the statuses the library's open issues justify" do
-      assert %{status: :planned, issues: [%{number: 14} | _]} = Catalogue.fetch!(:sky)
-      assert %{status: :limited, issues: [%{number: 19} | _]} = Catalogue.fetch!(:terrain_control)
-      assert %{status: :limited, issues: [%{number: 11} | _]} = Catalogue.fetch!(:deckgl_layer)
+    # Statuses on the library's main branch (0.2.0, unreleased), derived from
+    # its open issues.
+    @limited %{
+      map: [21, 25, 26],
+      marker: [35, 36],
+      popup: [22],
+      geojson_layer: [22],
+      raster_tile_source: [24],
+      image_source: [28],
+      video_source: [28],
+      navigation_control: [3],
+      scale_control: [3],
+      fullscreen_control: [3],
+      attribution_control: [3],
+      terrain_control: [19],
+      control: [3],
+      control_group: [3],
+      zoom_range: [3],
+      deckgl_layer: [11, 10],
+      custom_layer: [34, 27]
+    }
 
+    test "records the statuses the library's open issues justify" do
+      assert %{status: :planned, issues: [%{number: 14}]} = Catalogue.fetch!(:sky)
+
+      for {name, numbers} <- @limited do
+        component = Catalogue.fetch!(name)
+
+        assert component.status == :limited, "#{name} is #{component.status}"
+
+        assert Enum.map(component.issues, & &1.number) == numbers,
+               "#{name} cites the wrong issues"
+      end
+    end
+
+    test "marks stable what 0.2.0 fixed and no open issue limits" do
       for name <- ~w(circle_layer line_layer fill_layer symbol_layer heatmap_layer
                      fill_extrusion_layer background_layer hillshade_layer raster_layer
-                     vector_tile_source raster_tile_source raster_dem_source image_source
-                     video_source)a do
-        assert %{status: :limited, issues: [%{number: 3} | _]} = Catalogue.fetch!(name)
+                     vector_tile_source raster_dem_source terrain geolocate_control
+                     control_button)a do
+        assert %{status: :stable, issues: []} = Catalogue.fetch!(name)
+      end
+    end
+
+    test "cites no issue the library has closed" do
+      closed = [2, 4, 5, 6, 7, 8, 9, 12, 15, 16, 17, 18, 20]
+
+      for component <- Catalogue.components(), %{number: number} <- component.issues do
+        refute number in closed, "#{component.name} cites closed issue ##{number}"
       end
     end
   end
@@ -118,7 +157,7 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       layers = Enum.find(Catalogue.families(), &(&1.id == :layers))
 
       assert layers.count == 10
-      assert layers.statuses == %{stable: 0, limited: 10, planned: 0}
+      assert layers.statuses == %{stable: 9, limited: 1, planned: 0}
       assert Enum.map(layers.components, & &1.name) |> hd() == :geojson_layer
 
       assert Enum.sum(Enum.map(Catalogue.families(), & &1.count)) == 32
@@ -196,6 +235,18 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
         assert scenario.module, "#{scenario.id} has no page"
         refute Map.has_key?(scenario, :legacy_path)
       end
+    end
+  end
+
+  describe "next_release/0" do
+    test "reports 0.2.0 as merged on main, not published, with the issues it fixes" do
+      release = Catalogue.next_release()
+
+      assert release.version == "0.2.0"
+      assert release.state == :merged
+
+      assert release.items |> Enum.flat_map(& &1.issues) |> Enum.sort() ==
+               [3, 4, 5, 12, 15, 16, 17, 18, 20]
     end
   end
 

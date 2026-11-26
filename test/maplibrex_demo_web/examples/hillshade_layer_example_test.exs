@@ -30,15 +30,17 @@ defmodule MaplibrexDemoWeb.Examples.HillshadeLayerExampleTest do
     assert has_element?(view, layer(~s(\\"mapId\\":\\"example-hillshade-map\\")))
   end
 
-  test "a look button sets the paint, mounting a new layer", %{conn: conn} do
+  test "a look button repaints the same layer", %{conn: conn} do
     view = mount_example(conn)
 
     view |> element("#example-hillshade-look-warm") |> render_click()
 
-    assert has_element?(view, layer(~s(\\"hillshade-shadow-color\\":\\"#473b24\\")))
+    assert has_element?(
+             view,
+             ~s(#example-hillshade-layer#{@layer}[data-config*="#473b24"])
+           )
+
     assert has_element?(view, ~s(#example-hillshade-look-warm[aria-pressed="true"]))
-    assert has_element?(view, "#example-hillshade-warm")
-    refute has_element?(view, "#example-hillshade-plain")
     assert has_element?(view, "#assign-look", "warm")
   end
 
@@ -64,25 +66,15 @@ defmodule MaplibrexDemoWeb.Examples.HillshadeLayerExampleTest do
     assert has_element?(view, @layer)
   end
 
-  test "layer:added and layer:removed say which layer is on the map", %{conn: conn} do
+  test "layer:added and layer:removed say whether the layer is on the map", %{conn: conn} do
     view = mount_example(conn)
-    assert has_element?(view, "#assign-on_map", "—")
+    assert has_element?(view, "#assign-on_map", "false")
 
-    render_hook(view, "layer:added", %{"layer_id" => "example-hillshade-plain"})
-    assert has_element?(view, "#assign-on_map", "example-hillshade-plain")
+    render_hook(view, "layer:added", %{"layer_id" => "example-hillshade-layer"})
+    assert has_element?(view, "#assign-on_map", "true")
 
-    render_hook(view, "layer:removed", %{"layer_id" => "example-hillshade-plain"})
-    assert has_element?(view, "#assign-on_map", "—")
-  end
-
-  test "a new look's layer:added may arrive before the old layer's removal", %{conn: conn} do
-    view = mount_example(conn)
-
-    render_hook(view, "layer:added", %{"layer_id" => "example-hillshade-plain"})
-    render_hook(view, "layer:added", %{"layer_id" => "example-hillshade-warm"})
-    render_hook(view, "layer:removed", %{"layer_id" => "example-hillshade-plain"})
-
-    assert has_element?(view, "#assign-on_map", "example-hillshade-warm")
+    render_hook(view, "layer:removed", %{"layer_id" => "example-hillshade-layer"})
+    assert has_element?(view, "#assign-on_map", "false")
   end
 
   test "source:error and map:error are shown over the map", %{conn: conn} do
