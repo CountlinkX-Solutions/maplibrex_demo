@@ -84,7 +84,8 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
 
     test "the components migrated from the old pages have their examples" do
       examples = %{
-        marker: MaplibrexDemoWeb.Examples.MarkerExample
+        marker: MaplibrexDemoWeb.Examples.MarkerExample,
+        geojson_layer: MaplibrexDemoWeb.Examples.GeojsonLayerExample
       }
 
       for {name, example} <- examples do
