@@ -6,9 +6,10 @@ defmodule MaplibrexDemoWeb.OverviewLive do
   The install steps condense the installation section of the library's
   README, which the page links to for the rest (a `path:` dependency,
   deck.gl, the reasons); the code in them and the minimal template are
-  copied from it. Keep them in step with it, except the dependency, which
-  names the library's `main` branch the demo itself runs. Every count is
-  computed from `MaplibrexDemoWeb.Catalogue`.
+  copied from it. Keep them in step with it, except the dependency: the
+  Hex release when the demo runs that release, and the library's `main`
+  branch while `main` is ahead of Hex (see `install_dependency/1`). Every
+  count is computed from `MaplibrexDemoWeb.Catalogue`.
   """
   use MaplibrexDemoWeb, :live_view
 
@@ -16,13 +17,7 @@ defmodule MaplibrexDemoWeb.OverviewLive do
 
   @readme_install_url "https://github.com/CountlinkX-Solutions/maplibrex#installation"
 
-  @dependency ~S'''
-  def deps do
-    [
-      {:maplibrex, github: "CountlinkX-Solutions/maplibrex", branch: "main"}
-    ]
-  end
-  '''
+  @main_dependency ~s({:maplibrex, github: "CountlinkX-Solutions/maplibrex", branch: "main"})
 
   @npm ~S'''
   npm install --prefix assets maplibre-gl
@@ -126,7 +121,6 @@ defmodule MaplibrexDemoWeb.OverviewLive do
         release: Catalogue.next_release().version,
         readme_install_url: @readme_install_url,
         snippets: %{
-          dependency: String.trim_trailing(@dependency),
           npm: String.trim_trailing(@npm),
           hooks: String.trim_trailing(@hooks),
           esbuild: String.trim_trailing(@esbuild),
@@ -220,13 +214,7 @@ defmodule MaplibrexDemoWeb.OverviewLive do
               number={1}
               title={gettext("Add the dependency to mix.exs")}
             >
-              <.hex_release_note version={@version} hex={Catalogue.hex_release()} />
-              <.code_block
-                id="install-dependency"
-                code={@snippets.dependency}
-                language={:elixir}
-                title="mix.exs"
-              />
+              <.install_dependency version={@version} hex={Catalogue.hex_release()} />
             </.install_step>
 
             <.install_step id="install-step-npm" number={2} title={gettext("Install MapLibre GL JS")}>
@@ -487,40 +475,67 @@ defmodule MaplibrexDemoWeb.OverviewLive do
   end
 
   @doc """
-  The line under the install step's dependency that says which release Hex
-  has, given the `version` the demo runs and the `hex` release: while the
-  library's `main` is ahead of Hex, that the release lacks the fixes the
-  roadmap lists; otherwise, that `main` has nothing unreleased.
+  The first install step's dependency, given the `version` the demo runs and
+  the `hex` release, with a line on which release Hex has.
+
+  When the demo runs the release Hex has, the dependency is that release's
+  requirement (`Catalogue.hex_requirement/1`), followed by a line saying the
+  demo itself runs the library's `main` branch, which has nothing unreleased
+  beyond it. While `main` is ahead of Hex, the dependency is `main`, after a
+  line saying the Hex release lacks the fixes the roadmap lists.
   """
   attr :version, :string, required: true
   attr :hex, :string, required: true
 
-  def hex_release_note(assigns) do
-    assigns = assign(assigns, :unreleased, Catalogue.unreleased?(assigns.version, assigns.hex))
+  def install_dependency(assigns) do
+    unreleased = Catalogue.unreleased?(assigns.version, assigns.hex)
+
+    dependency =
+      if unreleased,
+        do: @main_dependency,
+        else: ~s({:maplibrex, "#{Catalogue.hex_requirement(assigns.hex)}"})
+
+    assigns = assign(assigns, unreleased: unreleased, code: deps_snippet(dependency))
 
     ~H"""
     <p
+      :if={@unreleased}
       id="install-hex-release"
-      data-state={if(@unreleased, do: "unreleased", else: "released")}
+      data-state="unreleased"
       class="mb-3 max-w-measure text-body text-ink-muted"
     >
-      <%= if @unreleased do %>
-        {gettext(
-          "The demo uses the library's main branch; MaplibreX %{hex}, the latest release on Hex, lacks the fixes listed on",
-          hex: @hex
-        )}
-        <.link
-          navigate={~p"/roadmap" <> "#next-release-heading"}
-          class="font-bold text-accent-ink underline-offset-2 hover:underline"
-        >
-          {gettext("the roadmap")}</.link>.
-      <% else %>
-        {gettext(
-          "The demo uses the library's main branch, which has nothing unreleased beyond MaplibreX %{hex}, the latest release on Hex.",
-          hex: @hex
-        )}
-      <% end %>
+      {gettext(
+        "The demo uses the library's main branch; MaplibreX %{hex}, the latest release on Hex, lacks the fixes listed on",
+        hex: @hex
+      )}
+      <.link
+        navigate={~p"/roadmap" <> "#next-release-heading"}
+        class="font-bold text-accent-ink underline-offset-2 hover:underline"
+      >
+        {gettext("the roadmap")}</.link>.
     </p>
+    <.code_block id="install-dependency" code={@code} language={:elixir} title="mix.exs" />
+    <p
+      :if={!@unreleased}
+      id="install-hex-release"
+      data-state="released"
+      class="mt-3 max-w-measure text-body text-ink-muted"
+    >
+      {gettext(
+        "The demo itself runs the library's main branch, which has nothing unreleased beyond MaplibreX %{hex}, the latest release on Hex.",
+        hex: @hex
+      )}
+    </p>
+    """
+  end
+
+  defp deps_snippet(dependency) do
+    """
+    def deps do
+      [
+        #{dependency}
+      ]
+    end\
     """
   end
 

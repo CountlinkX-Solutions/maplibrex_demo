@@ -312,6 +312,20 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
     end
   end
 
+  describe "hex_requirement/1" do
+    test "allows the release's minor version and later ones" do
+      assert Catalogue.hex_requirement("0.2.0") == "~> 0.2"
+      assert Catalogue.hex_requirement("0.3.1") == "~> 0.3"
+      assert Catalogue.hex_requirement("1.4.2") == "~> 1.4"
+    end
+
+    test "is derived from the Hex release by default" do
+      %Version{major: major, minor: minor} = Version.parse!(Catalogue.hex_release())
+
+      assert Catalogue.hex_requirement() == "~> #{major}.#{minor}"
+    end
+  end
+
   describe "fetch_scenario/1" do
     test "finds a scenario by its string id" do
       assert {:ok, %{id: :terrain_3d}} = Catalogue.fetch_scenario("terrain_3d")

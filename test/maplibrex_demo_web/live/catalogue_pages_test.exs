@@ -19,19 +19,18 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
       assert has_element?(view, "#minimal-template code", "<.map")
     end
 
-    test "installs the library from the main branch the demo runs", %{conn: conn} do
+    test "installs the dependency that matches the library the demo runs", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
-      assert has_element?(
-               view,
-               "#install-dependency code",
-               ~s({:maplibrex, github: "CountlinkX-Solutions/maplibrex", branch: "main"})
-             )
+      dependency =
+        if Catalogue.unreleased?(LibraryDocs.version()),
+          do: ~s({:maplibrex, github: "CountlinkX-Solutions/maplibrex", branch: "main"}),
+          else: ~s({:maplibrex, "#{Catalogue.hex_requirement()}"})
 
-      refute has_element?(view, "#install-dependency code", "~>")
+      assert has_element?(view, "#install-step-dependency #install-dependency code", dependency)
     end
 
-    test "names the release on Hex and what it lacks", %{conn: conn} do
+    test "names the release on Hex next to the dependency", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
       state = if Catalogue.unreleased?(LibraryDocs.version()), do: "unreleased", else: "released"
@@ -41,22 +40,45 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
       assert has_element?(view, "#install-step-dependency #{note}")
     end
 
-    test "says the Hex release lacks the roadmap's fixes while main is ahead of it" do
-      note =
-        render_note(&OverviewLive.hex_release_note/1, version: "0.2.0", hex: "0.1.1")
+    test "installs from Hex when the demo runs the release Hex has" do
+      step =
+        render_note(&OverviewLive.install_dependency/1, version: "0.3.0", hex: "0.3.0")
 
-      assert count(note, ~s(#install-hex-release[data-state="unreleased"])) == 1
-      assert text(note, "#install-hex-release") =~ "0.1.1"
-      assert count(note, ~s(#install-hex-release a[href="/roadmap#next-release-heading"])) == 1
+      code = text(step, "#install-dependency code")
+      assert code =~ ~s({:maplibrex, "~> 0.3"})
+      refute code =~ "github:"
+
+      assert count(step, ~s(#install-hex-release[data-state="released"])) == 1
+      assert text(step, "#install-hex-release") =~ "main"
+      assert text(step, "#install-hex-release") =~ "0.3.0"
+      assert count(step, "#install-hex-release a") == 0
     end
 
-    test "says main has nothing unreleased once Hex has caught up" do
-      note =
-        render_note(&OverviewLive.hex_release_note/1, version: "0.2.0", hex: "0.2.0")
+    test "installs from the main branch while it is ahead of the release on Hex" do
+      step =
+        render_note(&OverviewLive.install_dependency/1, version: "0.3.0", hex: "0.2.0")
 
-      assert count(note, ~s(#install-hex-release[data-state="released"])) == 1
-      assert text(note, "#install-hex-release") =~ "0.2.0"
-      assert count(note, "#install-hex-release a") == 0
+      code = text(step, "#install-dependency code")
+      assert code =~ ~s({:maplibrex, github: "CountlinkX-Solutions/maplibrex", branch: "main"})
+      refute code =~ "~>"
+
+      assert count(step, ~s(#install-hex-release[data-state="unreleased"])) == 1
+      assert text(step, "#install-hex-release") =~ "0.2.0"
+      assert count(step, ~s(#install-hex-release a[href="/roadmap#next-release-heading"])) == 1
+    end
+
+    test "says in Spanish which branch the demo runs, in both states" do
+      # The locale belongs to this test's process only.
+      Gettext.put_locale(MaplibrexDemoWeb.Gettext, "es")
+
+      released =
+        render_note(&OverviewLive.install_dependency/1, version: "0.3.0", hex: "0.3.0")
+
+      unreleased =
+        render_note(&OverviewLive.install_dependency/1, version: "0.3.0", hex: "0.2.0")
+
+      assert text(released, "#install-hex-release") =~ "La propia demo ejecuta la rama main"
+      assert text(unreleased, "#install-hex-release") =~ "La demo usa la rama main"
     end
 
     test "links to the whole installation in the library's README", %{conn: conn} do

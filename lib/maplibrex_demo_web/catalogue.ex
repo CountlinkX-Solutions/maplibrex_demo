@@ -760,6 +760,16 @@ defmodule MaplibrexDemoWeb.Catalogue do
   def hex_release, do: @hex_release
 
   @doc """
+  The version requirement that installs `hex` (by default `hex_release/0`)
+  and its later releases up to the next major version: `"~> 0.2"` for 0.2.0.
+  """
+  @spec hex_requirement(String.t()) :: String.t()
+  def hex_requirement(hex \\ @hex_release) do
+    %Version{major: major, minor: minor} = Version.parse!(hex)
+    "~> #{major}.#{minor}"
+  end
+
+  @doc """
   Whether `version` is ahead of the release on Hex, `hex` (by default
   `hex_release/0`): true while the library's `main` branch carries work that
   is not published yet. A version that cannot be parsed is not ahead.
