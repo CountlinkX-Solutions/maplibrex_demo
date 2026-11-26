@@ -226,6 +226,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :vector_tile_source,
         family: :sources,
         module: Lib.VectorTileSource,
+        example: MaplibrexDemoWeb.Examples.VectorTileSourceExample,
         summary:
           gettext(
             "Adds vector tiles, from a TileJSON URL or a tile template, for layers to draw."
@@ -236,6 +237,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :raster_tile_source,
         family: :sources,
         module: Lib.RasterTileSource,
+        example: MaplibrexDemoWeb.Examples.RasterTileSourceExample,
         summary: gettext("Adds raster image tiles for a raster layer to draw."),
         status: :limited,
         issues: [
