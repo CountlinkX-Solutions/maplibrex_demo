@@ -172,7 +172,7 @@ defmodule MaplibrexDemoWeb.CoreComponents do
   attr :error_class, :string, default: nil, doc: "the input error class to use over defaults"
 
   attr :wrapper_class, :string,
-    default: "fieldset mb-2",
+    default: nil,
     doc: "the class of the element around the label and input"
 
   attr :rest, :global,
@@ -197,20 +197,18 @@ defmodule MaplibrexDemoWeb.CoreComponents do
       end)
 
     ~H"""
-    <div class="fieldset mb-2">
-      <label>
+    <div class={@wrapper_class}>
+      <label class="inline-flex cursor-pointer items-center gap-2">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
-        <span class="label">
-          <input
-            type="checkbox"
-            id={@id}
-            name={@name}
-            value="true"
-            checked={@checked}
-            class={@class || "checkbox checkbox-sm"}
-            {@rest}
-          />{@label}
-        </span>
+        <input
+          type="checkbox"
+          id={@id}
+          name={@name}
+          value="true"
+          checked={@checked}
+          class={@class || "size-4 shrink-0 cursor-pointer accent-accent"}
+          {@rest}
+        />{@label}
       </label>
       <.error :for={msg <- @errors}>{msg}</.error>
     </div>
@@ -263,15 +261,16 @@ defmodule MaplibrexDemoWeb.CoreComponents do
     ~H"""
     <div class={@wrapper_class}>
       <label>
-        <span :if={@label} class="label mb-1">{@label}</span>
+        <span :if={@label}>{@label}</span>
         <input
           type={@type}
           name={@name}
           id={@id}
           value={Phoenix.HTML.Form.normalize_value(@type, @value)}
           class={[
-            @class || "w-full input",
-            @errors != [] && (@error_class || "input-error")
+            @class ||
+              "mt-1 block h-9 w-full rounded-ui border border-line-strong bg-canvas px-3 font-sans text-ui text-ink placeholder:text-ink-subtle",
+            @errors != [] && (@error_class || "border-danger")
           ]}
           {@rest}
         />
@@ -284,8 +283,8 @@ defmodule MaplibrexDemoWeb.CoreComponents do
   # Helper used by inputs to generate form errors
   defp error(assigns) do
     ~H"""
-    <p class="mt-1.5 flex gap-2 items-center text-sm text-error">
-      <.icon name="hero-exclamation-circle" class="size-5" />
+    <p class="mt-1.5 flex items-center gap-1.5 text-label text-danger">
+      <.icon name="hero-exclamation-circle-micro" class="size-4" />
       {render_slot(@inner_block)}
     </p>
     """

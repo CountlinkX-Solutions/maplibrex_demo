@@ -82,6 +82,16 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       assert Catalogue.fetch!(:map).example == MaplibrexDemoWeb.Examples.MapExample
     end
 
+    test "the components migrated from the old pages have their examples" do
+      examples = %{
+        marker: MaplibrexDemoWeb.Examples.MarkerExample
+      }
+
+      for {name, example} <- examples do
+        assert Catalogue.fetch!(name).example == example
+      end
+    end
+
     test "every example is a LiveView with its source on hand" do
       for %Component{example: example} <- Catalogue.components(), example do
         assert Code.ensure_loaded?(example)

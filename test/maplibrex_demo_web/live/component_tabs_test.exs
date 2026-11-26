@@ -74,13 +74,13 @@ defmodule MaplibrexDemoWeb.ComponentTabsTest do
 
   describe "a component without an example" do
     test "says the example is coming in the preview", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/components/marker")
+      {:ok, view, _html} = live(conn, ~p"/components/popup")
 
       assert has_element?(view, "#example-coming")
     end
 
     test "has no source in the HEEx tab", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/components/marker?tab=heex")
+      {:ok, view, _html} = live(conn, ~p"/components/popup?tab=heex")
 
       assert has_element?(view, "#source-empty")
     end

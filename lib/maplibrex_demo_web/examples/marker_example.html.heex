@@ -1,0 +1,84 @@
+<div id="marker-example">
+  <.example_frame error={@map_error} error_id="example-marker-map-error">
+    <.map
+      id="example-marker-map"
+      center={@home}
+      zoom={13}
+      style="https://tiles.openfreemap.org/styles/liberty"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- Markers sit next to <.map>, not inside it, and name it with map_id. --%>
+  <.marker
+    id="example-marker"
+    map_id="example-marker-map"
+    lng_lat={@lng_lat}
+    color={@color}
+    scale={@scale}
+    draggable={@draggable}
+    popup_text={@popup_text}
+  />
+
+  <.marker
+    :for={pin <- @pins}
+    id={pin.id}
+    map_id="example-marker-map"
+    lng_lat={pin.lng_lat}
+    color="#63637a"
+    scale={0.8}
+  />
+
+  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[1fr_auto]">
+    <%!-- Assigns: each control changes an assign; the marker follows. --%>
+    <.example_group id="example-marker-assigns" label={gettext("Set assigns")}>
+      <.example_button
+        :for={{name, hex} <- colors()}
+        id={"example-marker-color-#{name}"}
+        code
+        pressed={@color == hex}
+        phx-click="color"
+        phx-value-color={hex}
+      >
+        <.example_swatch color={hex} />{hex}
+      </.example_button>
+
+      <.form
+        for={@options}
+        id="example-marker-options"
+        phx-change="options"
+        class="grid w-full gap-4 pt-2 sm:grid-cols-[1fr_auto_2fr] sm:items-end"
+      >
+        <.example_range field={@options[:scale]} label="scale" min="0.5" max="2" step="0.1" />
+        <.example_checkbox field={@options[:draggable]} label="draggable" />
+        <.input
+          field={@options[:popup_text]}
+          type="text"
+          label="popup_text"
+          maxlength="60"
+          phx-debounce="300"
+          wrapper_class="font-mono text-label text-ink-subtle"
+        />
+      </.form>
+    </.example_group>
+
+    <%!-- Markers added and removed by the server, at the map's centre. --%>
+    <.example_group id="example-marker-list" label={gettext("Add and remove markers")}>
+      <.example_button id="example-marker-add" phx-click="add_pin">
+        {gettext("Add at the centre")}
+      </.example_button>
+      <.example_button id="example-marker-remove" phx-click="remove_pin" disabled={@pins == []}>
+        {gettext("Remove the last")}
+      </.example_button>
+    </.example_group>
+  </div>
+
+  <%!-- The assigns as they are now: marker:drag_end keeps lng_lat current. --%>
+  <.example_readout values={[
+    lng_lat: lng_lat(@lng_lat),
+    color: @color,
+    scale: @scale,
+    draggable: @draggable,
+    pins: length(@pins)
+  ]} />
+</div>

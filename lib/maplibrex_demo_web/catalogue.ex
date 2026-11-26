@@ -94,6 +94,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :marker,
         family: :markers,
         module: Lib.Marker,
+        example: MaplibrexDemoWeb.Examples.MarkerExample,
         summary:
           gettext(
             "A marker at a coordinate, with an optional popup and dragging that reports the new position."
