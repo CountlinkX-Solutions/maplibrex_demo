@@ -47,7 +47,7 @@ MaplibreX package itself), and builds the assets.
 maplibre-gl is pinned to version 5 because `<.deckgl_layer>` needs it
 (library issue #11). MaplibreX supports version 6 for every other component;
 with esbuild, version 6 also needs its worker files served next to the bundle
-(library issue #41).
+(step 4 of the library README's installation).
 
 ## Pages
 
@@ -58,7 +58,7 @@ with esbuild, version 6 also needs its worker files served next to the bundle
 | `/components/:name` | One component: Preview, HEEx (`?tab=heex`), Events (`?tab=events`) and Attributes (`?tab=attributes`) |
 | `/scenarios` | The scenarios |
 | `/scenarios/:id` | One scenario above its source: `terrain_3d`, `heatmap`, `buildings`, `particles`, `deckgl` |
-| `/roadmap` | Every limited or planned component with its issues, and what the library's next release fixes |
+| `/roadmap` | Every limited or planned component with its issues, and what MaplibreX 0.2.0 fixes |
 
 The pages of earlier versions of the demo (`/map`, `/markers`, `/terrain`,
 `/heatmap`, `/buildings`, `/particles`, `/deckgl`, `/tiles`, `/ogc`) redirect
