@@ -35,6 +35,13 @@ defmodule MaplibrexDemoWeb.ScenarioLiveTest do
     end
   end
 
+  test "names the library issues a scenario depends on", %{conn: conn} do
+    {:ok, view, _html} = live(conn, ~p"/scenarios/deckgl")
+
+    assert has_element?(view, ~s(#scenario-notes a[href$="/issues/11"]))
+    assert has_element?(view, "#scenario-sample-data")
+  end
+
   test "marks the scenarios section as current", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/scenarios/terrain_3d")
 

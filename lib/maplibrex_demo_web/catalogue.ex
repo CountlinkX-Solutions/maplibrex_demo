@@ -558,12 +558,21 @@ defmodule MaplibrexDemoWeb.Catalogue do
       %{
         id: :deckgl,
         title: gettext("deck.gl layers"),
-        summary: gettext("deck.gl arc, hexagon and scatterplot layers drawn over the map."),
+        summary:
+          gettext(
+            "deck.gl arc, hexagon and scatterplot layers drawn over the map from sample data, one at a time, with clicks coming back to the server."
+          ),
         components: [:map, :deckgl_layer, :navigation_control],
         sample_data: true,
-        module: nil,
-        notes: [],
-        legacy_path: "/deckgl"
+        module: MaplibrexDemoWeb.Scenarios.DeckglScenario,
+        notes: [
+          issue(
+            11,
+            gettext(
+              "deck.gl needs maplibre-gl 5, which this demo pins; MaplibreX does not support it on maplibre-gl 6 yet."
+            )
+          )
+        ]
       }
     ]
   end

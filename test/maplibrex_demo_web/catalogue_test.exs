@@ -193,7 +193,8 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
         terrain_3d: MaplibrexDemoWeb.Scenarios.TerrainScenario,
         heatmap: MaplibrexDemoWeb.Scenarios.HeatmapScenario,
         buildings: MaplibrexDemoWeb.Scenarios.BuildingsScenario,
-        particles: MaplibrexDemoWeb.Scenarios.ParticlesScenario
+        particles: MaplibrexDemoWeb.Scenarios.ParticlesScenario,
+        deckgl: MaplibrexDemoWeb.Scenarios.DeckglScenario
       }
 
       for {id, module} <- rebuilt do
