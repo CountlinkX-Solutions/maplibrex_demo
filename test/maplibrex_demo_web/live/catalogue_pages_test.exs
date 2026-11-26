@@ -59,12 +59,71 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
       assert count(note, "#install-hex-release a") == 0
     end
 
-    test "says maplibre-gl 6 needs its worker files served, with the issue", %{conn: conn} do
+    test "links to the whole installation in the library's README", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
-      assert has_element?(view, "#install-maplibre-gl-6", "maplibre-gl-worker.mjs")
-      assert has_element?(view, "#install-maplibre-gl-6", "maplibre-gl-shared.mjs")
-      assert has_element?(view, ~s(#install-maplibre-gl-6 a[href$="/issues/41"]))
+      assert has_element?(
+               view,
+               ~s(#install a[href="https://github.com/CountlinkX-Solutions/maplibrex#installation"])
+             )
+    end
+
+    test "adds the hooks to the ones the generated LiveSocket has", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      hooks = "#install-step-hooks #install-hooks code"
+      assert has_element?(view, hooks, "hooks: {...colocatedHooks, ...MapHooks}")
+      assert has_element?(view, hooks, "longPollFallbackMs: 2500")
+    end
+
+    test "adds assets/node_modules to NODE_PATH in the esbuild profile", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      esbuild = "#install-step-hooks #install-esbuild code"
+      assert has_element?(view, esbuild, ~s|Path.expand("../assets/node_modules", __DIR__)|)
+      assert has_element?(view, esbuild, "--external:@deck.gl/*")
+    end
+
+    test "serves the maplibre-gl 6 worker in a step of its own", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      copy = "#install-step-worker #install-worker-copy code"
+      assert has_element?(view, copy, "maplibre-gl-worker.mjs")
+      assert has_element?(view, copy, "maplibre-gl-shared.mjs")
+      assert has_element?(view, "#install-step-worker #install-worker-url code", "setWorkerUrl")
+    end
+
+    test "ends both examples with a catch-all handle_event/3 clause", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      for selector <- ["#install-import code", "#minimal-template code"] do
+        # The rendered code loses the spaces between highlighted tokens, so
+        # compare it with every space removed.
+        [_before | clauses] =
+          view
+          |> element(selector)
+          |> render()
+          |> LazyHTML.from_fragment()
+          |> LazyHTML.text()
+          |> String.replace(~r/\s/, "")
+          |> String.split("defhandle_event(")
+
+        assert clauses != [], "#{selector} has no handle_event/3 clause"
+
+        assert String.starts_with?(
+                 List.last(clauses),
+                 "_event,_params,socket),do:{:noreply,socket}"
+               ),
+               "#{selector} does not end with the catch-all clause"
+      end
+    end
+
+    test "cites none of the closed installation issues", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      for number <- [41, 42] do
+        refute has_element?(view, ~s(#overview a[href$="/issues/#{number}"]))
+      end
     end
 
     test "counts each family's components and statuses from the catalogue", %{conn: conn} do

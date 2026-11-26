@@ -15,8 +15,8 @@ msgstr "Avanzado"
 #: lib/maplibrex_demo_web/components/layouts.ex:319
 #: lib/maplibrex_demo_web/live/components_live.ex:12
 #: lib/maplibrex_demo_web/live/components_live.ex:33
-#: lib/maplibrex_demo_web/live/overview_live.ex:245
-#: lib/maplibrex_demo_web/live/overview_live.ex:317
+#: lib/maplibrex_demo_web/live/overview_live.ex:382
+#: lib/maplibrex_demo_web/live/overview_live.ex:454
 #, elixir-autogen, elixir-format
 msgid "Components"
 msgstr "Componentes"
@@ -89,12 +89,12 @@ msgstr "Una capa WebGL personalizada, dibujada con tus propios shaders GLSL o co
 msgid "A map control button with an icon or your own content, and an active state."
 msgstr "Un botón de control del mapa con un icono o contenido propio, y un estado activo."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:324
+#: lib/maplibrex_demo_web/live/overview_live.ex:461
 #, elixir-autogen, elixir-format
 msgid "A map whose camera is driven from the server, with client-side commands and its events."
 msgstr "Un mapa cuya cámara se controla desde el servidor, con comandos en el cliente y sus eventos."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:214
+#: lib/maplibrex_demo_web/live/overview_live.ex:351
 #, elixir-autogen, elixir-format
 msgid "A map, a navigation control and one marker per city. When the visitor pans or zooms, map:moved updates the assigns."
 msgstr "Un mapa, un control de navegación y un marcador por ciudad. Cuando el visitante desplaza o acerca el mapa, map:moved actualiza los assigns."
@@ -104,8 +104,8 @@ msgstr "Un mapa, un control de navegación y un marcador por ciudad. Cuando el v
 msgid "A marker at a coordinate, with an optional popup and dragging that reports the new position."
 msgstr "Un marcador en una coordenada, con popup opcional y arrastre que informa de la nueva posición."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:98
-#: lib/maplibrex_demo_web/live/overview_live.ex:212
+#: lib/maplibrex_demo_web/live/overview_live.ex:148
+#: lib/maplibrex_demo_web/live/overview_live.ex:349
 #, elixir-autogen, elixir-format
 msgid "A minimal map"
 msgstr "Un mapa mínimo"
@@ -120,7 +120,7 @@ msgstr "Un popup con contenido de texto o HTML, situado en una coordenada."
 msgid "A scale bar for the current zoom level."
 msgstr "Una barra de escala para el nivel de zoom actual."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:147
+#: lib/maplibrex_demo_web/live/overview_live.ex:219
 #, elixir-autogen, elixir-format
 msgid "Add the dependency to mix.exs"
 msgstr "Añade la dependencia a mix.exs"
@@ -140,7 +140,7 @@ msgstr "Añade teselas de imagen ráster para que las dibuje una capa ráster."
 msgid "Adds vector tiles, from a TileJSON URL or a tile template, for layers to draw."
 msgstr "Añade teselas vectoriales, desde una URL TileJSON o una plantilla de teselas, para que las dibujen las capas."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:284
+#: lib/maplibrex_demo_web/live/overview_live.ex:421
 #, elixir-autogen, elixir-format
 msgid "All families"
 msgstr "Todas las familias"
@@ -166,7 +166,7 @@ msgid "Attributes"
 msgstr "Atributos"
 
 #: lib/maplibrex_demo_web/controllers/error_html/404.html.heex:12
-#: lib/maplibrex_demo_web/live/overview_live.ex:124
+#: lib/maplibrex_demo_web/live/overview_live.ex:174
 #, elixir-autogen, elixir-format
 msgid "Browse the components"
 msgstr "Ver los componentes"
@@ -201,8 +201,8 @@ msgstr "Cerrar la navegación"
 msgid "Component sections"
 msgstr "Secciones del componente"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:99
-#: lib/maplibrex_demo_web/live/overview_live.ex:229
+#: lib/maplibrex_demo_web/live/overview_live.ex:149
+#: lib/maplibrex_demo_web/live/overview_live.ex:366
 #, elixir-autogen, elixir-format
 msgid "Components by family"
 msgstr "Componentes por familia"
@@ -262,7 +262,7 @@ msgstr "Dibuja los puntos de una fuente como círculos."
 msgid "Events"
 msgstr "Eventos"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:318
+#: lib/maplibrex_demo_web/live/overview_live.ex:455
 #, elixir-autogen, elixir-format
 msgid "Every component by family, with its attributes, events and status."
 msgstr "Todos los componentes por familia, con sus atributos, eventos y estado."
@@ -272,7 +272,7 @@ msgstr "Todos los componentes por familia, con sus atributos, eventos y estado."
 msgid "Extrudes polygons from a source into 3D shapes, such as buildings."
 msgstr "Extruye polígonos de una fuente en formas 3D, como edificios."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:244
+#: lib/maplibrex_demo_web/live/overview_live.ex:381
 #, elixir-autogen, elixir-format
 msgid "Family"
 msgstr "Familia"
@@ -292,23 +292,23 @@ msgstr "Generado a partir de la definición del componente en la librería, así
 msgid "Groups several controls into one map control."
 msgstr "Agrupa varios controles en un solo control del mapa."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:200
+#: lib/maplibrex_demo_web/live/overview_live.ex:329
 #, elixir-autogen, elixir-format
 msgid "Import the components"
 msgstr "Importa los componentes"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:191
+#: lib/maplibrex_demo_web/live/overview_live.ex:316
 #, elixir-autogen, elixir-format
 msgid "Import the stylesheets"
 msgstr "Importa las hojas de estilo"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:97
-#: lib/maplibrex_demo_web/live/overview_live.ex:138
+#: lib/maplibrex_demo_web/live/overview_live.ex:147
+#: lib/maplibrex_demo_web/live/overview_live.ex:194
 #, elixir-autogen, elixir-format
 msgid "Install"
 msgstr "Instalación"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:158
+#: lib/maplibrex_demo_web/live/overview_live.ex:230
 #, elixir-autogen, elixir-format
 msgid "Install MapLibre GL JS"
 msgstr "Instala MapLibre GL JS"
@@ -364,12 +364,12 @@ msgstr "Madrid"
 msgid "Map"
 msgstr "Mapa"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:107
+#: lib/maplibrex_demo_web/live/overview_live.ex:157
 #, elixir-autogen, elixir-format
 msgid "MapLibre GL JS as declarative Phoenix LiveView components. The map is declared in HEEx and driven from the server: assigns change the map, map events arrive in handle_event/3, and the application writes no JavaScript."
 msgstr "MapLibre GL JS como componentes declarativos de Phoenix LiveView. El mapa se declara en HEEx y se controla desde el servidor: los assigns cambian el mapa, los eventos del mapa llegan a handle_event/3 y la aplicación no escribe JavaScript."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:160
+#: lib/maplibrex_demo_web/live/overview_live.ex:232
 #, elixir-autogen, elixir-format
 msgid "MaplibreX does not bundle MapLibre GL JS; your application owns its version. MaplibreX supports maplibre-gl 5 and 6, except deckgl_layer, which needs 5."
 msgstr "MaplibreX no incluye MapLibre GL JS; tu aplicación decide su versión. MaplibreX admite maplibre-gl 5 y 6, salvo deckgl_layer, que necesita la 5."
@@ -429,7 +429,7 @@ msgstr "Uno de"
 msgid "Open navigation"
 msgstr "Abrir la navegación"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:132
+#: lib/maplibrex_demo_web/live/overview_live.ex:182
 #, elixir-autogen, elixir-format
 msgid "Open the map example"
 msgstr "Abrir el ejemplo de map"
@@ -440,7 +440,7 @@ msgid "Optional."
 msgstr "Opcional."
 
 #: lib/maplibrex_demo_web/components/layouts.ex:326
-#: lib/maplibrex_demo_web/live/overview_live.ex:68
+#: lib/maplibrex_demo_web/live/overview_live.ex:114
 #, elixir-autogen, elixir-format
 msgid "Overview"
 msgstr "Inicio"
@@ -505,7 +505,7 @@ msgstr "Reconectando. Si el servidor de la demo se detuvo, vuelve a iniciarlo co
 msgid "Reconnecting. The page cannot update until the connection is back."
 msgstr "Reconectando. La página no puede actualizarse hasta que vuelva la conexión."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:175
+#: lib/maplibrex_demo_web/live/overview_live.ex:239
 #, elixir-autogen, elixir-format
 msgid "Register the hooks"
 msgstr "Registra los hooks"
@@ -530,14 +530,14 @@ msgstr "Renderiza una capa de deck.gl sobre el mapa; deck.gl se carga la primera
 msgid "Required."
 msgstr "Obligatorio."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:140
+#: lib/maplibrex_demo_web/live/overview_live.ex:196
 #, elixir-autogen, elixir-format
 msgid "Requires Elixir 1.15 or later and Phoenix LiveView 1.0 or later."
 msgstr "Requiere Elixir 1.15 o posterior y Phoenix LiveView 1.0 o posterior."
 
 #: lib/maplibrex_demo_web/components/layouts.ex:116
 #: lib/maplibrex_demo_web/components/layouts.ex:224
-#: lib/maplibrex_demo_web/live/overview_live.ex:336
+#: lib/maplibrex_demo_web/live/overview_live.ex:473
 #: lib/maplibrex_demo_web/live/roadmap_live.ex:17
 #: lib/maplibrex_demo_web/live/roadmap_live.ex:47
 #, elixir-autogen, elixir-format
@@ -558,7 +558,7 @@ msgstr "Datos de ejemplo"
 
 #: lib/maplibrex_demo_web/components/layouts.ex:113
 #: lib/maplibrex_demo_web/components/layouts.ex:223
-#: lib/maplibrex_demo_web/live/overview_live.ex:331
+#: lib/maplibrex_demo_web/live/overview_live.ex:468
 #: lib/maplibrex_demo_web/live/scenarios_live.ex:12
 #: lib/maplibrex_demo_web/live/scenarios_live.ex:28
 #, elixir-autogen, elixir-format
@@ -607,7 +607,7 @@ msgstr "Ver sus atributos"
 msgid "Set assigns"
 msgstr "Cambiar assigns"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:332
+#: lib/maplibrex_demo_web/live/overview_live.ex:469
 #, elixir-autogen, elixir-format
 msgid "Several components combined into one working map."
 msgstr "Varios componentes combinados en un mapa que funciona."
@@ -683,11 +683,6 @@ msgstr "Los helpers JS `open/1`, `close/1`, `toggle/1` y `set_location/2` no hac
 msgid "The JS helpers such as `set_paint_property/3`, `set_data/2`, `show/1` and `hide/1` do nothing unless the server echoes them back."
 msgstr "Los helpers JS como `set_paint_property/3`, `set_data/2`, `show/1` y `hide/1` no hacen nada salvo que el servidor los devuelva."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:178
-#, elixir-autogen, elixir-format
-msgid "The bare `\"maplibrex\"` import resolves through `NODE_PATH`, which a generated Phoenix application already sets for esbuild."
-msgstr "El import directo de `\"maplibrex\"` se resuelve mediante `NODE_PATH`, que una aplicación Phoenix generada ya define para esbuild."
-
 #: lib/maplibrex_demo_web/catalogue.ex:88
 #, elixir-autogen, elixir-format
 msgid "The documented `debug={true}` does not turn on debug logging."
@@ -713,7 +708,7 @@ msgstr "La librería no describe los atributos de este componente."
 msgid "The library's documentation is not available in this build, so its events cannot be listed."
 msgstr "La documentación de la librería no está disponible en esta compilación, así que no se pueden listar sus eventos."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:322
+#: lib/maplibrex_demo_web/live/overview_live.ex:459
 #, elixir-autogen, elixir-format
 msgid "The map example"
 msgstr "El ejemplo de map"
@@ -723,7 +718,7 @@ msgstr "El ejemplo de map"
 msgid "The map reported an error:"
 msgstr "El mapa informó de un error:"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:233
+#: lib/maplibrex_demo_web/live/overview_live.ex:370
 #, elixir-autogen, elixir-format
 msgid "The roadmap"
 msgstr "La hoja de ruta"
@@ -753,7 +748,7 @@ msgstr "Este componente aún no tiene ejemplo, así que no hay código que mostr
 msgid "This component sends no events of its own. Bindings such as phx-click on its content work as usual."
 msgstr "Este componente no envía eventos propios. Los bindings como phx-click en su contenido funcionan como siempre."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:112
+#: lib/maplibrex_demo_web/live/overview_live.ex:162
 #, elixir-autogen, elixir-format
 msgid "This demo runs MaplibreX %{version}. It lists all %{count} components with their status, and shows each working example next to the code that produces it."
 msgstr "Esta demo ejecuta MaplibreX %{version}. Lista los %{count} componentes con su estado y muestra cada ejemplo que funciona junto al código que lo produce."
@@ -798,13 +793,13 @@ msgstr "Versión de la librería MaplibreX que ejecuta esta demo"
 msgid "WebGL particles"
 msgstr "Partículas WebGL"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:337
+#: lib/maplibrex_demo_web/live/overview_live.ex:474
 #, elixir-autogen, elixir-format
 msgid "What is limited or planned, and what the next library release fixes."
 msgstr "Lo que está limitado o planificado, y lo que corrige la próxima versión de la librería."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:100
-#: lib/maplibrex_demo_web/live/overview_live.ex:313
+#: lib/maplibrex_demo_web/live/overview_live.ex:150
+#: lib/maplibrex_demo_web/live/overview_live.ex:450
 #, elixir-autogen, elixir-format
 msgid "Where to go next"
 msgstr "Por dónde seguir"
@@ -854,7 +849,7 @@ msgstr "`layer:source_loaded` se envía cuando la fuente de la capa ha cargado."
 msgid "deck.gl layers"
 msgstr "Capas de deck.gl"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:235
+#: lib/maplibrex_demo_web/live/overview_live.ex:372
 #, elixir-autogen, elixir-format
 msgid "explains each status that is not stable, with its library issue."
 msgstr "explica cada estado que no es estable, con su incidencia en la librería."
@@ -1320,11 +1315,6 @@ msgstr "`orientation=\"horizontal\"` no tiene efecto."
 msgid "`show_user_heading` hides the location dot instead of showing the heading, the options are fixed at mount, and `geolocate:user_location_updated` reports the map's centre."
 msgstr "`show_user_heading` oculta el punto de ubicación en lugar de mostrar la orientación, las opciones quedan fijas al montarse y `geolocate:user_location_updated` informa del centro del mapa."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:167
-#, elixir-autogen, elixir-format
-msgid "maplibre-gl 6 starts its worker from separate files that esbuild does not emit. Serve `maplibre-gl-worker.mjs` and `maplibre-gl-shared.mjs` from `node_modules/maplibre-gl/dist/` next to your bundle, or no vector data draws."
-msgstr "maplibre-gl 6 arranca su worker desde archivos aparte que esbuild no genera. Sirve `maplibre-gl-worker.mjs` y `maplibre-gl-shared.mjs` de `node_modules/maplibre-gl/dist/` junto a tu bundle, o no se dibuja ningún dato vectorial."
-
 #: lib/maplibrex_demo_web/controllers/error_html/404.html.heex:7
 #, elixir-autogen, elixir-format
 msgid "A component's page is named after it, such as `/components/map`; the component index lists them all."
@@ -1366,17 +1356,17 @@ msgstr "El servidor no pudo generar esta página"
 msgid "Ways back"
 msgstr "Formas de volver"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:375
+#: lib/maplibrex_demo_web/live/overview_live.ex:512
 #, elixir-autogen, elixir-format
 msgid "The demo uses the library's main branch, which has nothing unreleased beyond MaplibreX %{hex}, the latest release on Hex."
 msgstr "La demo usa la rama main de la librería, que no tiene nada sin publicar más allá de MaplibreX %{hex}, la última versión publicada en Hex."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:365
+#: lib/maplibrex_demo_web/live/overview_live.ex:502
 #, elixir-autogen, elixir-format
 msgid "The demo uses the library's main branch; MaplibreX %{hex}, the latest release on Hex, lacks the fixes listed on"
 msgstr "La demo usa la rama main de la librería; MaplibreX %{hex}, la última versión publicada en Hex, no tiene las correcciones que recoge"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:373
+#: lib/maplibrex_demo_web/live/overview_live.ex:510
 #, elixir-autogen, elixir-format
 msgid "the roadmap"
 msgstr "la hoja de ruta"
@@ -1410,3 +1400,53 @@ msgstr "Ver menos"
 #, elixir-autogen, elixir-format
 msgid "On this page"
 msgstr "En esta página"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:242
+#, elixir-autogen, elixir-format
+msgid "In `assets/js/app.js`, add the hooks to the ones the generated `LiveSocket` already has:"
+msgstr "En `assets/js/app.js`, añade los hooks a los que ya tiene el `LiveSocket` generado:"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:306
+#, elixir-autogen, elixir-format
+msgid "Run `mix assets.build` after every install or upgrade of maplibre-gl: `mix phx.server` does not copy the files."
+msgstr "Ejecuta `mix assets.build` tras cada instalación o actualización de maplibre-gl: `mix phx.server` no copia los archivos."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:255
+#, elixir-autogen, elixir-format
+msgid "The bare `\"maplibrex\"` import resolves through `NODE_PATH`, which the generated esbuild profile points at `deps/`. The bundle found there imports `maplibre-gl`, which npm installed in `assets/node_modules`; add that directory to `NODE_PATH`:"
+msgstr "El import directo de `\"maplibrex\"` se resuelve mediante `NODE_PATH`, que el perfil de esbuild generado dirige a `deps/`. El bundle que encuentra allí importa `maplibre-gl`, que npm instaló en `assets/node_modules`; añade ese directorio a `NODE_PATH`:"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:339
+#, elixir-autogen, elixir-format
+msgid "The components push their events whether or not your LiveView handles them, and an event with no matching clause crashes it: keep a catch-all as the last `handle_event/3`."
+msgstr "Los componentes envían sus eventos tanto si tu LiveView los maneja como si no, y un evento sin una cláusula que coincida la hace fallar: deja una cláusula que los acepte todos como último `handle_event/3`."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:198
+#, elixir-autogen, elixir-format
+msgid "The steps start from an application generated by `mix phx.new` (Phoenix 1.8). For a `path:` dependency, deck.gl and the reasons behind each step, see"
+msgstr "Los pasos parten de una aplicación generada con `mix phx.new` (Phoenix 1.8). Para una dependencia `path:`, deck.gl y el porqué de cada paso, consulta"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:295
+#, elixir-autogen, elixir-format
+msgid "Then point MapLibre at the copy, near the top of `assets/js/app.js`:"
+msgstr "Después indica a MapLibre dónde está la copia, al principio de `assets/js/app.js`:"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:268
+#, elixir-autogen, elixir-format
+msgid "Without that entry the build stops with `Could not resolve \"maplibre-gl\"`. The `--external:@deck.gl/*` flag is only for an application without the deck.gl packages, which only `deckgl_layer` needs; with them installed, leave it out."
+msgstr "Sin esa entrada, la compilación se detiene con `Could not resolve \"maplibre-gl\"`. La opción `--external:@deck.gl/*` es solo para una aplicación sin los paquetes de deck.gl, que solo necesita `deckgl_layer`; si los instalaste, quítala."
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:278
+#, elixir-autogen, elixir-format
+msgid "maplibre-gl 6 only: serve the worker"
+msgstr "Solo con maplibre-gl 6: sirve el worker"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:282
+#, elixir-autogen, elixir-format
+msgid "maplibre-gl 6 starts its worker from separate files that esbuild does not copy into your build, and without them the map draws no tile data; maplibre-gl 5 needs none of this. Copy the files next to `app.js` with this function in `mix.exs`, and add `&copy_maplibre_worker/1` right after the esbuild task in the `assets.build` and `assets.deploy` aliases:"
+msgstr "maplibre-gl 6 arranca su worker desde archivos aparte que esbuild no copia a tu compilación, y sin ellos el mapa no dibuja datos de las teselas; maplibre-gl 5 no necesita nada de esto. Copia los archivos junto a `app.js` con esta función en `mix.exs`, y añade `&copy_maplibre_worker/1` justo después de la tarea de esbuild en los alias `assets.build` y `assets.deploy`:"
+
+#: lib/maplibrex_demo_web/live/overview_live.ex:209
+#, elixir-autogen, elixir-format
+msgid "the installation in the library's README"
+msgstr "la instalación en el README de la librería"
