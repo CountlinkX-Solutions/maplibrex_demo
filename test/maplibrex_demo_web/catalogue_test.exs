@@ -191,7 +191,8 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
     test "the scenarios moved from the old pages are rebuilt" do
       rebuilt = %{
         terrain_3d: MaplibrexDemoWeb.Scenarios.TerrainScenario,
-        heatmap: MaplibrexDemoWeb.Scenarios.HeatmapScenario
+        heatmap: MaplibrexDemoWeb.Scenarios.HeatmapScenario,
+        buildings: MaplibrexDemoWeb.Scenarios.BuildingsScenario
       }
 
       for {id, module} <- rebuilt do
