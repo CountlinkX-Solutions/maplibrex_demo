@@ -10,7 +10,7 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
 
   import MaplibrexDemoWeb.CoreComponents, only: [icon: 1]
 
-  alias MaplibrexDemoWeb.Catalogue
+  alias MaplibrexDemoWeb.{Catalogue, Highlight}
   alias Phoenix.LiveView.JS
 
   @statuses [:stable, :limited, :planned, :coming]
@@ -135,7 +135,8 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
   @doc """
   A code block on the dark code ground, with a copy button.
 
-  `code` is shown exactly as given. `title` names the file or the step it
+  `code` is shown exactly as given, highlighted on the server (no CDN), and
+  is what the copy button copies. `title` names the file or the step it
   belongs to.
   """
   attr :id, :string, required: true
@@ -149,7 +150,16 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
   attr :class, :string, default: nil
   attr :max_height, :string, default: nil, doc: "a Tailwind max-height class for long sources"
 
+  attr :html, :string,
+    default: nil,
+    doc: "the code already highlighted by `MaplibrexDemoWeb.Highlight.to_html/2`"
+
   def code_block(assigns) do
+    assigns =
+      assign_new(assigns, :highlighted, fn ->
+        assigns.html || Highlight.to_html(assigns.code, assigns.language)
+      end)
+
     ~H"""
     <figure
       id={@id}
@@ -168,7 +178,7 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
         ]}
         tabindex="0"
         phx-no-format
-      ><code id={"#{@id}-code"}>{@code}</code></pre>
+      ><code id={"#{@id}-code"}>{Phoenix.HTML.raw(@highlighted)}</code></pre>
     </figure>
     """
   end
