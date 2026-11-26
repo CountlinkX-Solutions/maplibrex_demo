@@ -28,6 +28,14 @@ defmodule MaplibrexDemo.LibraryCheckoutTest do
     end
   end
 
+  describe "precommit" do
+    # `mix compile` ignores an unknown switch such as --warning-as-errors, so a
+    # misspelt flag would let warnings through without a word.
+    test "compiles with warnings as errors" do
+      assert "compile --warnings-as-errors" in project().project()[:aliases][:precommit]
+    end
+  end
+
   describe "maplibrex_checkout/0" do
     test "is the checkout Mix compiles the :maplibrex dependency from" do
       assert project().maplibrex_checkout() == Mix.Project.deps_paths()[:maplibrex]
