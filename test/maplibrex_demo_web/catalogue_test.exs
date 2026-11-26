@@ -1,0 +1,153 @@
+defmodule MaplibrexDemoWeb.CatalogueTest do
+  use ExUnit.Case, async: true
+
+  alias MaplibrexDemoWeb.Catalogue
+  alias MaplibrexDemoWeb.Catalogue.Component
+
+  describe "sync with the library" do
+    # The catalogue is written by hand, so this is what keeps it honest: every
+    # component MaplibreX.Components delegates must be listed, and every listed
+    # component must exist in the library.
+    test "lists exactly the components MaplibreX.Components delegates" do
+      library = Catalogue.library_components()
+      catalogued = Map.new(Catalogue.components(), &{&1.name, &1.module})
+
+      missing = Map.keys(library) -- Map.keys(catalogued)
+      unknown = Map.keys(catalogued) -- Map.keys(library)
+
+      assert missing == [], "components missing from the catalogue: #{inspect(missing)}"
+      assert unknown == [], "catalogued components the library does not have: #{inspect(unknown)}"
+    end
+
+    test "points every component at the module the library delegates to" do
+      library = Catalogue.library_components()
+
+      for %Component{name: name, module: module} <- Catalogue.components() do
+        assert library[name] == module,
+               "#{name} is catalogued as #{inspect(module)}, the library delegates to #{inspect(library[name])}"
+      end
+    end
+
+    test "every catalogued module documents its component with attrs" do
+      for %Component{name: name, module: module} <- Catalogue.components() do
+        assert %{^name => %{attrs: [_ | _]}} = module.__components__()
+      end
+    end
+  end
+
+  describe "components/0" do
+    test "holds 32 components with unique names" do
+      names = Enum.map(Catalogue.components(), & &1.name)
+
+      assert length(names) == 32
+      assert names == Enum.uniq(names)
+    end
+
+    test "gives every component a family, a summary and a known status" do
+      family_ids = Enum.map(Catalogue.families(), & &1.id)
+
+      for component <- Catalogue.components() do
+        assert component.family in family_ids
+        assert is_binary(component.summary) and component.summary != ""
+        assert component.status in [:stable, :limited, :planned]
+      end
+    end
+
+    test "justifies every non-stable status with at least one library issue" do
+      for %Component{status: status} = component <- Catalogue.components(), status != :stable do
+        assert [%{number: number, note: note} | _] = component.issues,
+               "#{component.name} is #{status} without an issue"
+
+        assert is_integer(number) and number > 0
+        assert is_binary(note) and note != ""
+      end
+    end
+
+    test "records the statuses the library's open issues justify" do
+      assert %{status: :planned, issues: [%{number: 14} | _]} = Catalogue.fetch!(:sky)
+      assert %{status: :limited, issues: [%{number: 19} | _]} = Catalogue.fetch!(:terrain_control)
+      assert %{status: :limited, issues: [%{number: 11} | _]} = Catalogue.fetch!(:deckgl_layer)
+
+      for name <- ~w(circle_layer line_layer fill_layer symbol_layer heatmap_layer
+                     fill_extrusion_layer background_layer hillshade_layer raster_layer
+                     vector_tile_source raster_tile_source raster_dem_source image_source
+                     video_source)a do
+        assert %{status: :limited, issues: [%{number: 3} | _]} = Catalogue.fetch!(name)
+      end
+    end
+  end
+
+  describe "families/0" do
+    test "lists the seven families in reading order" do
+      assert Enum.map(Catalogue.families(), & &1.id) ==
+               [:map, :markers, :layers, :sources, :controls, :three_d, :advanced]
+    end
+
+    test "counts the components of each family and their statuses" do
+      layers = Enum.find(Catalogue.families(), &(&1.id == :layers))
+
+      assert layers.count == 10
+      assert layers.statuses == %{stable: 0, limited: 10, planned: 0}
+      assert Enum.map(layers.components, & &1.name) |> hd() == :geojson_layer
+
+      assert Enum.sum(Enum.map(Catalogue.families(), & &1.count)) == 32
+    end
+  end
+
+  describe "fetch/1" do
+    test "finds a component by its string name" do
+      assert {:ok, %Component{name: :marker}} = Catalogue.fetch("marker")
+    end
+
+    test "does not create atoms for unknown names" do
+      assert Catalogue.fetch("no_such_component_xyz") == :error
+    end
+  end
+
+  describe "status_counts/0" do
+    test "adds up to the size of the catalogue" do
+      counts = Catalogue.status_counts()
+
+      assert counts.stable + counts.limited + counts.planned == 32
+      assert counts.planned >= 1
+    end
+  end
+
+  describe "search/1" do
+    test "matches on part of the name, ignoring case" do
+      assert Enum.map(Catalogue.search("CIRCLE"), & &1.name) == [:circle_layer]
+    end
+
+    test "treats spaces as underscores" do
+      assert Enum.map(Catalogue.search("tile source"), & &1.name) ==
+               [:vector_tile_source, :raster_tile_source]
+    end
+
+    test "returns everything for a blank query" do
+      assert length(Catalogue.search("  ")) == 32
+    end
+
+    test "returns nothing when no name matches" do
+      assert Catalogue.search("zzz") == []
+    end
+  end
+
+  describe "neighbours/1" do
+    test "returns the previous and next component in catalogue order" do
+      assert {nil, %Component{name: :marker}} = Catalogue.neighbours(:map)
+      assert {%Component{name: :map}, %Component{name: :popup}} = Catalogue.neighbours(:marker)
+      assert {%Component{name: :deckgl_layer}, nil} = Catalogue.neighbours(:custom_layer)
+    end
+  end
+
+  describe "scenarios/0" do
+    test "marks every scenario as coming and names only catalogued components" do
+      names = MapSet.new(Catalogue.components(), & &1.name)
+
+      for scenario <- Catalogue.scenarios() do
+        assert scenario.status == :coming
+        assert Enum.all?(scenario.components, &MapSet.member?(names, &1))
+      end
+    end
+  end
+end
