@@ -12,7 +12,13 @@ defmodule MaplibrexDemo.LibraryCheckoutTest do
     # The demo follows the library's main branch; `mix deps.update maplibrex`
     # (run without MAPLIBREX_PATH) moves it to main's latest commit.
     test "locks MaplibreX to a commit of its main branch" do
-      {lock, _binding} = Code.eval_file(Path.expand("../../mix.lock", __DIR__))
+      # Read as Mix does: the lock quotes every key.
+      {lock, _binding} =
+        "../../mix.lock"
+        |> Path.expand(__DIR__)
+        |> File.read!()
+        |> Code.string_to_quoted!(emit_warnings: false)
+        |> Code.eval_quoted()
 
       assert {:git, "https://github.com/CountlinkX-Solutions/maplibrex.git", sha, opts} =
                lock[:maplibrex]
