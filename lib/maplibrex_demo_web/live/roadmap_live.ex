@@ -44,8 +44,9 @@ defmodule MaplibrexDemoWeb.RoadmapLive do
         <h1 class="text-display font-black tracking-tight">{gettext("Roadmap")}</h1>
         <p class="mt-3 text-lead text-ink-muted">
           {gettext(
-            "What does not fully work in MaplibreX %{version}, and what its next release fixes. Every status that is not stable links to the library issue that explains it.",
-            version: @version
+            "What does not fully work in MaplibreX %{version}, and what version %{next} fixes. Every status that is not stable links to the library issue that explains it.",
+            version: @version,
+            next: @next_release.version
           )}
         </p>
       </header>
@@ -123,12 +124,17 @@ defmodule MaplibrexDemoWeb.RoadmapLive do
           )}
         </p>
         <ul class="mt-4 max-w-measure space-y-2.5 text-body">
-          <li :for={item <- @next_release.items} class="flex flex-wrap items-baseline gap-x-2">
-            <.icon name="hero-check-micro" class="size-4 shrink-0 self-center text-ink-subtle" />
-            <span><.rich_text text={item.text} /></span>
-            <span class="inline-flex gap-1.5">
-              <.issue_link :for={number <- item.issues} number={number} />
-            </span>
+          <li
+            :for={item <- @next_release.items}
+            class="grid grid-cols-[1rem_minmax(0,1fr)] gap-x-2"
+          >
+            <.icon name="hero-check-micro" class="mt-[0.3em] size-4 text-ink-subtle" />
+            <p>
+              <.rich_text text={item.text} />
+              <span class="ml-1 inline-flex gap-1.5">
+                <.issue_link :for={number <- item.issues} number={number} />
+              </span>
+            </p>
           </li>
         </ul>
         <p class="mt-6 text-ui">

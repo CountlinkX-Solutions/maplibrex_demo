@@ -21,7 +21,9 @@ defmodule MaplibrexDemoWeb.Examples.BackgroundLayerExampleTest do
 
     assert has_element?(view, ~s(#example-background-map[data-config*='"layers":[]']))
     assert has_element?(view, layer(~s("background-color":"#b9d9eb")))
-    assert has_element?(view, layer(~s("beforeId":"example-background-land")))
+    # Added before the land, so it stays under it without a before_id,
+    # which would log a warning until the land arrives.
+    refute has_element?(view, layer("beforeId"))
 
     assert has_element?(
              view,

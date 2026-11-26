@@ -13,12 +13,11 @@
     />
   </.example_frame>
 
-  <%!-- The background has no source. before_id keeps it under the land,
-        whichever of the two reaches the map first. --%>
+  <%!-- The background has no source, so it reaches the map first and the
+        land is drawn over it. --%>
   <.background_layer
     id="example-background-layer"
     map_id="example-background-map"
-    before_id="example-background-land"
     paint={%{"background-color" => @color, "background-opacity" => @opacity}}
   />
 

@@ -281,7 +281,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         issues: [undocumented_events],
         example_note:
           gettext(
-            "It has no example because no openly licensed video could be found that is hosted to stay available and whose picture lines up with four points on a map."
+            "No openly licensed video could be found that is hosted to stay available and whose picture lines up with four points on a map."
           )
       },
 
