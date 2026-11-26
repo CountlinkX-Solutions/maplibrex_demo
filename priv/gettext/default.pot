@@ -21,8 +21,8 @@ msgstr ""
 #: lib/maplibrex_demo_web/components/layouts.ex:261
 #: lib/maplibrex_demo_web/live/components_live.ex:12
 #: lib/maplibrex_demo_web/live/components_live.ex:33
-#: lib/maplibrex_demo_web/live/overview_live.ex:237
-#: lib/maplibrex_demo_web/live/overview_live.ex:283
+#: lib/maplibrex_demo_web/live/overview_live.ex:239
+#: lib/maplibrex_demo_web/live/overview_live.ex:311
 #, elixir-autogen, elixir-format
 msgid "Components"
 msgstr ""
@@ -95,7 +95,7 @@ msgstr ""
 msgid "A map control button with an icon or your own content, and an active state."
 msgstr ""
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:290
+#: lib/maplibrex_demo_web/live/overview_live.ex:318
 #, elixir-autogen, elixir-format
 msgid "A map whose camera is driven from the server, with client-side commands and its events."
 msgstr ""
@@ -145,7 +145,7 @@ msgstr ""
 msgid "Adds vector tiles, from a TileJSON URL or a tile template, for layers to draw."
 msgstr ""
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:267
+#: lib/maplibrex_demo_web/live/overview_live.ex:278
 #, elixir-autogen, elixir-format
 msgid "All families"
 msgstr ""
@@ -266,7 +266,7 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:284
+#: lib/maplibrex_demo_web/live/overview_live.ex:312
 #, elixir-autogen, elixir-format
 msgid "Every component by family, with its attributes, events and status."
 msgstr ""
@@ -276,7 +276,7 @@ msgstr ""
 msgid "Extrudes polygons from a source into 3D shapes, such as buildings."
 msgstr ""
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:236
+#: lib/maplibrex_demo_web/live/overview_live.ex:238
 #, elixir-autogen, elixir-format
 msgid "Family"
 msgstr ""
@@ -539,7 +539,7 @@ msgstr ""
 
 #: lib/maplibrex_demo_web/components/layouts.ex:108
 #: lib/maplibrex_demo_web/components/layouts.ex:207
-#: lib/maplibrex_demo_web/live/overview_live.ex:302
+#: lib/maplibrex_demo_web/live/overview_live.ex:330
 #: lib/maplibrex_demo_web/live/roadmap_live.ex:17
 #: lib/maplibrex_demo_web/live/roadmap_live.ex:46
 #, elixir-autogen, elixir-format
@@ -560,7 +560,7 @@ msgstr ""
 
 #: lib/maplibrex_demo_web/components/layouts.ex:105
 #: lib/maplibrex_demo_web/components/layouts.ex:206
-#: lib/maplibrex_demo_web/live/overview_live.ex:297
+#: lib/maplibrex_demo_web/live/overview_live.ex:325
 #: lib/maplibrex_demo_web/live/scenarios_live.ex:12
 #: lib/maplibrex_demo_web/live/scenarios_live.ex:28
 #, elixir-autogen, elixir-format
@@ -609,7 +609,7 @@ msgstr ""
 msgid "Set assigns"
 msgstr ""
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:298
+#: lib/maplibrex_demo_web/live/overview_live.ex:326
 #, elixir-autogen, elixir-format
 msgid "Several components combined into one working map."
 msgstr ""
@@ -714,7 +714,7 @@ msgstr ""
 msgid "The library's documentation is not available in this build, so its events cannot be listed."
 msgstr ""
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:288
+#: lib/maplibrex_demo_web/live/overview_live.ex:316
 #, elixir-autogen, elixir-format
 msgid "The map example"
 msgstr ""
@@ -799,12 +799,12 @@ msgstr ""
 msgid "WebGL particles"
 msgstr ""
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:303
+#: lib/maplibrex_demo_web/live/overview_live.ex:331
 #, elixir-autogen, elixir-format
 msgid "What is limited or planned, and what the next library release fixes."
 msgstr ""
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:279
+#: lib/maplibrex_demo_web/live/overview_live.ex:307
 #, elixir-autogen, elixir-format
 msgid "Where to go next"
 msgstr ""
@@ -1365,17 +1365,17 @@ msgstr ""
 msgid "Ways back"
 msgstr ""
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:341
+#: lib/maplibrex_demo_web/live/overview_live.ex:369
 #, elixir-autogen, elixir-format
 msgid "The demo uses the library's main branch, which has nothing unreleased beyond MaplibreX %{hex}, the latest release on Hex."
 msgstr ""
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:331
+#: lib/maplibrex_demo_web/live/overview_live.ex:359
 #, elixir-autogen, elixir-format
 msgid "The demo uses the library's main branch; MaplibreX %{hex}, the latest release on Hex, lacks the fixes listed on"
 msgstr ""
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:339
+#: lib/maplibrex_demo_web/live/overview_live.ex:367
 #, elixir-autogen, elixir-format
 msgid "the roadmap"
 msgstr ""

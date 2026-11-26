@@ -85,6 +85,30 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
       end
     end
 
+    test "repeats each family's status counts under its name for narrow screens", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      for family <- Catalogue.families(), {status, n} <- family.statuses do
+        assert has_element?(
+                 view,
+                 ~s(#family-row-#{family.id} th #family-summary-#{family.id} [data-status-summary="#{status}"]),
+                 Integer.to_string(n)
+               )
+      end
+
+      for {status, n} <- Catalogue.status_counts() do
+        assert has_element?(
+                 view,
+                 ~s(#family-row-total th #family-summary-total [data-status-summary="#{status}"]),
+                 Integer.to_string(n)
+               )
+      end
+
+      for status <- [:stable, :limited, :planned] do
+        assert has_element?(view, ~s(#family-legend [data-status-mark="#{status}"]))
+      end
+    end
+
     test "leads into components, scenarios and the roadmap", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
