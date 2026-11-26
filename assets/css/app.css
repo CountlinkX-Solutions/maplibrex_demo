@@ -123,6 +123,7 @@
   --spacing-topbar: 3.75rem;
   --spacing-sidebar: 17.5rem;
   --spacing-preview: 22.5rem;
+  --spacing-scenario: 32rem;
   --container-measure: 34rem;
   --container-page: 66rem;
 
@@ -299,6 +300,13 @@
   }
   .tok-punct {
     color: var(--color-syntax-punct);
+  }
+
+  /* The frame's loading note goes once the map shows its sources'
+     attribution: a pitched map leaves the sky transparent, and the note
+     would show through it. */
+  [data-example-frame]:has(.maplibregl-ctrl-attrib-inner:not(:empty)) > [data-map-loading] {
+    visibility: hidden;
   }
 
   /* An example shown in full screen by <.fullscreen_control container_id>:

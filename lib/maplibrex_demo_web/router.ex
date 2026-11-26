@@ -27,6 +27,7 @@ defmodule MaplibrexDemoWeb.Router do
       live "/components", ComponentsLive
       live "/components/:name", ComponentLive
       live "/scenarios", ScenariosLive
+      live "/scenarios/:id", ScenarioLive
       live "/roadmap", RoadmapLive
     end
 

@@ -128,10 +128,23 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
   end
 
   describe "scenarios" do
-    test "marks every scenario as coming and links the page that shows it today", %{conn: conn} do
+    test "links every rebuilt scenario to its page", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/scenarios")
 
-      for scenario <- Catalogue.scenarios() do
+      for %{module: module} = scenario <- Catalogue.scenarios(), module do
+        assert has_element?(
+                 view,
+                 ~s(#scenario-#{scenario.id} a[href="/scenarios/#{scenario.id}"])
+               )
+
+        refute has_element?(view, ~s(#scenario-#{scenario.id} [data-status="coming"]))
+      end
+    end
+
+    test "marks the others as coming and links the page that shows them today", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/scenarios")
+
+      for %{module: nil} = scenario <- Catalogue.scenarios() do
         selector = "#scenario-#{scenario.id}"
 
         assert has_element?(view, ~s(#{selector} [data-status="coming"]))

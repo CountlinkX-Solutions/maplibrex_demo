@@ -1,12 +1,14 @@
 defmodule MaplibrexDemoWeb.Examples.Sources do
   @moduledoc """
-  The source files of every example, read and highlighted at compile time.
+  The source files of every example and scenario, read and highlighted at
+  compile time.
 
   An example `FooExample` lives in `foo_example.ex` with its template in
-  `foo_example.html.heex`, in this directory. Each file is an external
-  resource of this module, so editing an example recompiles it, and adding
-  or removing one does too (`__mix_recompile__?/0`). What the HEEx tab shows
-  is therefore always the code that runs.
+  `foo_example.html.heex`, in this directory; a scenario `FooScenario` the
+  same way in `../scenarios`. Each file is an external resource of this
+  module, so editing one recompiles it, and adding or removing one does too
+  (`__mix_recompile__?/0`). What the pages show is therefore always the code
+  that runs.
   """
   alias MaplibrexDemoWeb.Highlight
 
@@ -18,8 +20,11 @@ defmodule MaplibrexDemoWeb.Examples.Sources do
           html: String.t()
         }
 
-  @pattern Path.join(__DIR__, "*_example.{html.heex,ex}")
-  @paths @pattern |> Path.wildcard() |> Enum.sort()
+  @patterns [
+    Path.join(__DIR__, "*_example.{html.heex,ex}"),
+    Path.expand("../scenarios/*_scenario.{html.heex,ex}", __DIR__)
+  ]
+  @paths @patterns |> Enum.flat_map(&Path.wildcard/1) |> Enum.sort()
   @paths_hash :erlang.md5(@paths)
 
   for path <- @paths, do: @external_resource(path)
@@ -39,12 +44,12 @@ defmodule MaplibrexDemoWeb.Examples.Sources do
 
   @doc false
   def __mix_recompile__? do
-    @pattern |> Path.wildcard() |> Enum.sort() |> :erlang.md5() != @paths_hash
+    @patterns |> Enum.flat_map(&Path.wildcard/1) |> Enum.sort() |> :erlang.md5() != @paths_hash
   end
 
   @doc """
-  The files of an example module: its template first, then the module.
-  Empty for a module that is not an example.
+  The files of an example or scenario module: its template first, then the
+  module. Empty for any other module.
   """
   @spec files(module()) :: [file()]
   def files(module) when is_atom(module) do

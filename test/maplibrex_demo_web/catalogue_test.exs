@@ -172,13 +172,40 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
   end
 
   describe "scenarios/0" do
-    test "marks every scenario as coming and names only catalogued components" do
+    test "names only catalogued components" do
       names = MapSet.new(Catalogue.components(), & &1.name)
 
       for scenario <- Catalogue.scenarios() do
-        assert scenario.status == :coming
         assert Enum.all?(scenario.components, &MapSet.member?(names, &1))
       end
+    end
+
+    test "every rebuilt scenario is a LiveView with its source on hand" do
+      for %{module: module} <- Catalogue.scenarios(), module do
+        assert Code.ensure_loaded?(module)
+        assert function_exported?(module, :mount, 3)
+        assert [_template, _module] = MaplibrexDemoWeb.Examples.Sources.files(module)
+      end
+    end
+
+    test "the scenarios moved from the old pages are rebuilt" do
+      rebuilt = %{
+        terrain_3d: MaplibrexDemoWeb.Scenarios.TerrainScenario
+      }
+
+      for {id, module} <- rebuilt do
+        assert {:ok, %{module: ^module}} = Catalogue.fetch_scenario(Atom.to_string(id))
+      end
+    end
+  end
+
+  describe "fetch_scenario/1" do
+    test "finds a scenario by its string id" do
+      assert {:ok, %{id: :terrain_3d}} = Catalogue.fetch_scenario("terrain_3d")
+    end
+
+    test "does not create atoms for unknown ids" do
+      assert Catalogue.fetch_scenario("no_such_scenario_xyz") == :error
     end
   end
 end

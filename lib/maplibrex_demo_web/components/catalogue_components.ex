@@ -7,6 +7,7 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
   """
   use Phoenix.Component
   use Gettext, backend: MaplibrexDemoWeb.Gettext
+  use MaplibrexDemoWeb, :verified_routes
 
   import MaplibrexDemoWeb.CoreComponents, only: [icon: 1]
 
@@ -70,6 +71,83 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
   defp badge_tint(:stable), do: "bg-stable-soft text-stable"
   defp badge_tint(:limited), do: "bg-limited-soft text-limited"
   defp badge_tint(status) when status in [:planned, :coming], do: "bg-planned-soft text-planned"
+
+  @doc """
+  Says that a scenario draws data generated for the demo, not real
+  measurements.
+  """
+  attr :id, :string, default: nil
+
+  def sample_data_badge(assigns) do
+    ~H"""
+    <span
+      id={@id}
+      data-sample-data
+      class="inline-flex items-center gap-1 rounded-ui border border-line-strong py-0.5 pr-2 pl-1.5 text-label font-bold whitespace-nowrap text-ink-muted"
+    >
+      <.icon name="hero-beaker-micro" class="size-3.5 text-ink-subtle" />
+      {gettext("Sample data")}
+    </span>
+    """
+  end
+
+  @doc "The components a scenario uses, each linked to its page."
+  attr :id, :string, default: nil
+  attr :names, :list, required: true
+  attr :class, :string, default: nil
+
+  def component_chips(assigns) do
+    ~H"""
+    <div id={@id} class={["flex flex-wrap items-center gap-x-2 gap-y-1.5 text-ui", @class]}>
+      <span class="text-ink-subtle">{gettext("Uses")}</span>
+      <.link
+        :for={name <- @names}
+        navigate={~p"/components/#{name}"}
+        class="rounded-[4px] bg-surface px-1.5 py-0.5 font-mono text-label text-ink hover:bg-surface-hover hover:text-accent-ink"
+      >
+        {name}
+      </.link>
+    </div>
+    """
+  end
+
+  @doc """
+  The previous and next page of a sequence, at the foot of a page. Each is
+  `%{name: name, path: path}`, or `nil` at either end.
+  """
+  attr :id, :string, required: true, doc: "the prefix of the two links' ids"
+  attr :label, :string, required: true, doc: "the name of the navigation landmark"
+  attr :previous, :map, default: nil
+  attr :next, :map, default: nil
+
+  def pager(assigns) do
+    ~H"""
+    <nav aria-label={@label} class="mt-16 grid gap-3 border-t border-line pt-6 sm:grid-cols-2">
+      <.link
+        :if={@previous}
+        id={"#{@id}-previous"}
+        navigate={@previous.path}
+        class="group rounded-panel border border-line px-4 py-3 hover:border-line-strong hover:bg-surface"
+      >
+        <span class="block text-label text-ink-subtle">{gettext("Previous")}</span>
+        <span class="mt-0.5 flex items-center gap-1.5 font-bold group-hover:text-accent-ink">
+          <.icon name="hero-arrow-left-micro" class="size-4" />{@previous.name}
+        </span>
+      </.link>
+      <.link
+        :if={@next}
+        id={"#{@id}-next"}
+        navigate={@next.path}
+        class="group rounded-panel border border-line px-4 py-3 text-right hover:border-line-strong hover:bg-surface sm:col-start-2"
+      >
+        <span class="block text-label text-ink-subtle">{gettext("Next")}</span>
+        <span class="mt-0.5 flex items-center justify-end gap-1.5 font-bold group-hover:text-accent-ink">
+          {@next.name}<.icon name="hero-arrow-right-micro" class="size-4" />
+        </span>
+      </.link>
+    </nav>
+    """
+  end
 
   @doc """
   Prose that may name code between backticks, as the catalogue's notes do:
