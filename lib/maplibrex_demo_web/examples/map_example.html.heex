@@ -8,7 +8,19 @@
       bearing={@bearing}
       style="https://tiles.openfreemap.org/styles/liberty"
       class="h-full w-full"
-    />
+    >
+      <%!-- Nested in <.map>: rendered right after the map element, so they
+            follow the assigns and mount and unmount like components placed
+            next to it. The chosen place's marker takes the accent. --%>
+      <.marker
+        :for={place <- place_list()}
+        :if={@markers}
+        id={"example-map-place-#{place.id}"}
+        map_id="example-map"
+        lng_lat={place.center}
+        color={marker_color(place.id, @place)}
+      />
+    </.map>
   </.example_frame>
 
   <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[1fr_auto]">
@@ -17,6 +29,7 @@
       <.example_button
         :for={{id, name} <- places()}
         id={"example-place-#{id}"}
+        pressed={@place == id}
         phx-click="go"
         phx-value-place={id}
       >
@@ -58,6 +71,10 @@
           class="mt-1 block w-full accent-accent"
         />
       </.form>
+
+      <.form for={@markers_form} id="example-markers" phx-change="markers" class="pt-1">
+        <.example_checkbox field={@markers_form[:markers]} label=":if markers" />
+      </.form>
     </.example_group>
 
     <%!-- Commands: JS structs that run in the browser, with no round trip. --%>
@@ -83,6 +100,8 @@
 
   <%!-- The assigns as they are now: map:moved and map:clicked keep them current. --%>
   <.example_readout values={[
+    place: @place,
+    markers: @markers,
     center: lng_lat(@center),
     zoom: @zoom,
     pitch: @pitch,

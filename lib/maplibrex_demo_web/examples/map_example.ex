@@ -1,7 +1,8 @@
 defmodule MaplibrexDemoWeb.Examples.MapExample do
   @moduledoc """
   The reference example for `<.map>`: a camera driven from the server,
-  commands that run in the browser, and the map's events coming back.
+  commands that run in the browser, the map's events coming back, and
+  components nested in the map that follow the assigns.
 
   An example is a LiveView of its own, with its template next to it
   (`map_example.html.heex`). The component page runs it with `live_render/3`
@@ -35,7 +36,8 @@ defmodule MaplibrexDemoWeb.Examples.MapExample do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(home: @home, last_click: nil, map_error: nil)
+      |> assign(home: @home, place: @home.id, markers: true, last_click: nil, map_error: nil)
+      |> assign(:markers_form, to_form(%{"markers" => true}))
       |> assign_camera(center: @home.center, zoom: @home.zoom, pitch: 0, bearing: 0)
 
     {:ok, socket}
@@ -46,9 +48,21 @@ defmodule MaplibrexDemoWeb.Examples.MapExample do
   @impl true
   def handle_event("go", %{"place" => id}, socket) do
     case Enum.find(@places, &(&1.id == id)) do
-      nil -> {:noreply, socket}
-      place -> {:noreply, assign_camera(socket, center: place.center, zoom: place.zoom)}
+      nil ->
+        {:noreply, socket}
+
+      place ->
+        {:noreply,
+         socket
+         |> assign(:place, place.id)
+         |> assign_camera(center: place.center, zoom: place.zoom)}
     end
+  end
+
+  # :if on the nested markers: they mount and unmount with this assign.
+  def handle_event("markers", %{"markers" => markers}, socket) do
+    markers = markers == "true"
+    {:noreply, assign(socket, markers: markers, markers_form: to_form(%{"markers" => markers}))}
   end
 
   def handle_event("camera", %{"zoom" => zoom, "pitch" => pitch, "bearing" => bearing}, socket) do
@@ -93,6 +107,11 @@ defmodule MaplibrexDemoWeb.Examples.MapExample do
 
     assign(socket, :camera, form)
   end
+
+  defp place_list, do: @places
+
+  defp marker_color(id, id), do: "#5b3fa6"
+  defp marker_color(_id, _current), do: "#63637a"
 
   defp places do
     names = %{
