@@ -41,6 +41,48 @@ defmodule MaplibrexDemoWeb.Examples.MapExampleTest do
     assert has_element?(view, "#assign-center", "36.8219")
   end
 
+  describe "markers nested in <.map>" do
+    defp marker(id), do: ~s(#example-map-place-#{id}[phx-hook="MarkerHook"])
+
+    test "are rendered after the map element, one per place", %{conn: conn} do
+      view = mount_example(conn)
+
+      for id <- ~w(madrid buenos_aires nairobi) do
+        assert has_element?(view, "#example-map ~ #{marker(id)}")
+        assert has_element?(view, ~s(#{marker(id)}[data-config*='"mapId":"example-map"']))
+      end
+
+      refute has_element?(view, "#example-map #{marker("madrid")}")
+    end
+
+    test "follow the assigns: the chosen place's marker takes the accent", %{conn: conn} do
+      view = mount_example(conn)
+
+      assert has_element?(view, ~s(#{marker("madrid")}[data-config*='"color":"#5b3fa6"']))
+      assert has_element?(view, ~s(#{marker("nairobi")}[data-config*='"color":"#63637a"']))
+
+      view |> element("#example-place-nairobi") |> render_click()
+
+      assert has_element?(view, ~s(#{marker("nairobi")}[data-config*='"color":"#5b3fa6"']))
+      assert has_element?(view, ~s(#{marker("madrid")}[data-config*='"color":"#63637a"']))
+      assert has_element?(view, "#assign-place", "nairobi")
+      assert has_element?(view, ~s(#example-place-nairobi[aria-pressed="true"]))
+    end
+
+    test "mount and unmount with :if", %{conn: conn} do
+      view = mount_example(conn)
+
+      view |> element("#example-markers") |> render_change(%{"markers" => "false"})
+
+      refute has_element?(view, ~s([phx-hook="MarkerHook"]))
+      assert has_element?(view, "#assign-markers", "false")
+
+      view |> element("#example-markers") |> render_change(%{"markers" => "true"})
+
+      assert has_element?(view, marker("buenos_aires"))
+    end
+  end
+
   test "the camera sliders set zoom, pitch and bearing", %{conn: conn} do
     view = mount_example(conn)
 

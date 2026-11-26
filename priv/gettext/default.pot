@@ -175,7 +175,7 @@ msgstr ""
 msgid "Browse the components"
 msgstr ""
 
-#: lib/maplibrex_demo_web/examples/map_example.ex:100
+#: lib/maplibrex_demo_web/examples/map_example.ex:119
 #, elixir-autogen, elixir-format
 msgid "Buenos Aires"
 msgstr ""
@@ -355,7 +355,7 @@ msgstr ""
 msgid "Loading the map"
 msgstr ""
 
-#: lib/maplibrex_demo_web/examples/map_example.ex:99
+#: lib/maplibrex_demo_web/examples/map_example.ex:118
 #, elixir-autogen, elixir-format
 msgid "Madrid"
 msgstr ""
@@ -385,7 +385,7 @@ msgstr ""
 msgid "Meant to add an atmospheric sky to 3D views; it cannot render yet."
 msgstr ""
 
-#: lib/maplibrex_demo_web/examples/map_example.ex:101
+#: lib/maplibrex_demo_web/examples/map_example.ex:120
 #, elixir-autogen, elixir-format
 msgid "Nairobi"
 msgstr ""
@@ -545,7 +545,7 @@ msgstr ""
 msgid "Roadmap"
 msgstr ""
 
-#: lib/maplibrex_demo_web/examples/map_example.html.heex:64
+#: lib/maplibrex_demo_web/examples/map_example.html.heex:81
 #: lib/maplibrex_demo_web/examples/zoom_range_example.html.heex:47
 #: lib/maplibrex_demo_web/scenarios/terrain_scenario.html.heex:80
 #, elixir-autogen, elixir-format
@@ -591,7 +591,7 @@ msgstr ""
 #: lib/maplibrex_demo_web/examples/geojson_layer_example.html.heex:24
 #: lib/maplibrex_demo_web/examples/hillshade_layer_example.html.heex:32
 #: lib/maplibrex_demo_web/examples/line_layer_example.html.heex:31
-#: lib/maplibrex_demo_web/examples/map_example.html.heex:16
+#: lib/maplibrex_demo_web/examples/map_example.html.heex:28
 #: lib/maplibrex_demo_web/examples/marker_example.html.heex:34
 #: lib/maplibrex_demo_web/examples/navigation_control_example.html.heex:39
 #: lib/maplibrex_demo_web/examples/popup_example.html.heex:32
