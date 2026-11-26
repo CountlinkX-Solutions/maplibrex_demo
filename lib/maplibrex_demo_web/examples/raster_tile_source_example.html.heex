@@ -1,0 +1,51 @@
+<div id="raster-tile-source-example">
+  <.example_frame
+    error={@map_error}
+    error_id="example-raster-map-error"
+    hosts={["gibs.earthdata.nasa.gov"]}
+  >
+    <%!-- A blank style: the raster layer below is all the map draws. --%>
+    <.map
+      id="example-raster-map"
+      center={[10, 30]}
+      zoom={1.5}
+      max_zoom={8}
+      style={blank_style()}
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- NASA's imagery is public domain; the attribution credits the service. --%>
+  <.raster_tile_source
+    id="example-raster-tiles"
+    map_id="example-raster-map"
+    tiles={tiles(@imagery)}
+    tile_size={256}
+    max_zoom={8}
+    attribution="Imagery: NASA EOSDIS GIBS"
+  />
+
+  <.raster_layer
+    id="example-raster-tiles-layer"
+    map_id="example-raster-map"
+    source_id="example-raster-tiles"
+  />
+
+  <div class="border-t border-line px-4 py-4">
+    <%!-- A new imagery changes the tiles; the source keeps its place. --%>
+    <.example_group id="example-raster-imageries" label="tiles" code>
+      <.example_button
+        :for={imagery <- imageries()}
+        id={"example-raster-imagery-#{imagery}"}
+        pressed={@imagery == imagery}
+        phx-click="imagery"
+        phx-value-imagery={imagery}
+      >
+        {imagery_name(imagery)}
+      </.example_button>
+    </.example_group>
+  </div>
+
+  <%!-- source:added and source:data keep status current. --%>
+  <.example_readout values={[imagery: @imagery, status: @status, data_events: @data_events]} />
+</div>

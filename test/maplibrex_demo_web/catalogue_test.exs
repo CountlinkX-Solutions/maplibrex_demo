@@ -146,7 +146,9 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
         control: MaplibrexDemoWeb.Examples.ControlExample,
         control_button: MaplibrexDemoWeb.Examples.ControlButtonExample,
         control_group: MaplibrexDemoWeb.Examples.ControlGroupExample,
-        zoom_range: MaplibrexDemoWeb.Examples.ZoomRangeExample
+        zoom_range: MaplibrexDemoWeb.Examples.ZoomRangeExample,
+        vector_tile_source: MaplibrexDemoWeb.Examples.VectorTileSourceExample,
+        raster_tile_source: MaplibrexDemoWeb.Examples.RasterTileSourceExample
       }
 
       for {name, example} <- examples do
