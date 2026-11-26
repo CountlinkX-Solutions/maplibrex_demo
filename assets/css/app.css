@@ -73,6 +73,10 @@
   --color-accent-soft: #eee9f8;
   --color-on-accent: #ffffff;
 
+  /* MapLibre's controls, attribution and popups stay on white in both
+     themes, so their text keeps the light theme's ink */
+  --color-map-ink: #1f2330;
+
   /* Code blocks stay dark in both themes */
   --color-code: #1f2330;
   --color-code-ink: #e9e9f2;
@@ -245,6 +249,12 @@
   li,
   dd {
     text-wrap: pretty;
+  }
+
+  /* MapLibre draws its attribution, controls and popups on white but lets
+     their text inherit the page's colour, which the dark theme makes light. */
+  .maplibregl-map {
+    color: var(--color-map-ink);
   }
 
   /* Code is copied, so show it as typed: no "->" or "=>" arrow ligatures. */

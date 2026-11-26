@@ -23,7 +23,7 @@
 
   <div class="space-y-4 border-t border-line px-4 py-4">
     <div class="grid gap-x-8 gap-y-4 lg:grid-cols-[auto_1fr]">
-      <.example_group id="scenario-particles-presets" label="preset">
+      <.example_group id="scenario-particles-presets" label="preset" code>
         <.example_button
           :for={preset <- presets()}
           id={"scenario-particles-preset-#{preset}"}
@@ -36,7 +36,7 @@
         </.example_button>
       </.example_group>
 
-      <.example_group id="scenario-particles-colors" label="u_color">
+      <.example_group id="scenario-particles-colors" label="u_color" code>
         <.example_button
           :for={{name, color} <- colors()}
           id={"scenario-particles-color-#{name}"}
