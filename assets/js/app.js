@@ -1,20 +1,3 @@
-// If you want to use Phoenix channels, run `mix help phx.gen.channel`
-// to get started and then uncomment the line below.
-// import "./user_socket.js"
-
-// You can include dependencies in two ways.
-//
-// The simplest option is to put them in assets/vendor and
-// import them using relative paths:
-//
-//     import "../vendor/some-package.js"
-//
-// Alternatively, you can `npm install some-package --prefix assets` and import
-// them using a path starting with the package name:
-//
-//     import "some-package"
-//
-
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
@@ -22,6 +5,7 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import {MapHooks} from "maplibrex"
+import {initTheme} from "./theme"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
@@ -30,14 +14,16 @@ let liveSocket = new LiveSocket("/live", Socket, {
   hooks: MapHooks
 })
 
-// Show progress bar on live navigation and form submits
-topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
+// Show progress bar on live navigation and form submits, in the accent colour.
+topbar.config({barColors: {0: "#5b3fa6"}, shadowColor: "rgba(0, 0, 0, .2)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 
 // No custom map glue is needed here: MaplibreX registers its own LiveView
 // handlers, so `push_event(socket, "map:fly_to", %{...})` from a LiveView
 // reaches the map directly.
+
+initTheme()
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()

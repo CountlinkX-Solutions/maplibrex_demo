@@ -69,7 +69,7 @@ defmodule MaplibrexDemoWeb.DemoComponents do
 
   def demo_page(assigns) do
     ~H"""
-    <div class="relative h-screen w-full overflow-hidden bg-[#050810]">
+    <div class="demo-legacy relative h-screen w-full overflow-hidden bg-[#050810] text-white">
       {render_slot(@map)}
 
       <.demo_nav path={@path} locale={@locale} />
