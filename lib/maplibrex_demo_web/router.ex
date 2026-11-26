@@ -9,6 +9,7 @@ defmodule MaplibrexDemoWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug MaplibrexDemoWeb.Plugs.SetLocale
+    plug MaplibrexDemoWeb.Plugs.SetTheme
   end
 
   pipeline :api do
