@@ -198,6 +198,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :hillshade_layer,
         family: :layers,
         module: Lib.HillshadeLayer,
+        example: MaplibrexDemoWeb.Examples.HillshadeLayerExample,
         summary: gettext("Shades relief from a raster DEM source."),
         status: :limited,
         issues: [reactive_layer]
@@ -235,6 +236,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :raster_dem_source,
         family: :sources,
         module: Lib.RasterDEMSource,
+        example: MaplibrexDemoWeb.Examples.RasterDemSourceExample,
         summary: gettext("Adds elevation tiles for hillshading and 3D terrain."),
         status: :limited,
         issues: [reactive_source]
