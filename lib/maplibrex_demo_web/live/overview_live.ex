@@ -150,6 +150,14 @@ defmodule MaplibrexDemoWeb.OverviewLive do
                 )}
               </p>
               <.code_block id="install-npm" code={@snippets.npm} language={:shell} />
+              <p id="install-maplibre-gl-6" class="mt-3 max-w-measure text-body text-ink-muted">
+                <.rich_text text={
+                  gettext(
+                    "maplibre-gl 6 starts its worker from separate files that esbuild does not emit. Serve `maplibre-gl-worker.mjs` and `maplibre-gl-shared.mjs` from `node_modules/maplibre-gl/dist/` next to your bundle, or no vector data draws."
+                  )
+                } />
+                <.issue_link number={41} />
+              </p>
             </.install_step>
 
             <.install_step number={3} title={gettext("Register the hooks")}>

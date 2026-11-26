@@ -40,7 +40,8 @@ defmodule MaplibrexDemoWeb.Examples.GeolocateControlExample do
      )}
   end
 
-  # While tracking, each new position arrives here.
+  # While tracking, this arrives each time the map stops moving. It carries
+  # the map's centre rather than the device's own position (library issue #40).
   def handle_event("geolocate:user_location_updated", %{"coords" => coords}, socket) do
     {:noreply, assign(socket, :location, [coords["latitude"], coords["longitude"]])}
   end
