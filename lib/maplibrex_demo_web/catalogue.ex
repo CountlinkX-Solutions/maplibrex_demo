@@ -39,7 +39,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
   # library the demo runs, which follows `main`, so it is written here once.
   # Bump it whenever the library publishes a release on Hex: the overview's
   # install step and the roadmap compare it with the version the demo runs.
-  @hex_release "0.2.0"
+  @hex_release "0.2.1"
 
   @family_ids [:map, :markers, :layers, :sources, :controls, :three_d, :advanced]
 

@@ -23,7 +23,7 @@ defmodule MaplibrexDemo.LibraryCheckoutTest do
     # the first with the fixes for #41 and #42. When the lock moves on, check
     # those steps against the README and move this with it.
     test "locks MaplibreX at the commit the overview's install steps follow" do
-      assert {:git, _url, "363b3967d84f3b9829e298b2bf7bd8230c591bdf", _opts} = maplibrex_lock()
+      assert {:git, _url, "c84b7f95443ae70c05e434736a655ca39ceef409", _opts} = maplibrex_lock()
     end
   end
 
