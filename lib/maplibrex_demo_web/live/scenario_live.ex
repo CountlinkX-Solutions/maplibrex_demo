@@ -92,7 +92,7 @@ defmodule MaplibrexDemoWeb.ScenarioLive do
           html={file.html}
           language={file.language}
           title={file.path}
-          max_height="max-h-[30rem]"
+          collapse
           class="mt-[18px]"
         />
       </section>

@@ -209,12 +209,24 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
     """
   end
 
+  # A collapsed source shows this many lines (the `20lh` of the collapsed
+  # height below), and only a source longer than the threshold collapses, so
+  # the control never hides just a line or two.
+  @collapsed_lines 20
+  @collapse_threshold @collapsed_lines + 4
+
   @doc """
   A code block on the dark code ground, with a copy button.
 
   `code` is shown exactly as given, highlighted on the server (no CDN), and
   is what the copy button copies. `title` names the file or the step it
   belongs to.
+
+  With `collapse`, a source longer than #{@collapse_threshold} lines shows
+  its first #{@collapsed_lines} under a fade, with a "Show full source" button.
+  The button toggles in the browser only (`JS.toggle_attribute/2`, which
+  LiveView keeps across patches); the whole source stays in the page, so
+  copying and screen readers always get all of it.
   """
   attr :id, :string, required: true
   attr :code, :string, required: true
@@ -225,7 +237,7 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
 
   attr :title, :string, default: nil
   attr :class, :string, default: nil
-  attr :max_height, :string, default: nil, doc: "a Tailwind max-height class for long sources"
+  attr :collapse, :boolean, default: false, doc: "cap a long source until the reader expands it"
 
   attr :html, :string,
     default: nil,
@@ -233,32 +245,70 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
 
   def code_block(assigns) do
     assigns =
-      assign_new(assigns, :highlighted, fn ->
+      assigns
+      |> assign_new(:highlighted, fn ->
         assigns.html || Highlight.to_html(assigns.code, assigns.language)
       end)
+      |> assign(:collapsible, assigns.collapse and line_count(assigns.code) > @collapse_threshold)
 
     ~H"""
     <figure
       id={@id}
-      class={["overflow-hidden rounded-panel border border-code-line bg-code text-code-ink", @class]}
+      data-collapsible={@collapsible}
+      class={[
+        "group/code overflow-hidden rounded-panel border border-code-line bg-code text-code-ink",
+        @class
+      ]}
     >
       <figcaption class="flex h-10 items-center justify-between gap-3 border-b border-code-line pr-1.5 pl-4">
         <span class="truncate font-mono text-label text-code-muted">{@title ||
           language_label(@language)}</span>
         <.copy_button target={"#{@id}-code"} />
       </figcaption>
-      <pre
-        class={[
-          "overflow-x-auto px-4 py-3.5 font-mono text-source",
-          @max_height && "overflow-y-auto",
-          @max_height
-        ]}
-        tabindex="0"
-        phx-no-format
-      ><code id={"#{@id}-code"}>{Phoenix.HTML.raw(@highlighted)}</code></pre>
+      <div class="relative">
+        <pre
+          id={"#{@id}-source"}
+          class={[
+            "overflow-x-auto px-4 py-3.5 font-mono text-source",
+            @collapsible &&
+              "max-h-[calc(20lh+1.75rem)] overflow-y-hidden group-data-expanded/code:max-h-none"
+          ]}
+          tabindex="0"
+          phx-no-format
+        ><code id={"#{@id}-code"}>{Phoenix.HTML.raw(@highlighted)}</code></pre>
+        <div
+          :if={@collapsible}
+          id={"#{@id}-fade"}
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-b from-transparent to-code group-data-expanded/code:hidden"
+        />
+      </div>
+      <button
+        :if={@collapsible}
+        id={"#{@id}-toggle"}
+        type="button"
+        aria-expanded="false"
+        aria-controls={"#{@id}-source"}
+        class="flex h-10 w-full cursor-pointer items-center justify-center gap-1.5 border-t border-code-line text-label font-bold text-code-muted hover:bg-white/5 hover:text-code-ink focus-visible:-outline-offset-2"
+        phx-click={
+          JS.dispatch("app:code-toggle")
+          |> JS.toggle_attribute({"aria-expanded", "true", "false"})
+          |> JS.toggle_attribute({"data-expanded", ""}, to: "##{@id}")
+        }
+      >
+        <span class="group-data-expanded/code:hidden">{gettext("Show full source")}</span>
+        <.icon name="hero-chevron-down-micro" class="size-4 group-data-expanded/code:hidden" />
+        <span class="hidden group-data-expanded/code:inline">{gettext("Show less")}</span>
+        <.icon
+          name="hero-chevron-up-micro"
+          class="hidden size-4 group-data-expanded/code:inline-block"
+        />
+      </button>
     </figure>
     """
   end
+
+  defp line_count(code), do: code |> String.trim_trailing() |> String.split("\n") |> length()
 
   defp language_label(:elixir), do: "Elixir"
   defp language_label(:heex), do: "HEEx"

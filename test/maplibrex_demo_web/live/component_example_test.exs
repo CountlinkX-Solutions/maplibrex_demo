@@ -16,6 +16,20 @@ defmodule MaplibrexDemoWeb.ComponentExampleTest do
     refute has_element?(view, "#example-coming")
   end
 
+  test "caps the long template under the preview behind a control", %{conn: conn} do
+    {:ok, view, _html} = live(conn, ~p"/components/map")
+
+    assert has_element?(view, "#preview-source[data-collapsible]")
+    assert has_element?(view, ~s(#preview-source-toggle[aria-expanded="false"]))
+  end
+
+  test "shows the sources whole in the HEEx tab", %{conn: conn} do
+    {:ok, view, _html} = live(conn, ~p"/components/map?tab=heex")
+
+    assert has_element?(view, "#panel-heex #source-map_example-ex-code")
+    refute has_element?(view, "#panel-heex [data-collapsible]")
+  end
+
   test "keeps the example running while another tab is open", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/components/map")
     child = example(view)

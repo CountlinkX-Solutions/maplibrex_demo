@@ -38,6 +38,23 @@ const initCopy = () => {
   })
 }
 
+// Long sources open and close with `JS.toggle_attribute/2` in the template,
+// which LiveView keeps across patches. This only keeps the button in place
+// when "Show less" shortens a source the reader has scrolled through, so the
+// page does not leave them far below it. The event arrives before the toggle.
+const initCodeToggle = () => {
+  window.addEventListener("app:code-toggle", event => {
+    const button = event.target
+    if (button.getAttribute("aria-expanded") !== "true") return
+
+    const before = button.getBoundingClientRect().top
+    requestAnimationFrame(() => {
+      const shift = button.getBoundingClientRect().top - before
+      if (shift !== 0) window.scrollBy(0, shift)
+    })
+  })
+}
+
 // "/" focuses the component filter, as on most documentation sites, unless
 // the visitor is already typing somewhere.
 const initSearchShortcut = () => {
@@ -59,5 +76,6 @@ const initSearchShortcut = () => {
 export const initShell = () => {
   initDialogs()
   initCopy()
+  initCodeToggle()
   initSearchShortcut()
 }
