@@ -135,6 +135,7 @@
   --spacing-sidebar: 17.5rem;
   --spacing-preview: 22.5rem;
   --spacing-scenario: 32rem;
+  --spacing-rail: 13rem;
   --container-measure: 34rem;
   --container-page: 66rem;
 
@@ -250,6 +251,11 @@
   h2,
   h3 {
     text-wrap: balance;
+  }
+
+  /* A heading reached through a link stops below the sticky top bar. */
+  main :is(h2, h3)[id] {
+    scroll-margin-top: calc(var(--spacing-topbar) + 1.5rem);
   }
 
   p,

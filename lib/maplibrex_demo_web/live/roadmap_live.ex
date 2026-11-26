@@ -41,6 +41,7 @@ defmodule MaplibrexDemoWeb.RoadmapLive do
       current_path={@current_path}
       query={@query}
       section={:roadmap}
+      page_sections={page_sections(@families, @next_release)}
     >
       <header class="max-w-measure">
         <h1 class="text-display font-black tracking-tight">{gettext("Roadmap")}</h1>
@@ -154,6 +155,24 @@ defmodule MaplibrexDemoWeb.RoadmapLive do
       </section>
     </Layouts.app>
     """
+  end
+
+  # The rail lists the sections and, under the components, each family.
+  defp page_sections(families, next_release) do
+    [
+      %{id: "statuses-heading", label: gettext("Statuses")},
+      %{id: "roadmap-components-heading", label: gettext("Limited and planned components")}
+    ] ++
+      for(
+        family <- families,
+        do: %{id: "roadmap-family-#{family.id}-heading", label: family.label, level: 3}
+      ) ++
+      [
+        %{
+          id: "next-release-heading",
+          label: gettext("Fixed in %{version}", version: next_release.version)
+        }
+      ]
   end
 
   @doc """

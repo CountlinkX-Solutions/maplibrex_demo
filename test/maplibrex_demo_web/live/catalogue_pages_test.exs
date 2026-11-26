@@ -235,6 +235,49 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
     end
   end
 
+  describe "on this page" do
+    defp query(view, selector, attribute) do
+      view
+      |> render()
+      |> LazyHTML.from_fragment()
+      |> LazyHTML.query(selector)
+      |> LazyHTML.attribute(attribute)
+    end
+
+    for path <- ["/", "/roadmap"] do
+      test "#{path} links every section heading from its rail", %{conn: conn} do
+        {:ok, view, _html} = live(conn, unquote(path))
+
+        assert has_element?(view, ~s(nav#page-rail[aria-labelledby="page-rail-title"]))
+        assert has_element?(view, "#page-rail-title")
+        assert has_element?(view, ~s(#page-rail[phx-hook="PageRail"][phx-update="ignore"]))
+
+        targets = for "#" <> id <- query(view, "#page-rail a", "href"), do: id
+        assert targets != []
+
+        for id <- targets do
+          assert has_element?(view, "#main h2##{id}, #main h3##{id}"), "no heading ##{id}"
+        end
+
+        assert query(view, "#main h2[id]", "id") -- targets == []
+      end
+    end
+
+    test "the roadmap's rail lists each family under its section", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/roadmap")
+
+      for family <- Catalogue.families(), Enum.any?(family.components, &(&1.status != :stable)) do
+        assert has_element?(view, ~s(#page-rail a[href="#roadmap-family-#{family.id}-heading"]))
+      end
+    end
+
+    test "a component page has no rail", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/components/map")
+
+      refute has_element?(view, "#page-rail")
+    end
+  end
+
   describe "scenarios" do
     test "links every scenario to its page", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/scenarios")

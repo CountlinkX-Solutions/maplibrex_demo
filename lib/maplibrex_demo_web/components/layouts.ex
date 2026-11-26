@@ -46,6 +46,14 @@ defmodule MaplibrexDemoWeb.Layouts do
 
   attr :current_component, :atom, default: nil, doc: "the component to mark in the sidebar"
 
+  attr :page_sections, :list,
+    default: [],
+    doc: """
+    the page's sections for the "On this page" rail beside the main column
+    on wide screens, as `%{id: heading_id, label: label}`, with `level: 3`
+    for a subsection; no rail when empty
+    """
+
   slot :inner_block, required: true
 
   def app(assigns) do
@@ -132,9 +140,18 @@ defmodule MaplibrexDemoWeb.Layouts do
       </aside>
 
       <main id="main" class="min-w-0 px-4 pt-8 pb-24 sm:px-8 lg:px-12 lg:pt-[34px]">
-        <div class="max-w-page">
-          {render_slot(@inner_block)}
-        </div>
+        <%= if @page_sections == [] do %>
+          <div class="max-w-page">
+            {render_slot(@inner_block)}
+          </div>
+        <% else %>
+          <div class="max-w-page xl:grid xl:max-w-[calc(var(--container-page)+var(--spacing-rail)+3rem)] xl:grid-cols-[minmax(0,1fr)_var(--spacing-rail)] xl:gap-x-12">
+            <div class="min-w-0">
+              {render_slot(@inner_block)}
+            </div>
+            <.page_rail sections={@page_sections} />
+          </div>
+        <% end %>
       </main>
     </div>
 
@@ -217,6 +234,47 @@ defmodule MaplibrexDemoWeb.Layouts do
         members != [] do
       %{family | components: members}
     end
+  end
+
+  # The "On this page" rail: plain anchors to the page's headings, so it
+  # works without JavaScript. The PageRail hook (assets/js/page_rail.js)
+  # marks the section being read; phx-update="ignore" keeps that mark when
+  # LiveView patches the page.
+  attr :sections, :list, required: true
+
+  defp page_rail(assigns) do
+    ~H"""
+    <aside class="hidden xl:block">
+      <nav
+        id="page-rail"
+        phx-hook="PageRail"
+        phx-update="ignore"
+        aria-labelledby="page-rail-title"
+        class="sticky top-[calc(var(--spacing-topbar)+2.125rem)] max-h-[calc(100dvh-var(--spacing-topbar)-4.25rem)] overflow-y-auto pb-6"
+      >
+        <p
+          id="page-rail-title"
+          class="text-label font-bold tracking-[0.1em] text-ink-subtle uppercase"
+        >
+          {gettext("On this page")}
+        </p>
+        <ul class="mt-3 border-l border-line">
+          <li :for={section <- @sections}>
+            <a
+              href={"##{section.id}"}
+              class={[
+                "-ml-px block border-l border-transparent py-1 pr-2 text-ui text-ink-muted hover:text-ink focus-visible:-outline-offset-2",
+                "aria-[current=true]:border-accent-ink aria-[current=true]:font-bold aria-[current=true]:text-accent-ink",
+                if(Map.get(section, :level, 2) == 3, do: "pl-6", else: "pl-3")
+              ]}
+            >
+              {section.label}
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+    """
   end
 
   attr :id, :string, required: true
