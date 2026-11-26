@@ -65,15 +65,24 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
     """
   end
 
-  @doc "A labelled row of controls."
+  @doc """
+  A labelled row of controls. `code` sets the label in the code face, for a
+  row named after the attribute or assign its controls set.
+  """
   attr :label, :string, required: true
   attr :id, :string, required: true
+  attr :code, :boolean, default: false
   slot :inner_block, required: true
 
   def example_group(assigns) do
     ~H"""
     <div role="group" aria-labelledby={"#{@id}-label"} class="min-w-0">
-      <p id={"#{@id}-label"} class="mb-2 text-label font-bold text-ink-subtle">{@label}</p>
+      <p
+        id={"#{@id}-label"}
+        class={["mb-2 text-label text-ink-subtle", if(@code, do: "font-mono", else: "font-bold")]}
+      >
+        {@label}
+      </p>
       <div class="flex flex-wrap items-center gap-1.5">{render_slot(@inner_block)}</div>
     </div>
     """

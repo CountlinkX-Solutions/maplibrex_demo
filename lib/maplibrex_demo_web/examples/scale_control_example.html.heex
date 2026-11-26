@@ -19,39 +19,41 @@
     position={@position}
   />
 
-  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[auto_1fr]">
-    <.example_group id="example-scale-units" label="unit">
-      <.example_button
-        :for={unit <- units()}
-        id={"example-scale-unit-#{unit}"}
-        code
-        pressed={@unit == unit}
-        phx-click="unit"
-        phx-value-unit={unit}
-      >
-        {unit}
-      </.example_button>
-    </.example_group>
+  <div class="space-y-4 border-t border-line px-4 py-4">
+    <div class="flex flex-wrap gap-x-8 gap-y-4">
+      <.example_group id="example-scale-units" label="unit" code>
+        <.example_button
+          :for={unit <- units()}
+          id={"example-scale-unit-#{unit}"}
+          code
+          pressed={@unit == unit}
+          phx-click="unit"
+          phx-value-unit={unit}
+        >
+          {unit}
+        </.example_button>
+      </.example_group>
 
-    <.example_group id="example-scale-positions" label="position">
-      <.example_button
-        :for={position <- positions()}
-        id={"example-scale-position-#{position}"}
-        code
-        pressed={@position == position}
-        phx-click="position"
-        phx-value-position={position}
-      >
-        {position}
-      </.example_button>
-    </.example_group>
+      <.example_group id="example-scale-positions" label="position" code>
+        <.example_button
+          :for={position <- positions()}
+          id={"example-scale-position-#{position}"}
+          code
+          pressed={@position == position}
+          phx-click="position"
+          phx-value-position={position}
+        >
+          {position}
+        </.example_button>
+      </.example_group>
+    </div>
 
     <.example_group id="example-scale-assigns" label={gettext("Set assigns")}>
       <.form
         for={@options}
         id="example-scale-options"
         phx-change="options"
-        class="grid w-full gap-4 sm:max-w-lg sm:grid-cols-2"
+        class="grid w-full gap-4 sm:max-w-2xl sm:grid-cols-2"
       >
         <.example_range
           field={@options[:max_width]}
