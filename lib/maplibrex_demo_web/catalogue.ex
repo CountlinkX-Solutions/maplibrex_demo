@@ -72,6 +72,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :map,
         family: :map,
         module: Lib.Map,
+        example: MaplibrexDemoWeb.Examples.MapExample,
         summary:
           gettext(
             "A MapLibre GL JS map whose center, zoom, pitch, bearing and style follow the LiveView's assigns."

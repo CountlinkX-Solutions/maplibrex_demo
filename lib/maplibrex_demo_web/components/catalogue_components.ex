@@ -107,8 +107,8 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
   def issue_list(assigns) do
     ~H"""
     <ul class={["space-y-1.5", @class]}>
-      <li :for={issue <- @issues} class="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-        <span class="text-ink-muted"><.rich_text text={issue.note} /></span>
+      <li :for={issue <- @issues} class="text-ink-muted">
+        <.rich_text text={issue.note} />
         <.issue_link number={issue.number} />
       </li>
     </ul>

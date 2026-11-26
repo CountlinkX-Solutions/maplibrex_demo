@@ -77,6 +77,20 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
     end
   end
 
+  describe "examples" do
+    test "the map has the reference example" do
+      assert Catalogue.fetch!(:map).example == MaplibrexDemoWeb.Examples.MapExample
+    end
+
+    test "every example is a LiveView with its source on hand" do
+      for %Component{example: example} <- Catalogue.components(), example do
+        assert Code.ensure_loaded?(example)
+        assert function_exported?(example, :mount, 3)
+        assert [_ | _] = MaplibrexDemoWeb.Examples.Sources.files(example)
+      end
+    end
+  end
+
   describe "families/0" do
     test "lists the seven families in reading order" do
       assert Enum.map(Catalogue.families(), & &1.id) ==
