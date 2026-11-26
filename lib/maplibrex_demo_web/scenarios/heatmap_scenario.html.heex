@@ -1,0 +1,66 @@
+<div id="heatmap-scenario">
+  <.example_frame error={@map_error} error_id="scenario-heatmap-map-error" tall>
+    <.map
+      id="scenario-heatmap-map"
+      center={[-106.0, 39.5]}
+      zoom={3.4}
+      style="https://tiles.openfreemap.org/styles/dark"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <.navigation_control id="scenario-heatmap-navigation" map_id="scenario-heatmap-map" />
+
+  <.geojson_layer
+    id="scenario-heatmap-layer"
+    map_id="scenario-heatmap-map"
+    type="heatmap"
+    data={@points}
+    paint={paint(@radius, @intensity, @opacity)}
+  />
+
+  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[1fr_auto]">
+    <.example_group id="scenario-heatmap-assigns" label={gettext("Set assigns")}>
+      <.form
+        for={@options}
+        id="scenario-heatmap-options"
+        phx-change="options"
+        class="grid w-full gap-4 sm:grid-cols-3"
+      >
+        <.example_range field={@options[:radius]} label="radius" min="10" max="50" />
+        <.example_range
+          field={@options[:intensity]}
+          label="intensity"
+          min="0.2"
+          max="3"
+          step="0.1"
+        />
+        <.example_range field={@options[:opacity]} label="opacity" min="0" max="1" step="0.05" />
+      </.form>
+    </.example_group>
+
+    <%!-- The heatmap-color ramp, from no density to the highest. --%>
+    <div id="scenario-heatmap-legend" class="min-w-48">
+      <p class="mb-2 text-label font-bold text-ink-subtle">{gettext("Density")}</p>
+      <div class="h-2.5 rounded-full ring-1 ring-line" style={legend_gradient()} />
+      <p class="mt-1.5 flex justify-between text-label text-ink-muted">
+        <span>{gettext("Low")}</span><span>{gettext("High")}</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="px-4 pb-4">
+    <.example_note id="scenario-heatmap-sample-data">
+      {gettext(
+        "Sample data: 500 points generated around six seismic zones of the United States. They are not real earthquakes."
+      )}
+    </.example_note>
+  </div>
+
+  <.example_readout values={[
+    points: length(@points["features"]),
+    radius: @radius,
+    intensity: @intensity,
+    opacity: @opacity
+  ]} />
+</div>
