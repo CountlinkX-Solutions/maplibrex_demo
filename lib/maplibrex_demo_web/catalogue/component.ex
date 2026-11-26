@@ -11,10 +11,21 @@ defmodule MaplibrexDemoWeb.Catalogue.Component do
     * `issues` — the library issues behind a non-stable status, each with a
       one-sentence note, most important first.
     * `example` — the LiveView that demonstrates it, or `nil` while none exists.
+    * `example_note` — why a component that works has no example, already
+      translated, when the reason is not its status; `nil` otherwise.
   """
 
   @enforce_keys [:name, :family, :module, :summary, :status]
-  defstruct [:name, :family, :module, :summary, :status, issues: [], example: nil]
+  defstruct [
+    :name,
+    :family,
+    :module,
+    :summary,
+    :status,
+    issues: [],
+    example: nil,
+    example_note: nil
+  ]
 
   @type status :: :stable | :limited | :planned
   @type issue :: %{number: pos_integer(), note: String.t()}
@@ -26,6 +37,7 @@ defmodule MaplibrexDemoWeb.Catalogue.Component do
           summary: String.t(),
           status: status(),
           issues: [issue()],
-          example: module() | nil
+          example: module() | nil,
+          example_note: String.t() | nil
         }
 end

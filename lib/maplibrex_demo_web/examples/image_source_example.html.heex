@@ -1,0 +1,84 @@
+<div id="image-source-example">
+  <.example_frame
+    error={@map_error}
+    error_id="example-image-map-error"
+    hosts={["tiles.openfreemap.org", "maplibre.org"]}
+  >
+    <.map
+      id="example-image-map"
+      center={[-75.97, 42.19]}
+      zoom={4.6}
+      style="https://tiles.openfreemap.org/styles/positron"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- The image is stretched between its four corners. A new url is
+        applied to the source in place, without removing it. --%>
+  <.image_source
+    id="example-image-radar"
+    map_id="example-image-map"
+    url={frame_url(@frame)}
+    coordinates={@corners}
+  />
+
+  <.raster_layer
+    id="example-image-layer"
+    map_id="example-image-map"
+    source_id="example-image-radar"
+    paint={%{"raster-opacity" => @opacity, "raster-fade-duration" => 0}}
+  />
+
+  <div class="space-y-4 border-t border-line px-4 py-4">
+    <div class="grid gap-x-8 gap-y-4 lg:grid-cols-[auto_1fr]">
+      <.example_group id="example-image-frames" label="url" code>
+        <.example_button
+          :for={frame <- frames()}
+          id={"example-image-frame-#{frame}"}
+          code
+          pressed={@frame == frame}
+          phx-click="frame"
+          phx-value-frame={frame}
+        >
+          radar{frame}.gif
+        </.example_button>
+        <.example_button id="example-image-play" pressed={@playing} phx-click="play">
+          <.icon
+            name={if(@playing, do: "hero-pause-mini", else: "hero-play-mini")}
+            class="size-4"
+          />
+          {if(@playing, do: gettext("Pause"), else: gettext("Play"))}
+        </.example_button>
+      </.example_group>
+
+      <.form
+        for={@options}
+        id="example-image-options"
+        phx-change="options"
+        class="w-full sm:max-w-xs"
+      >
+        <.example_range
+          field={@options[:opacity]}
+          label="raster-opacity"
+          min="0"
+          max="1"
+          step="0.05"
+        />
+      </.form>
+    </div>
+
+    <.example_note id="example-image-sample-data">
+      {gettext(
+        "Sample data: radar images from the MapLibre GL JS documentation, placed where its examples place them. They are not current weather."
+      )}
+    </.example_note>
+  </div>
+
+  <%!-- source:added sets status; the timer moves frame while playing. --%>
+  <.example_readout values={[
+    frame: @frame,
+    playing: @playing,
+    opacity: @opacity,
+    status: @status
+  ]} />
+</div>

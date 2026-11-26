@@ -230,16 +230,21 @@ defmodule MaplibrexDemoWeb.ComponentLive do
     >
       <.icon name="hero-map" class="size-7 text-ink-subtle" />
       <p class="mt-3 font-bold">{gettext("No example yet")}</p>
-      <p class="mt-1 max-w-sm text-ui text-ink-muted">
-        {if @component.status == :planned,
-          do:
+      <p id="example-coming-note" class="mt-1 max-w-sm text-ui text-ink-muted">
+        {cond do
+          @component.status == :planned ->
             gettext(
               "This component cannot render yet, so it gets no example until its issue is fixed."
-            ),
-          else:
+            )
+
+          @component.example_note ->
+            @component.example_note
+
+          true ->
             gettext(
               "Its interactive example comes in a later update of the demo. Its events and attributes are already listed."
-            )}
+            )
+        end}
       </p>
       <.link
         patch={tab_path(@component, :attributes)}

@@ -259,6 +259,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :image_source,
         family: :sources,
         module: Lib.ImageSource,
+        example: MaplibrexDemoWeb.Examples.ImageSourceExample,
         summary: gettext("Places an image at four coordinates for a raster layer to draw."),
         status: :limited,
         issues: [undocumented_events]
@@ -269,7 +270,11 @@ defmodule MaplibrexDemoWeb.Catalogue do
         module: Lib.VideoSource,
         summary: gettext("Places a video at four coordinates for a raster layer to draw."),
         status: :limited,
-        issues: [undocumented_events]
+        issues: [undocumented_events],
+        example_note:
+          gettext(
+            "It has no example because no openly licensed video could be found that is hosted to stay available and whose picture lines up with four points on a map."
+          )
       },
 
       # Controls

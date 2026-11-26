@@ -85,6 +85,12 @@ defmodule MaplibrexDemoWeb.ComponentTabsTest do
       assert has_element?(view, "#source-empty")
     end
 
+    test "gives the catalogue's reason when there is one", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/components/video_source")
+
+      assert has_element?(view, "#example-coming #example-coming-note", "video")
+    end
+
     test "explains a planned component has no example until its issue is fixed", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/components/sky")
 
