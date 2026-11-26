@@ -65,6 +65,11 @@ defmodule MaplibrexDemoWeb.RoutingTest do
     end
   end
 
+  test "no page needs a tile server any more, so none is configured" do
+    assert Application.get_env(:maplibrex_demo, :tile_server_url) == nil
+    assert Application.get_env(:maplibrex_demo, :fallback_style_url) == nil
+  end
+
   test "the old pages and their chrome are gone" do
     for name <- ~w(MapLive TilesLive OgcFeaturesLive DeckglLive TerrainLive HeatmapLive
                    BuildingsLive MarkersLive ParticlesLive DemoComponents) do

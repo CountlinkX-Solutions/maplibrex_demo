@@ -7,16 +7,7 @@
 # General application configuration
 import Config
 
-config :maplibrex_demo,
-  generators: [timestamp_type: :utc_datetime],
-  # The /tiles and /ogc demos read from a separate tile server (the sibling
-  # `tileserver` project), not from this application. Both pages degrade to a
-  # public basemap and say so when it is not reachable.
-  #
-  # Override at runtime with TILE_SERVER_URL — see config/runtime.exs.
-  tile_server_url: "http://localhost:4000",
-  # Public style used when the tile server is unreachable.
-  fallback_style_url: "https://demotiles.maplibre.org/style.json"
+config :maplibrex_demo, generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
 config :maplibrex_demo, MaplibrexDemoWeb.Endpoint,
