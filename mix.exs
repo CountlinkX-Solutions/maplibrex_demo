@@ -64,24 +64,59 @@ defmodule MaplibrexDemo.MixProject do
     ]
   end
 
-  # MaplibreX ships its hooks and stylesheet as an npm package so that
-  # `import "maplibrex"` resolves the same way whether the Elixir dependency
-  # came from GitHub (deps/maplibrex) or from a local checkout (MAPLIBREX_PATH,
-  # where Mix creates no deps/ entry at all).
+  # MaplibreX ships its hooks and stylesheet as an npm package. esbuild
+  # (`import "maplibrex"`) and Tailwind (`@import "maplibrex/css"`) both find it
+  # through one npm link, assets/node_modules/maplibrex, which must point at
+  # the checkout Mix compiles: MAPLIBREX_PATH when it is set, deps/maplibrex
+  # otherwise. `mix assets.setup` creates the link; `mix assets.build`,
+  # `mix assets.deploy` and `mix phx.server` re-create it first whenever it
+  # points at the other checkout, so switching MAPLIBREX_PATH on or off needs
+  # no extra step.
   defp npm_install(_args) do
     args =
       case System.get_env("MAPLIBREX_PATH") do
         # package.json already points at deps/maplibrex.
         nil ->
-          ["install", "--prefix", "assets"]
+          ["install", "--prefix", "assets", "--no-audit", "--no-fund"]
 
         # Override the checkout without rewriting the committed package.json.
-        path ->
-          ["install", "--prefix", "assets", "--no-save", "maplibrex@file:" <> Path.expand(path)]
+        _path ->
+          ["install", "--prefix", "assets", "--no-audit", "--no-fund", "--no-save"] ++
+            ["maplibrex@file:" <> maplibrex_checkout()]
       end
 
     {_out, 0} = System.cmd("npm", args, into: IO.stream())
     :ok
+  end
+
+  defp link_maplibrex(args) do
+    link = Path.expand("assets/node_modules/maplibrex", __DIR__)
+
+    if maplibrex_linked?(link, maplibrex_checkout()) do
+      :ok
+    else
+      Mix.shell().info("Linking assets/node_modules/maplibrex to #{maplibrex_checkout()}")
+      npm_install(args)
+    end
+  end
+
+  @doc false
+  # The checkout of MaplibreX that both Mix and the asset build use.
+  # MAPLIBREX_PATH is relative to this file, as a Mix path dependency is.
+  def maplibrex_checkout do
+    case System.get_env("MAPLIBREX_PATH") do
+      nil -> Path.expand("deps/maplibrex", __DIR__)
+      path -> Path.expand(path, __DIR__)
+    end
+  end
+
+  @doc false
+  # Whether `link` is a symlink to `checkout`. npm writes relative links.
+  def maplibrex_linked?(link, checkout) do
+    case File.read_link(link) do
+      {:ok, target} -> Path.expand(target, Path.dirname(link)) == Path.expand(checkout)
+      {:error, _} -> false
+    end
   end
 
   # Point at a local checkout while developing the library and the demo side by
@@ -110,12 +145,15 @@ defmodule MaplibrexDemo.MixProject do
         "esbuild.install --if-missing",
         &npm_install/1
       ],
-      "assets.build": ["tailwind maplibrex_demo", "esbuild maplibrex_demo"],
+      "assets.build": [&link_maplibrex/1, "tailwind maplibrex_demo", "esbuild maplibrex_demo"],
       "assets.deploy": [
+        &link_maplibrex/1,
         "tailwind maplibrex_demo --minify",
         "esbuild maplibrex_demo --minify",
         "phx.digest"
       ],
+      # The dev server's esbuild and Tailwind watchers read the same link.
+      "phx.server": [&link_maplibrex/1, "phx.server"],
       precommit: ["compile --warning-as-errors", "deps.unlock --unused", "format", "test"]
     ]
   end

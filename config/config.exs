@@ -28,19 +28,22 @@ config :esbuild,
     # splitting keeps it out of the main bundle — only /deckgl pays for it.
     # Requires format=esm, so root.html.heex loads app.js as type="module".
     #
-    # --preserve-symlinks: `maplibrex` is installed as a `file:` dependency,
-    # which npm links rather than copies. Without this, esbuild resolves the
-    # bundle's peer imports (maplibre-gl, @deck.gl/*) relative to the library's
-    # real location instead of this application's node_modules, and they fail.
+    # Where `import "maplibrex"` comes from. esbuild resolves a bare import
+    # in this order: tsconfig.json "paths" (assets/tsconfig.json maps only
+    # the Phoenix packages), then node_modules directories up from the
+    # importing file, then NODE_PATH. So `maplibrex` resolves to
+    # assets/node_modules/maplibrex, the npm link that mix.exs keeps pointing
+    # at the checkout Mix compiles: MAPLIBREX_PATH when it is set,
+    # deps/maplibrex otherwise. A deps/maplibrex left over from the other
+    # mode is never read.
     #
-    # assets/node_modules is on NODE_PATH for the same reason, and it is the
-    # half that matters with a git dependency: deps/ is already on NODE_PATH
-    # (Phoenix puts it there for `import "phoenix"`), so `maplibrex` resolves
-    # to the real deps/maplibrex directory rather than the node_modules
-    # symlink, and --preserve-symlinks never comes into play. From there
-    # esbuild walks up looking for node_modules and never reaches
-    # assets/node_modules, so the peer imports fail. Listing it explicitly
-    # makes them resolvable no matter which way `maplibrex` was found.
+    # --preserve-symlinks: esbuild keeps the link's path instead of the
+    # library's real location, so the bundle's peer imports (maplibre-gl,
+    # @deck.gl/*) resolve from this application's assets/node_modules and the
+    # demo, not the library, decides their versions.
+    #
+    # NODE_PATH is a generated Phoenix application's: deps/ for the Phoenix
+    # packages and Mix's build path for colocated hooks.
     args: ~w(
         js/app.js
         --bundle
@@ -55,13 +58,7 @@ config :esbuild,
         --alias:@=.
       ),
     cd: Path.expand("../assets", __DIR__),
-    env: %{
-      "NODE_PATH" => [
-        Path.expand("../deps", __DIR__),
-        Path.expand("../assets/node_modules", __DIR__),
-        Mix.Project.build_path()
-      ]
-    }
+    env: %{"NODE_PATH" => [Path.expand("../deps", __DIR__), Mix.Project.build_path()]}
   ]
 
 # Configure tailwind (the version is required)
