@@ -352,6 +352,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :terrain,
         family: :three_d,
         module: Lib.Terrain,
+        example: MaplibrexDemoWeb.Examples.TerrainExample,
         summary:
           gettext("Renders 3D terrain from a raster DEM source, with adjustable exaggeration."),
         status: :stable
