@@ -9,7 +9,7 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
   use Phoenix.Component
   use Gettext, backend: MaplibrexDemoWeb.Gettext
 
-  import MaplibrexDemoWeb.CoreComponents, only: [icon: 1]
+  import MaplibrexDemoWeb.CoreComponents, only: [icon: 1, input: 1]
 
   @doc """
   The box the map fills, at the preview's height: give the map
@@ -66,23 +66,82 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
     """
   end
 
-  @doc "A small button. `code` sets its label in the code face, for function names."
+  @doc """
+  A small button. `code` sets its label in the code face, for function names
+  and attribute values. `pressed` marks the current choice of a set, with
+  `aria-pressed`.
+  """
   attr :code, :boolean, default: false
-  attr :rest, :global, include: ~w(phx-click phx-value-place disabled)
+  attr :pressed, :boolean, default: nil, doc: "true or false for one of a set of choices"
+  attr :rest, :global, include: ~w(disabled)
   slot :inner_block, required: true
 
   def example_button(assigns) do
     ~H"""
     <button
       type="button"
+      aria-pressed={if(is_boolean(@pressed), do: to_string(@pressed))}
       class={[
-        "inline-flex h-8 cursor-pointer items-center rounded-ui border border-line-strong bg-canvas px-2.5 text-ui hover:border-ink-subtle hover:bg-surface active:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-50",
+        "inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-ui border px-2.5 text-ui active:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-50",
+        if(@pressed,
+          do: "border-accent-ink bg-accent-soft text-accent-ink",
+          else: "border-line-strong bg-canvas hover:border-ink-subtle hover:bg-surface"
+        ),
         if(@code, do: "font-mono text-label", else: "font-bold")
       ]}
       {@rest}
     >
       {render_slot(@inner_block)}
     </button>
+    """
+  end
+
+  @doc "A dot of colour, for buttons that set a colour."
+  attr :color, :string, required: true
+
+  def example_swatch(assigns) do
+    ~H"""
+    <span
+      class="size-3 shrink-0 rounded-full ring-1 ring-ink/25"
+      style={"background-color: #{@color}"}
+      aria-hidden="true"
+    />
+    """
+  end
+
+  @doc """
+  A slider bound to a form field, labelled with the assign it sets. Its
+  value arrives as a string, e.g. `"14.5"`.
+  """
+  attr :field, Phoenix.HTML.FormField, required: true
+  attr :label, :string, required: true
+  attr :rest, :global, include: ~w(min max step)
+
+  def example_range(assigns) do
+    ~H"""
+    <.input
+      field={@field}
+      type="range"
+      label={@label}
+      wrapper_class="min-w-0 font-mono text-label text-ink-subtle"
+      class="mt-1 block w-full cursor-pointer accent-accent"
+      {@rest}
+    />
+    """
+  end
+
+  @doc "A checkbox bound to a form field, labelled with the assign it sets."
+  attr :field, Phoenix.HTML.FormField, required: true
+  attr :label, :string, required: true
+
+  def example_checkbox(assigns) do
+    ~H"""
+    <.input
+      field={@field}
+      type="checkbox"
+      label={@label}
+      wrapper_class="font-mono text-label text-ink-muted"
+    />
     """
   end
 

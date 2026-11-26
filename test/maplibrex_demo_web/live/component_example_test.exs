@@ -40,6 +40,16 @@ defmodule MaplibrexDemoWeb.ComponentExampleTest do
     refute has_element?(view, "#source-empty")
   end
 
+  test "every component with an example runs it above its template", %{conn: conn} do
+    for %{name: name, example: example} <- MaplibrexDemoWeb.Catalogue.components(), example do
+      {:ok, view, _html} = live(conn, ~p"/components/#{name}")
+
+      assert find_live_child(view, "example-#{name}-live"), "#{name} runs no example"
+      assert has_element?(view, "#preview-source-code")
+      refute has_element?(view, "#example-coming")
+    end
+  end
+
   test "shows the last payload of each event the example received", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/components/map?tab=events")
 
