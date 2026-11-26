@@ -14,6 +14,14 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
       assert has_element?(view, "#minimal-template code", "<.map")
     end
 
+    test "says maplibre-gl 6 needs its worker files served, with the issue", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(view, "#install-maplibre-gl-6", "maplibre-gl-worker.mjs")
+      assert has_element?(view, "#install-maplibre-gl-6", "maplibre-gl-shared.mjs")
+      assert has_element?(view, ~s(#install-maplibre-gl-6 a[href$="/issues/41"]))
+    end
+
     test "counts each family's components and statuses from the catalogue", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 

@@ -128,6 +128,12 @@ defmodule MaplibrexDemoWeb.Catalogue do
         status: :limited,
         issues: [
           issue(
+            37,
+            gettext(
+              "Without an `anchor`, the default `\"auto\"` makes MapLibre throw at mount, and the popup then stops following its assigns."
+            )
+          ),
+          issue(
             22,
             gettext(
               "The JS helpers `open/1`, `close/1`, `toggle/1` and `set_location/2` do nothing unless the server echoes them back."
@@ -320,7 +326,15 @@ defmodule MaplibrexDemoWeb.Catalogue do
         example: MaplibrexDemoWeb.Examples.GeolocateControlExample,
         summary:
           gettext("A button that centres the map on the user's location, with optional tracking."),
-        status: :stable
+        status: :limited,
+        issues: [
+          issue(
+            40,
+            gettext(
+              "`show_user_heading` hides the location dot instead of showing the heading, the options are fixed at mount, and `geolocate:user_location_updated` reports the map's centre."
+            )
+          )
+        ]
       },
       %Component{
         name: :attribution_control,
@@ -371,7 +385,16 @@ defmodule MaplibrexDemoWeb.Catalogue do
         example: MaplibrexDemoWeb.Examples.ControlGroupExample,
         summary: gettext("Groups several controls into one map control."),
         status: :limited,
-        issues: [reactive_custom_control]
+        issues: [
+          issue(
+            38,
+            gettext(
+              "A `<.control_button>` placed inside it is added to the map as a separate control; plain buttons work."
+            )
+          ),
+          issue(39, gettext("`orientation=\"horizontal\"` has no effect.")),
+          reactive_custom_control
+        ]
       },
       %Component{
         name: :zoom_range,

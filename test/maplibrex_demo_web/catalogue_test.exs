@@ -68,7 +68,7 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
     @limited %{
       map: [21, 25, 26],
       marker: [35, 36],
-      popup: [22],
+      popup: [37, 22],
       geojson_layer: [22],
       raster_tile_source: [24],
       image_source: [28],
@@ -77,9 +77,10 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       scale_control: [3],
       fullscreen_control: [3],
       attribution_control: [3],
+      geolocate_control: [40],
       terrain_control: [19],
       control: [3],
-      control_group: [3],
+      control_group: [38, 39, 3],
       zoom_range: [3],
       deckgl_layer: [11, 10],
       custom_layer: [34, 27]
@@ -101,8 +102,7 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
     test "marks stable what 0.2.0 fixed and no open issue limits" do
       for name <- ~w(circle_layer line_layer fill_layer symbol_layer heatmap_layer
                      fill_extrusion_layer background_layer hillshade_layer raster_layer
-                     vector_tile_source raster_dem_source terrain geolocate_control
-                     control_button)a do
+                     vector_tile_source raster_dem_source terrain control_button)a do
         assert %{status: :stable, issues: []} = Catalogue.fetch!(name)
       end
     end
