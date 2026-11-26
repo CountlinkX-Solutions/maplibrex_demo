@@ -1,0 +1,55 @@
+<div id="hillshade-layer-example">
+  <.example_frame
+    error={@map_error}
+    error_id="example-hillshade-map-error"
+    hosts={["tiles.openfreemap.org", "tiles.mapterhorn.com"]}
+  >
+    <.map
+      id="example-hillshade-map"
+      center={[7.6586, 45.9763]}
+      zoom={11}
+      style="https://tiles.openfreemap.org/styles/positron"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <.raster_dem_source
+    id="example-hillshade-dem"
+    map_id="example-hillshade-map"
+    url="https://tiles.mapterhorn.com/tilejson.json"
+  />
+
+  <%!-- MaplibreX 0.1 reads a layer's paint when it mounts (#3). The look is
+        part of the id, so a new look mounts a new layer in its place. --%>
+  <.hillshade_layer
+    :if={@visible}
+    id={"example-hillshade-#{@look}"}
+    map_id="example-hillshade-map"
+    source_id="example-hillshade-dem"
+    paint={paint(@look)}
+  />
+
+  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[auto_1fr]">
+    <.example_group id="example-hillshade-looks" label={gettext("Set assigns")}>
+      <.example_button
+        :for={look <- looks()}
+        id={"example-hillshade-look-#{look}"}
+        code
+        pressed={@look == look}
+        phx-click="look"
+        phx-value-look={look}
+      >
+        {look}
+      </.example_button>
+    </.example_group>
+
+    <.example_group id="example-hillshade-toggle" label=":if">
+      <.form for={@options} id="example-hillshade-options" phx-change="options" class="py-1.5">
+        <.example_checkbox field={@options[:visible]} label="visible" />
+      </.form>
+    </.example_group>
+  </div>
+
+  <%!-- layer:added and layer:removed keep on_map current. --%>
+  <.example_readout values={[look: @look, visible: @visible, on_map: @on_map || "—"]} />
+</div>

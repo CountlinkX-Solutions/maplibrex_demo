@@ -88,7 +88,9 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
         geojson_layer: MaplibrexDemoWeb.Examples.GeojsonLayerExample,
         navigation_control: MaplibrexDemoWeb.Examples.NavigationControlExample,
         scale_control: MaplibrexDemoWeb.Examples.ScaleControlExample,
-        fullscreen_control: MaplibrexDemoWeb.Examples.FullscreenControlExample
+        fullscreen_control: MaplibrexDemoWeb.Examples.FullscreenControlExample,
+        raster_dem_source: MaplibrexDemoWeb.Examples.RasterDemSourceExample,
+        hillshade_layer: MaplibrexDemoWeb.Examples.HillshadeLayerExample
       }
 
       for {name, example} <- examples do

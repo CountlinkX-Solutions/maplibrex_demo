@@ -1,0 +1,43 @@
+<div id="raster-dem-source-example">
+  <.example_frame
+    error={@map_error}
+    error_id="example-dem-map-error"
+    hosts={["tiles.openfreemap.org", "tiles.mapterhorn.com"]}
+  >
+    <.map
+      id="example-dem-map"
+      center={@center}
+      zoom={10}
+      style="https://tiles.openfreemap.org/styles/positron"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- Elevation from Mapterhorn's public TileJSON. A DEM source draws
+        nothing itself: the hillshade layer below makes it visible. --%>
+  <.raster_dem_source
+    id="example-dem"
+    map_id="example-dem-map"
+    url="https://tiles.mapterhorn.com/tilejson.json"
+  />
+
+  <.hillshade_layer id="example-dem-hillshade" map_id="example-dem-map" source_id="example-dem" />
+
+  <div class="border-t border-line px-4 py-4">
+    <%!-- A new centre moves the map; the source loads the tiles in view. --%>
+    <.example_group id="example-dem-places" label={gettext("Set assigns")}>
+      <.example_button
+        :for={{id, name} <- places()}
+        id={"example-dem-place-#{id}"}
+        pressed={@place == id}
+        phx-click="go"
+        phx-value-place={id}
+      >
+        {name}
+      </.example_button>
+    </.example_group>
+  </div>
+
+  <%!-- source:added and source:data keep status and data_events current. --%>
+  <.example_readout values={[place: @place, status: @status, data_events: @data_events]} />
+</div>

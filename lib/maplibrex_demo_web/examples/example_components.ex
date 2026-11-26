@@ -19,6 +19,11 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
   """
   attr :error, :string, default: nil, doc: "the last map:error message, if any"
   attr :error_id, :string, required: true
+
+  attr :hosts, :list,
+    default: ["tiles.openfreemap.org"],
+    doc: "the services the example loads its map data from, named in an error"
+
   slot :inner_block, required: true
 
   def example_frame(assigns) do
@@ -44,7 +49,8 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
           <span class="font-mono text-label">{@error}</span>
           <span class="block text-ink-muted">
             {gettext(
-              "The basemap comes from tiles.openfreemap.org, so the preview needs an internet connection."
+              "The preview loads its map data from %{hosts}, so it needs an internet connection.",
+              hosts: Enum.join(@hosts, ", ")
             )}
           </span>
         </p>
