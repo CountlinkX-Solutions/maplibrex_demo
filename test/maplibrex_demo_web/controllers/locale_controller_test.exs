@@ -22,6 +22,22 @@ defmodule MaplibrexDemoWeb.LocaleControllerTest do
     assert has_element?(view, ~s(#locale-es[aria-current="true"]))
   end
 
+  test "translates the catalogue's own copy", %{conn: conn} do
+    conn = get(conn, ~p"/locale?#{[locale: "es", return_to: "/components/circle_layer"]}")
+
+    {:ok, view, _html} = conn |> recycle() |> live(~p"/components/circle_layer")
+
+    assert has_element?(
+             view,
+             "#component-summary",
+             "Dibuja los puntos de una fuente como círculos."
+           )
+
+    assert has_element?(view, ~s(#component-status[data-status="limited"]), "Limitado")
+    assert has_element?(view, "#tab-preview", "Vista previa")
+    assert has_element?(view, "#sidebar-family-markers-label", "Marcadores y popups")
+  end
+
   for target <- ["//example.com/x", "https://example.com/x", "components"] do
     test "refuses to return to #{target}", %{conn: conn} do
       conn = get(conn, ~p"/locale?#{[locale: "es", return_to: unquote(target)]}")
