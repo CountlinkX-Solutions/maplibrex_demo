@@ -106,8 +106,8 @@
   --text-title--line-height: 1.2;
   --text-display: 2.25rem;
   --text-display--line-height: 1.1;
-  --text-code: 0.875rem;
-  --text-code--line-height: 1.65;
+  --text-source: 0.875rem;
+  --text-source--line-height: 1.65;
 
   /* Layout */
   --spacing-topbar: 3.75rem;
@@ -224,9 +224,49 @@
     text-underline-offset: 3px;
   }
 
+  /* Code is copied, so show it as typed: no "->" or "=>" arrow ligatures. */
+  code,
+  kbd,
+  pre {
+    font-variant-ligatures: none;
+  }
+
   * {
     scrollbar-width: thin;
     scrollbar-color: var(--color-line-strong) transparent;
+  }
+}
+
+@layer components {
+  /* Code named inside prose and notes. */
+  .inline-code {
+    border-radius: 4px;
+    background-color: var(--color-surface);
+    padding: 0.05em 0.3em;
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    color: var(--color-ink);
+  }
+
+  /* The navigation drawer of narrow screens slides in from the left. */
+  .drawer[open] {
+    animation: drawer-in 240ms var(--ease-out-expo);
+  }
+
+  .drawer[open]::backdrop {
+    animation: backdrop-in 240ms var(--ease-out-expo);
+  }
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
   }
 }
 

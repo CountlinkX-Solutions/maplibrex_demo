@@ -19,8 +19,19 @@ defmodule MaplibrexDemoWeb.Router do
   scope "/", MaplibrexDemoWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
     get "/locale", LocaleController, :set
+
+    live_session :catalogue,
+      on_mount: [{MaplibrexDemoWeb.LocaleHook, :set_locale}, MaplibrexDemoWeb.CatalogueNav] do
+      live "/", OverviewLive
+      live "/components", ComponentsLive
+      live "/components/:name", ComponentLive
+      live "/scenarios", ScenariosLive
+      live "/roadmap", RoadmapLive
+    end
+
+    # The pages that predate the catalogue. Their content moves into it
+    # component by component, and they are removed once it has.
     live "/map", MapLive
     live "/tiles", TilesLive
     live "/ogc", OgcFeaturesLive
