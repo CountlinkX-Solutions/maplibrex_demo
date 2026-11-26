@@ -4,7 +4,8 @@ defmodule MaplibrexDemoWeb.OverviewLive do
   catalogue covers, and the ways into the rest of the demo.
 
   The install steps and the minimal template are copied from the library's
-  README; keep them in step with it. Every count is computed from
+  README; keep them in step with it, except the dependency, which names the
+  library's `main` branch the demo itself runs. Every count is computed from
   `MaplibrexDemoWeb.Catalogue`.
   """
   use MaplibrexDemoWeb, :live_view
@@ -14,7 +15,7 @@ defmodule MaplibrexDemoWeb.OverviewLive do
   @dependency ~S'''
   def deps do
     [
-      {:maplibrex, "~> 0.1.0"}
+      {:maplibrex, github: "CountlinkX-Solutions/maplibrex", branch: "main"}
     ]
   end
   '''
@@ -134,7 +135,12 @@ defmodule MaplibrexDemoWeb.OverviewLive do
           </p>
 
           <ol class="mt-6 space-y-8">
-            <.install_step number={1} title={gettext("Add the dependency to mix.exs")}>
+            <.install_step
+              id="install-step-dependency"
+              number={1}
+              title={gettext("Add the dependency to mix.exs")}
+            >
+              <.hex_release_note version={@version} hex={Catalogue.hex_release()} />
               <.code_block
                 id="install-dependency"
                 code={@snippets.dependency}
@@ -303,13 +309,52 @@ defmodule MaplibrexDemoWeb.OverviewLive do
     """
   end
 
+  @doc """
+  The line under the install step's dependency that says which release Hex
+  has, given the `version` the demo runs and the `hex` release: while the
+  library's `main` is ahead of Hex, that the release lacks the fixes the
+  roadmap lists; otherwise, that `main` has nothing unreleased.
+  """
+  attr :version, :string, required: true
+  attr :hex, :string, required: true
+
+  def hex_release_note(assigns) do
+    assigns = assign(assigns, :unreleased, Catalogue.unreleased?(assigns.version, assigns.hex))
+
+    ~H"""
+    <p
+      id="install-hex-release"
+      data-state={if(@unreleased, do: "unreleased", else: "released")}
+      class="mb-3 max-w-measure text-body text-ink-muted"
+    >
+      <%= if @unreleased do %>
+        {gettext(
+          "The demo uses the library's main branch; MaplibreX %{hex}, the latest release on Hex, lacks the fixes listed on",
+          hex: @hex
+        )}
+        <.link
+          navigate={~p"/roadmap" <> "#next-release-heading"}
+          class="font-bold text-accent-ink underline-offset-2 hover:underline"
+        >
+          {gettext("the roadmap")}</.link>.
+      <% else %>
+        {gettext(
+          "The demo uses the library's main branch, which has nothing unreleased beyond MaplibreX %{hex}, the latest release on Hex.",
+          hex: @hex
+        )}
+      <% end %>
+    </p>
+    """
+  end
+
+  attr :id, :string, default: nil
   attr :number, :integer, required: true
   attr :title, :string, required: true
   slot :inner_block, required: true
 
   defp install_step(assigns) do
     ~H"""
-    <li class="grid gap-x-4 gap-y-3 sm:grid-cols-[2rem_minmax(0,1fr)]">
+    <li id={@id} class="grid gap-x-4 gap-y-3 sm:grid-cols-[2rem_minmax(0,1fr)]">
       <span
         class="inline-flex size-7 items-center justify-center rounded-full border border-line-strong text-label font-bold text-ink-muted tabular-nums"
         aria-hidden="true"

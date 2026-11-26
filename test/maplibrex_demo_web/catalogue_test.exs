@@ -286,6 +286,27 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
     end
   end
 
+  describe "hex_release/0 and unreleased?/2" do
+    test "the Hex release is a version" do
+      assert {:ok, _version} = Version.parse(Catalogue.hex_release())
+    end
+
+    test "a version ahead of the Hex release is unreleased" do
+      assert Catalogue.unreleased?("0.2.0", "0.1.1")
+      refute Catalogue.unreleased?("0.2.0", "0.2.0")
+      refute Catalogue.unreleased?("0.1.1", "0.2.0")
+    end
+
+    test "a version that cannot be read is not called unreleased" do
+      refute Catalogue.unreleased?("?", "0.1.1")
+    end
+
+    test "compares with the Hex release by default" do
+      assert Catalogue.unreleased?("999.0.0")
+      refute Catalogue.unreleased?(Catalogue.hex_release())
+    end
+  end
+
   describe "fetch_scenario/1" do
     test "finds a scenario by its string id" do
       assert {:ok, %{id: :terrain_3d}} = Catalogue.fetch_scenario("terrain_3d")
