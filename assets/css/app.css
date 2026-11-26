@@ -252,9 +252,11 @@
   }
 
   /* MapLibre draws its attribution, controls and popups on white but lets
-     their text inherit the page's colour, which the dark theme makes light. */
+     their text inherit the page's colour, which the dark theme makes light.
+     Form fields in a custom control would take the dark scheme too. */
   .maplibregl-map {
     color: var(--color-map-ink);
+    color-scheme: light;
   }
 
   /* Code is copied, so show it as typed: no "->" or "=>" arrow ligatures. */
