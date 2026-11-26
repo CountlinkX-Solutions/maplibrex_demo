@@ -6,6 +6,7 @@ import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import {MapHooks} from "maplibrex"
 import {initTheme} from "./theme"
+import {initShell} from "./shell"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
@@ -24,6 +25,7 @@ window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 // reaches the map directly.
 
 initTheme()
+initShell()
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()

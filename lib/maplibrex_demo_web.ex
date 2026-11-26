@@ -90,6 +90,8 @@ defmodule MaplibrexDemoWeb do
       import MaplibrexDemoWeb.CoreComponents
       # Shared chrome for the demo pages
       import MaplibrexDemoWeb.DemoComponents
+      # Status marks, code blocks and issue links of the catalogue pages
+      import MaplibrexDemoWeb.CatalogueComponents
 
       # Common modules used in templates
       alias Phoenix.LiveView.JS

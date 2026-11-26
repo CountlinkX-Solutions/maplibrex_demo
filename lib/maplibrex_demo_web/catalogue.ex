@@ -545,6 +545,51 @@ defmodule MaplibrexDemoWeb.Catalogue do
   end
 
   @doc """
+  What the library's next release is working on, each item with the issues
+  it closes. Source: the open issues and the 0.2.0 lifecycle work recorded in
+  PRODUCT.md. No dates: the library has not announced one.
+  """
+  @spec next_release() :: %{
+          version: String.t(),
+          items: [%{issues: [pos_integer()], text: String.t()}]
+        }
+  def next_release do
+    %{
+      version: "0.2.0",
+      items: [
+        %{
+          issues: [3],
+          text: gettext("Layers and sources apply changes to their assigns after mount.")
+        },
+        %{
+          issues: [4, 16],
+          text: gettext("Sources, layers and terrain survive a change of map style.")
+        },
+        %{
+          issues: [5, 12, 17],
+          text:
+            gettext(
+              "A component appears whatever its place in the template and whenever it mounts."
+            )
+        },
+        %{
+          issues: [15],
+          text:
+            gettext("Components placed inside `<.map>` update like the ones placed next to it.")
+        },
+        %{
+          issues: [18],
+          text: gettext("Removing a source together with its layers leaves nothing on the map.")
+        },
+        %{
+          issues: [20],
+          text: gettext("`layer:source_loaded` is sent once the layer's source has loaded.")
+        }
+      ]
+    }
+  end
+
+  @doc """
   The components `MaplibreX.Components` delegates, as `%{name => module}`.
 
   Read from the library's documentation chunk, where `defdelegate` records its

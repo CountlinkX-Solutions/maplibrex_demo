@@ -9,11 +9,8 @@ defmodule MaplibrexDemoWeb.CoreComponents do
   them in any way you want, based on your application growth and needs.
 
   The foundation for styling is Tailwind CSS, a utility-first CSS framework,
-  augmented with daisyUI, a Tailwind CSS plugin that provides UI components
-  and themes. Here are useful references:
-
-    * [daisyUI](https://daisyui.com/docs/intro/) - a good place to get
-      started and see the available components.
+  with the demo's design tokens (colour roles, type scale, radii) defined in
+  `assets/css/app.css`. Here are useful references:
 
     * [Tailwind CSS](https://tailwindcss.com) - the foundational framework
       we build on. You will use it for layout, sizing, flexbox, grid, and
@@ -56,23 +53,34 @@ defmodule MaplibrexDemoWeb.CoreComponents do
       id={@id}
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
-      class="toast toast-top toast-end z-50"
+      class="pointer-events-auto"
       {@rest}
     >
       <div class={[
-        "alert w-80 sm:w-96 max-w-80 sm:max-w-96 text-wrap",
-        @kind == :info && "alert-info",
-        @kind == :error && "alert-error"
+        "flex items-start gap-3 rounded-panel border bg-canvas p-3.5 text-ui shadow-overlay",
+        @kind == :info && "border-line",
+        @kind == :error && "border-danger/40"
       ]}>
-        <.icon :if={@kind == :info} name="hero-information-circle" class="size-5 shrink-0" />
-        <.icon :if={@kind == :error} name="hero-exclamation-circle" class="size-5 shrink-0" />
-        <div>
-          <p :if={@title} class="font-semibold">{@title}</p>
-          <p>{msg}</p>
+        <.icon
+          :if={@kind == :info}
+          name="hero-information-circle-mini"
+          class="mt-px size-5 shrink-0 text-ink-subtle"
+        />
+        <.icon
+          :if={@kind == :error}
+          name="hero-exclamation-circle-mini"
+          class="mt-px size-5 shrink-0 text-danger"
+        />
+        <div class="min-w-0 flex-1">
+          <p :if={@title} class="font-bold text-ink">{@title}</p>
+          <p class="text-ink-muted">{msg}</p>
         </div>
-        <div class="flex-1" />
-        <button type="button" class="group self-start cursor-pointer" aria-label={gettext("close")}>
-          <.icon name="hero-x-mark" class="size-5 opacity-40 group-hover:opacity-70" />
+        <button
+          type="button"
+          class="-m-1 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-ui text-ink-subtle hover:bg-surface hover:text-ink"
+          aria-label={gettext("close")}
+        >
+          <.icon name="hero-x-mark-mini" class="size-4" />
         </button>
       </div>
     </div>
@@ -163,6 +171,10 @@ defmodule MaplibrexDemoWeb.CoreComponents do
   attr :class, :string, default: nil, doc: "the input class to use over defaults"
   attr :error_class, :string, default: nil, doc: "the input error class to use over defaults"
 
+  attr :wrapper_class, :string,
+    default: "fieldset mb-2",
+    doc: "the class of the element around the label and input"
+
   attr :rest, :global,
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
                 multiple pattern placeholder readonly required rows size step)
@@ -249,7 +261,7 @@ defmodule MaplibrexDemoWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div class="fieldset mb-2">
+    <div class={@wrapper_class}>
       <label>
         <span :if={@label} class="label mb-1">{@label}</span>
         <input
