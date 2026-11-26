@@ -1,0 +1,72 @@
+<div id="zoom-range-example">
+  <.example_frame error={@map_error} error_id="example-zoom-range-map-error">
+    <.map
+      id="example-zoom-range-map"
+      center={[-46.6333, -23.5505]}
+      zoom={10}
+      style="https://tiles.openfreemap.org/styles/positron"
+      class="h-full w-full"
+    />
+
+    <%!-- The content stays where it is written, here over the map; MaplibreX
+          hides it outside the range. It reads min and max only when it
+          mounts (#3), so they are part of the id and a new range mounts it
+          again. --%>
+    <.zoom_range
+      id={"example-zoom-range-#{@range.id}"}
+      map_id="example-zoom-range-map"
+      min={@range.min}
+      max={@range.max}
+    >
+      <p
+        id="example-zoom-range-badge"
+        class="pointer-events-none absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-ui border border-line bg-canvas px-2.5 py-1.5 text-ui font-bold shadow-overlay"
+      >
+        <.icon name="hero-eye-micro" class="size-4 text-accent-ink" />
+        {describe(@range)}
+      </p>
+    </.zoom_range>
+  </.example_frame>
+
+  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[1fr_auto]">
+    <.example_group id="example-zoom-range-ranges" label={gettext("Set assigns")}>
+      <.example_button
+        :for={range <- ranges()}
+        id={"example-zoom-range-preset-#{range.id}"}
+        code
+        pressed={@range.id == range.id}
+        phx-click="range"
+        phx-value-range={range.id}
+      >
+        <span :if={range.min}>min={range.min}</span>
+        <span :if={range.max}>max={range.max}</span>
+      </.example_button>
+    </.example_group>
+
+    <%!-- Commands: zoom the map in the browser, across the range's ends. --%>
+    <.example_group id="example-zoom-range-commands" label={gettext("Run commands")}>
+      <.example_button
+        id="example-zoom-range-zoom-out"
+        code
+        phx-click={MapCmd.zoom_out("example-zoom-range-map")}
+      >
+        zoom_out
+      </.example_button>
+      <.example_button
+        id="example-zoom-range-zoom-in"
+        code
+        phx-click={MapCmd.zoom_in("example-zoom-range-map")}
+      >
+        zoom_in
+      </.example_button>
+    </.example_group>
+  </div>
+
+  <%!-- map:moved keeps zoom current; shown is the same test the hook makes. --%>
+  <.example_readout values={[
+    zoom: @zoom,
+    min: bound(@range.min),
+    max: bound(@range.max),
+    shown: shown?(@range, @zoom)
+  ]} />
+</div>

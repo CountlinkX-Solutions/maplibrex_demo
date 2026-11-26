@@ -1,0 +1,46 @@
+<div id="control-example">
+  <.example_frame error={@map_error} error_id="example-control-map-error">
+    <.map
+      id="example-control-map"
+      center={[-0.1276, 51.5072]}
+      zoom={12}
+      style={style_url(@basemap)}
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- Anything in the slot becomes the control: here a form with radio
+        buttons. Its bindings work as anywhere else in the LiveView. --%>
+  <.control id="example-control-basemaps" map_id="example-control-map" position="top-left">
+    <form id="example-control-basemap-form" phx-change="basemap" class="px-3 py-2 font-sans">
+      <fieldset>
+        <legend class="mb-1 text-label font-bold">{gettext("Basemap")}</legend>
+        <label
+          :for={basemap <- basemaps()}
+          for={"example-control-basemap-#{basemap}"}
+          class="flex cursor-pointer items-center gap-2 py-0.5 text-ui"
+        >
+          <input
+            type="radio"
+            id={"example-control-basemap-#{basemap}"}
+            name="basemap"
+            value={basemap}
+            checked={@basemap == basemap}
+            class="accent-accent"
+          />
+          {basemap_name(basemap)}
+        </label>
+      </fieldset>
+    </form>
+  </.control>
+
+  <div class="border-t border-line px-4 py-4">
+    <.example_note id="example-control-hint" icon="hero-cursor-arrow-rays-micro">
+      {gettext(
+        "Choose a basemap in the control on the map: the form's phx-change sets the assign."
+      )}
+    </.example_note>
+  </div>
+
+  <.example_readout values={[basemap: @basemap, style: style_url(@basemap)]} />
+</div>
