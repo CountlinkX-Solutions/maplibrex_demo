@@ -751,12 +751,15 @@ defmodule MaplibrexDemoWeb.Catalogue do
 
   @doc """
   The version requirement that installs `hex` (by default `hex_release/0`)
-  and its later releases up to the next major version: `"~> 0.2"` for 0.2.0.
+  and its later patch releases: `"~> 0.2.1"` for 0.2.1, as the library README
+  shows it. The patch is kept because features the install steps use (the
+  `maplibrex.copy_worker` task, the `events` attribute) arrived in a patch
+  release.
   """
   @spec hex_requirement(String.t()) :: String.t()
   def hex_requirement(hex \\ @hex_release) do
-    %Version{major: major, minor: minor} = Version.parse!(hex)
-    "~> #{major}.#{minor}"
+    %Version{major: major, minor: minor, patch: patch} = Version.parse!(hex)
+    "~> #{major}.#{minor}.#{patch}"
   end
 
   @doc """
