@@ -1,0 +1,837 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-26T09:10:26+00:00",
+  "title": "Design System: MaplibreX Demo",
+  "extensions": {
+    "colorMeta": {
+      "canvas": {
+        "role": "neutral",
+        "displayName": "Paper White",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "darkValue": "#12141b"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Cool Grey Surface",
+        "canonical": "#f4f4f6",
+        "oklch": "oklch(96.8% 0.003 286.4)",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252526",
+          "#424243",
+          "#616162",
+          "#828284",
+          "#a5a5a6",
+          "#c9c9ca",
+          "#eeeeef"
+        ],
+        "darkValue": "#191c25"
+      },
+      "surface-hover": {
+        "role": "neutral",
+        "displayName": "Surface Hover",
+        "canonical": "#e8e8ee",
+        "oklch": "oklch(93.3% 0.008 286.2)",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252527",
+          "#424245",
+          "#616165",
+          "#828287",
+          "#a4a4a9",
+          "#c9c9cc",
+          "#eeeef0"
+        ],
+        "darkValue": "#242836"
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e3e3ea",
+        "oklch": "oklch(91.8% 0.009 286.2)",
+        "tonalRamp": [
+          "#0b0b0d",
+          "#252528",
+          "#414146",
+          "#616166",
+          "#828287",
+          "#a4a4a9",
+          "#c9c9cd",
+          "#eeeef1"
+        ],
+        "darkValue": "#2a2e3b"
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Strong Hairline",
+        "canonical": "#cfcfda",
+        "oklch": "oklch(85.8% 0.015 286.1)",
+        "tonalRamp": [
+          "#0b0b0e",
+          "#242429",
+          "#414148",
+          "#606069",
+          "#81818b",
+          "#a4a4ac",
+          "#c8c8cf",
+          "#eeeef2"
+        ],
+        "darkValue": "#3d4255"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Blue-Cast Ink",
+        "canonical": "#1f2330",
+        "oklch": "oklch(25.8% 0.025 271.3)",
+        "tonalRamp": [
+          "#0a0b10",
+          "#22252d",
+          "#3e424d",
+          "#5c616f",
+          "#7d8291",
+          "#a0a5b2",
+          "#c5c9d3",
+          "#eceef6"
+        ],
+        "darkValue": "#e8e9f1"
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "#4a4a5a",
+        "oklch": "oklch(41.5% 0.026 285.2)",
+        "tonalRamp": [
+          "#0b0b10",
+          "#24242d",
+          "#41414d",
+          "#5f606f",
+          "#808191",
+          "#a3a4b2",
+          "#c8c8d3",
+          "#edeef6"
+        ],
+        "darkValue": "#bcbecc"
+      },
+      "ink-subtle": {
+        "role": "neutral",
+        "displayName": "Subtle Ink",
+        "canonical": "#63637a",
+        "oklch": "oklch(50.8% 0.036 285.0)",
+        "tonalRamp": [
+          "#0a0a11",
+          "#24242f",
+          "#404051",
+          "#5f5f74",
+          "#808096",
+          "#a3a3b6",
+          "#c7c7d7",
+          "#ededf8"
+        ],
+        "darkValue": "#9a9db0"
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Elixir Purple",
+        "canonical": "#5b3fa6",
+        "oklch": "oklch(45.6% 0.158 291.4)",
+        "tonalRamp": [
+          "#0d0423",
+          "#27184e",
+          "#45317c",
+          "#644dac",
+          "#856fd2",
+          "#a697eb",
+          "#c9bfff",
+          "#eee8ff"
+        ],
+        "darkValue": "#6a4cc0"
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Deep Elixir Purple",
+        "canonical": "#4b3390",
+        "oklch": "oklch(40.4% 0.146 290.2)",
+        "tonalRamp": [
+          "#0c0522",
+          "#261a4c",
+          "#433478",
+          "#6250a7",
+          "#8272cd",
+          "#a498e7",
+          "#c8c0ff",
+          "#ede9ff"
+        ],
+        "darkValue": "#7a5dd0"
+      },
+      "accent-ink": {
+        "role": "primary",
+        "displayName": "Elixir Purple as Ink",
+        "canonical": "#5b3fa6",
+        "oklch": "oklch(45.6% 0.158 291.4)",
+        "tonalRamp": [
+          "#0d0423",
+          "#27184e",
+          "#45317c",
+          "#644dac",
+          "#856fd2",
+          "#a697eb",
+          "#c9bfff",
+          "#eee8ff"
+        ],
+        "darkValue": "#b7a3f3"
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Lavender Wash",
+        "canonical": "#eee9f8",
+        "oklch": "oklch(94.2% 0.021 301.1)",
+        "tonalRamp": [
+          "#0c0a0e",
+          "#26242a",
+          "#434049",
+          "#635f6b",
+          "#84808c",
+          "#a6a3ae",
+          "#cac7d0",
+          "#efedf3"
+        ],
+        "darkValue": "#2c2445"
+      },
+      "on-accent": {
+        "role": "primary",
+        "displayName": "On Purple",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "map-ink": {
+        "role": "neutral",
+        "displayName": "Map Ink",
+        "canonical": "#1f2330",
+        "oklch": "oklch(25.8% 0.025 271.3)",
+        "tonalRamp": [
+          "#0a0b10",
+          "#22252d",
+          "#3e424d",
+          "#5c616f",
+          "#7d8291",
+          "#a0a5b2",
+          "#c5c9d3",
+          "#eceef6"
+        ]
+      },
+      "code": {
+        "role": "secondary",
+        "displayName": "Night Code",
+        "canonical": "#1f2330",
+        "oklch": "oklch(25.8% 0.025 271.3)",
+        "tonalRamp": [
+          "#0a0b10",
+          "#22252d",
+          "#3e424d",
+          "#5c616f",
+          "#7d8291",
+          "#a0a5b2",
+          "#c5c9d3",
+          "#eceef6"
+        ],
+        "darkValue": "#0b0d12"
+      },
+      "code-ink": {
+        "role": "secondary",
+        "displayName": "Code Ink",
+        "canonical": "#e9e9f2",
+        "oklch": "oklch(93.7% 0.012 286.2)",
+        "tonalRamp": [
+          "#0b0b0d",
+          "#252528",
+          "#414147",
+          "#606067",
+          "#818189",
+          "#a4a4ab",
+          "#c8c8ce",
+          "#eeeef2"
+        ],
+        "darkValue": "#e6e7f0"
+      },
+      "code-muted": {
+        "role": "secondary",
+        "displayName": "Code Mist",
+        "canonical": "#a3a6bd",
+        "oklch": "oklch(73.0% 0.033 279.7)",
+        "tonalRamp": [
+          "#0a0b11",
+          "#23242f",
+          "#3f4150",
+          "#5d6073",
+          "#7e8195",
+          "#a1a4b5",
+          "#c6c8d6",
+          "#eceef8"
+        ],
+        "darkValue": "#9396ad"
+      },
+      "code-line": {
+        "role": "secondary",
+        "displayName": "Code Rule",
+        "canonical": "#343a4d",
+        "oklch": "oklch(35.1% 0.034 271.0)",
+        "tonalRamp": [
+          "#090b11",
+          "#21252f",
+          "#3d4150",
+          "#5a6174",
+          "#7b8296",
+          "#9fa5b6",
+          "#c4c9d7",
+          "#ebeef8"
+        ],
+        "darkValue": "#262a36"
+      },
+      "stable": {
+        "role": "tertiary",
+        "displayName": "Stable Green",
+        "canonical": "#17723a",
+        "oklch": "oklch(48.7% 0.120 151.1)",
+        "tonalRamp": [
+          "#001002",
+          "#002e11",
+          "#0e4f27",
+          "#24733f",
+          "#4a955f",
+          "#79b687",
+          "#a7d7b2",
+          "#d8f8de"
+        ],
+        "darkValue": "#74d6a0"
+      },
+      "stable-soft": {
+        "role": "tertiary",
+        "displayName": "Stable Mint",
+        "canonical": "#e7f6ec",
+        "oklch": "oklch(95.9% 0.021 156.8)",
+        "tonalRamp": [
+          "#080c0a",
+          "#202723",
+          "#3b453f",
+          "#59655d",
+          "#79867e",
+          "#9da8a1",
+          "#c3ccc6",
+          "#eaf0ec"
+        ],
+        "darkValue": "#133021"
+      },
+      "limited": {
+        "role": "tertiary",
+        "displayName": "Limited Amber",
+        "canonical": "#8a5300",
+        "oklch": "oklch(49.4% 0.109 66.9)",
+        "tonalRamp": [
+          "#170700",
+          "#3a1d00",
+          "#5f3700",
+          "#875412",
+          "#ab763a",
+          "#c99b6b",
+          "#e7c29c",
+          "#ffead0"
+        ],
+        "darkValue": "#f2bd63"
+      },
+      "limited-soft": {
+        "role": "tertiary",
+        "displayName": "Limited Cream",
+        "canonical": "#fdf1dc",
+        "oklch": "oklch(96.2% 0.031 81.8)",
+        "tonalRamp": [
+          "#0e0b06",
+          "#2a241b",
+          "#484134",
+          "#69604f",
+          "#8b8170",
+          "#ada495",
+          "#cfc8bc",
+          "#f3eee5"
+        ],
+        "darkValue": "#36280f"
+      },
+      "planned": {
+        "role": "tertiary",
+        "displayName": "Planned Slate",
+        "canonical": "#4a5470",
+        "oklch": "oklch(44.9% 0.048 269.2)",
+        "tonalRamp": [
+          "#080b13",
+          "#1f2533",
+          "#3a4156",
+          "#57607b",
+          "#77829e",
+          "#9ba5bd",
+          "#c1c9dd",
+          "#e9eefc"
+        ],
+        "darkValue": "#aab5d2"
+      },
+      "planned-soft": {
+        "role": "tertiary",
+        "displayName": "Planned Mist",
+        "canonical": "#eceff5",
+        "oklch": "oklch(95.2% 0.009 264.5)",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242528",
+          "#404246",
+          "#5f6166",
+          "#808287",
+          "#a3a5a9",
+          "#c7c9cd",
+          "#edeef1"
+        ],
+        "darkValue": "#222939"
+      },
+      "danger": {
+        "role": "tertiary",
+        "displayName": "Error Red",
+        "canonical": "#b42318",
+        "oklch": "oklch(50.0% 0.182 29.5)",
+        "tonalRamp": [
+          "#220000",
+          "#4d0000",
+          "#7c130b",
+          "#ac2a1f",
+          "#d45142",
+          "#f08070",
+          "#ffaea0",
+          "#ffddd2"
+        ],
+        "darkValue": "#ff8f80"
+      },
+      "danger-soft": {
+        "role": "tertiary",
+        "displayName": "Error Blush",
+        "canonical": "#fdecea",
+        "oklch": "oklch(95.6% 0.019 25.6)",
+        "tonalRamp": [
+          "#0e0a09",
+          "#2a2322",
+          "#493f3e",
+          "#6b5e5c",
+          "#8d7f7d",
+          "#aea2a0",
+          "#d0c6c5",
+          "#f3edec"
+        ],
+        "darkValue": "#3b1714"
+      },
+      "syntax-comment": {
+        "role": "secondary",
+        "displayName": "Syntax Comment",
+        "canonical": "#8f94ad",
+        "oklch": "oklch(67.1% 0.037 276.4)",
+        "tonalRamp": [
+          "#090b12",
+          "#222430",
+          "#3e4152",
+          "#5c6075",
+          "#7c8198",
+          "#a0a4b8",
+          "#c5c8d8",
+          "#ebeef9"
+        ]
+      },
+      "syntax-string": {
+        "role": "secondary",
+        "displayName": "Syntax String",
+        "canonical": "#a8d8a0",
+        "oklch": "oklch(83.4% 0.092 141.0)",
+        "tonalRamp": [
+          "#030f02",
+          "#152b11",
+          "#2c4b27",
+          "#456d3f",
+          "#668f5f",
+          "#8db187",
+          "#b6d3b1",
+          "#e2f5de"
+        ]
+      },
+      "syntax-atom": {
+        "role": "secondary",
+        "displayName": "Syntax Atom",
+        "canonical": "#7fd3c8",
+        "oklch": "oklch(81.0% 0.084 185.1)",
+        "tonalRamp": [
+          "#000f0d",
+          "#002d28",
+          "#064d46",
+          "#1d6f67",
+          "#459288",
+          "#75b3aa",
+          "#a5d4cd",
+          "#d7f6f1"
+        ]
+      },
+      "syntax-attribute": {
+        "role": "secondary",
+        "displayName": "Syntax Attribute",
+        "canonical": "#f0c27f",
+        "oklch": "oklch(84.0% 0.100 76.1)",
+        "tonalRamp": [
+          "#140800",
+          "#352000",
+          "#593b04",
+          "#7f5919",
+          "#a27a3e",
+          "#c19f6e",
+          "#e0c59e",
+          "#feecd1"
+        ]
+      },
+      "syntax-module": {
+        "role": "secondary",
+        "displayName": "Syntax Module",
+        "canonical": "#8fb8ff",
+        "oklch": "oklch(78.1% 0.111 261.1)",
+        "tonalRamp": [
+          "#020a1e",
+          "#112445",
+          "#27416f",
+          "#3f609b",
+          "#5f82c0",
+          "#87a6db",
+          "#b1caf5",
+          "#def0ff"
+        ]
+      },
+      "syntax-number": {
+        "role": "secondary",
+        "displayName": "Syntax Number",
+        "canonical": "#f3a37a",
+        "oklch": "oklch(78.5% 0.110 47.8)",
+        "tonalRamp": [
+          "#190500",
+          "#3e1904",
+          "#653214",
+          "#8f4d29",
+          "#b46e4a",
+          "#d19576",
+          "#eebda4",
+          "#ffe6d5"
+        ]
+      },
+      "syntax-keyword": {
+        "role": "secondary",
+        "displayName": "Syntax Keyword",
+        "canonical": "#c9a8ff",
+        "oklch": "oklch(79.2% 0.125 301.0)",
+        "tonalRamp": [
+          "#0f051d",
+          "#2c1a43",
+          "#4b346c",
+          "#6d4f98",
+          "#8e71bd",
+          "#af97d8",
+          "#d1bef3",
+          "#f4e7ff"
+        ]
+      },
+      "syntax-punct": {
+        "role": "secondary",
+        "displayName": "Syntax Punct",
+        "canonical": "#a3a6bd",
+        "oklch": "oklch(73.0% 0.033 279.7)",
+        "tonalRamp": [
+          "#0a0b11",
+          "#23242f",
+          "#3f4150",
+          "#5d6073",
+          "#7e8195",
+          "#a1a4b5",
+          "#c6c8d6",
+          "#eceef8"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The single page title: library name, component name, section index titles, error pages."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings within a page; also the top-bar wordmark size."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "The one-sentence summary under the page title, in muted ink."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose within the 34rem measure; h3 sub-headings at 700."
+      },
+      "nav": {
+        "displayName": "Nav",
+        "purpose": "Sidebar tree items and top-bar section links."
+      },
+      "ui": {
+        "displayName": "UI",
+        "purpose": "Controls, tabs, table cells, notices, descriptions."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Status badges, captions, small control labels."
+      },
+      "label-caps": {
+        "displayName": "Label Caps",
+        "purpose": "Uppercase group labels in the sidebar and roadmap, and the rail title."
+      },
+      "source": {
+        "displayName": "Source",
+        "purpose": "Code blocks, ligatures off."
+      },
+      "mono-label": {
+        "displayName": "Mono Label",
+        "purpose": "File captions, assigns, attribute and event names, version, issue numbers."
+      }
+    },
+    "shadows": [
+      {
+        "name": "overlay",
+        "value": "0 18px 40px -12px rgb(16 18 30 / 0.3), 0 2px 6px -2px rgb(16 18 30 / 0.12)",
+        "purpose": "Elements floating above the page: the navigation drawer, flash notices, the map error notice, the skip link."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The drawer's entrance and the changed-assign highlight."
+      },
+      {
+        "name": "drawer-in",
+        "value": "240ms ease-out-expo, translateX(-100%) to 0",
+        "purpose": "The navigation drawer slides in from the left; its backdrop fades in over the same time."
+      },
+      {
+        "name": "assign-changed",
+        "value": "1.4s ease-out-expo, from accent-soft background and accent-ink text",
+        "purpose": "A changed assign value in the example readout flashes and fades; motion-safe only."
+      },
+      {
+        "name": "flash-show",
+        "value": "300ms ease-out, opacity and translateY(16px) or scale(0.95)",
+        "purpose": "Flash notices appearing."
+      },
+      {
+        "name": "flash-hide",
+        "value": "200ms ease-in",
+        "purpose": "Flash notices leaving."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation and transition durations 0.01ms",
+        "purpose": "prefers-reduced-motion collapses all motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px",
+        "purpose": "Wider main padding, scenario preview height, table status columns."
+      },
+      {
+        "name": "md",
+        "value": "768px",
+        "purpose": "Section links appear in the top bar."
+      },
+      {
+        "name": "lg",
+        "value": "1024px",
+        "purpose": "Sticky sidebar and top-bar search replace the drawer."
+      },
+      {
+        "name": "xl",
+        "value": "1280px",
+        "purpose": "The 'On this page' rail appears."
+      }
+    ],
+    "themes": {
+      "mechanism": "Same role names redefined under :root[data-theme=dark] and under prefers-color-scheme: dark when no explicit choice is stored; the choice lives in a theme cookie read by the server.",
+      "codeAndMapStayFixed": true
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one purple action of a view, such as Browse the components.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Browse the components <svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z\" clip-rule=\"evenodd\"/></svg></a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 6px; background: var(--color-accent, #5b3fa6); color: var(--color-on-accent, #ffffff); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); font-size: 0.875rem; line-height: 1.25rem; font-weight: 700; text-decoration: none; } .ds-btn-primary:hover { background: var(--color-accent-hover, #4b3390); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "An outlined companion action beside the primary button.",
+      "html": "<a class=\"ds-btn-secondary\" href=\"#\">Open the map example</a>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border: 1px solid var(--color-line-strong, #cfcfda); border-radius: 6px; background: transparent; color: var(--color-ink, #1f2330); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); font-size: 0.875rem; line-height: 1.25rem; font-weight: 700; text-decoration: none; } .ds-btn-secondary:hover { background: var(--color-surface, #f4f4f6); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; }"
+    },
+    {
+      "name": "Example Buttons",
+      "kind": "button",
+      "refersTo": "example-button",
+      "description": "A set of choices under a preview; the pressed one takes the lavender wash.",
+      "html": "<div class=\"ds-ex-row\"><button class=\"ds-ex-btn\" aria-pressed=\"true\">Madrid</button><button class=\"ds-ex-btn\" aria-pressed=\"false\">Buenos Aires</button><button class=\"ds-ex-btn ds-ex-code\">fly_to</button></div>",
+      "css": ".ds-ex-row { display: flex; flex-wrap: wrap; gap: 6px; } .ds-ex-btn { display: inline-flex; align-items: center; height: 32px; padding: 0 10px; border: 1px solid var(--color-line-strong, #cfcfda); border-radius: 6px; background: var(--color-canvas, #ffffff); color: var(--color-ink, #1f2330); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); font-size: 0.875rem; font-weight: 700; cursor: pointer; } .ds-ex-btn:hover { border-color: var(--color-ink-subtle, #63637a); background: var(--color-surface, #f4f4f6); } .ds-ex-btn:active { background: var(--color-surface-hover, #e8e8ee); } .ds-ex-btn[aria-pressed=true], .ds-ex-btn[aria-pressed=true]:hover { border-color: var(--color-accent-ink, #5b3fa6); background: var(--color-accent-soft, #eee9f8); color: var(--color-accent-ink, #5b3fa6); } .ds-ex-code { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 0.75rem; font-weight: 400; } .ds-ex-btn:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; }"
+    },
+    {
+      "name": "Component Search",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "The component filter in the top bar, with its / key hint.",
+      "html": "<label class=\"ds-search\"><svg class=\"ds-search-icon\" viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z\" clip-rule=\"evenodd\"/></svg><input type=\"search\" placeholder=\"Search components\" aria-label=\"Search components\"><kbd>/</kbd></label>",
+      "css": ".ds-search { position: relative; display: block; width: 320px; } .ds-search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--color-ink-subtle, #63637a); } .ds-search input { width: 100%; height: 36px; padding: 0 36px; border: 1px solid var(--color-line-strong, #cfcfda); border-radius: 6px; background: var(--color-canvas, #ffffff); color: var(--color-ink, #1f2330); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); font-size: 0.875rem; caret-color: var(--color-accent-ink, #5b3fa6); } .ds-search input::placeholder { color: var(--color-ink-subtle, #63637a); } .ds-search input:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; } .ds-search kbd { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); padding: 0 6px; border: 1px solid var(--color-line, #e3e3ea); border-radius: 4px; background: var(--color-surface, #f4f4f6); color: var(--color-ink-subtle, #63637a); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 0.75rem; line-height: 20px; }"
+    },
+    {
+      "name": "Sidebar Tree",
+      "kind": "nav",
+      "refersTo": "tree-item",
+      "description": "The component tree by family; the current item is filled purple.",
+      "html": "<nav class=\"ds-tree\"><p class=\"ds-tree-label\">Layers</p><a href=\"#\">geojson_layer<svg class=\"ds-tree-mark\" viewBox=\"0 0 16 16\" width=\"14\" height=\"14\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M6.701 2.25c.577-1 2.02-1 2.598 0l5.196 9a1.5 1.5 0 0 1-1.299 2.25H2.804a1.5 1.5 0 0 1-1.3-2.25l5.197-9ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 1 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z\" clip-rule=\"evenodd\"/></svg></a><a href=\"#\" aria-current=\"page\">circle_layer</a><a href=\"#\">line_layer</a></nav>",
+      "css": ".ds-tree { width: 244px; padding: 12px 18px; background: var(--color-surface, #f4f4f6); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); } .ds-tree-label { margin: 0 10px 6px; font-size: 0.75rem; line-height: 1rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ink-subtle, #63637a); } .ds-tree a { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; font-size: 0.9375rem; line-height: 1.375rem; color: var(--color-ink, #1f2330); text-decoration: none; } .ds-tree a:hover { background: var(--color-surface-hover, #e8e8ee); } .ds-tree a[aria-current=page] { background: var(--color-accent, #5b3fa6); color: var(--color-on-accent, #ffffff); font-weight: 700; } .ds-tree-mark { margin-left: auto; color: var(--color-limited, #8a5300); } .ds-tree a:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; }"
+    },
+    {
+      "name": "Component Tabs",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "Preview, HEEx, Events, Attributes above the framed preview.",
+      "html": "<nav class=\"ds-tabs\"><a href=\"#\" aria-current=\"page\">Preview</a><a href=\"#\">HEEx</a><a href=\"#\">Events <span>5</span></a><a href=\"#\">Attributes <span>17</span></a></nav>",
+      "css": ".ds-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--color-line, #e3e3ea); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); } .ds-tabs a { display: inline-flex; align-items: center; gap: 6px; margin-bottom: -1px; padding: 10px 16px; border-bottom: 2px solid transparent; font-size: 0.875rem; line-height: 1.25rem; font-weight: 700; color: var(--color-ink-subtle, #63637a); text-decoration: none; } .ds-tabs a:hover { color: var(--color-ink, #1f2330); } .ds-tabs a[aria-current=page] { border-bottom-color: var(--color-accent-ink, #5b3fa6); color: var(--color-accent-ink, #5b3fa6); } .ds-tabs span { padding: 0 6px; border-radius: 4px; background: var(--color-surface, #f4f4f6); font-size: 0.75rem; color: var(--color-ink-subtle, #63637a); } .ds-tabs a:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; }"
+    },
+    {
+      "name": "Status Badges",
+      "kind": "chip",
+      "refersTo": "status-badge-stable",
+      "description": "Mark plus word on the status tint; never colour alone.",
+      "html": "<div class=\"ds-badges\"><span class=\"ds-badge ds-stable\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm3.844-8.791a.75.75 0 0 0-1.188-.918l-3.7 4.79-1.649-1.833a.75.75 0 1 0-1.114 1.004l2.25 2.5a.75.75 0 0 0 1.15-.043l4.25-5.5Z\" clip-rule=\"evenodd\"/></svg>Stable</span><span class=\"ds-badge ds-limited\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M6.701 2.25c.577-1 2.02-1 2.598 0l5.196 9a1.5 1.5 0 0 1-1.299 2.25H2.804a1.5 1.5 0 0 1-1.3-2.25l5.197-9ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 1 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z\" clip-rule=\"evenodd\"/></svg>Limited</span><span class=\"ds-badge ds-planned\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z\" clip-rule=\"evenodd\"/></svg>Planned</span></div>",
+      "css": ".ds-badges { display: flex; gap: 8px; } .ds-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px 2px 6px; border-radius: 6px; font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); font-size: 0.75rem; line-height: 1rem; font-weight: 700; white-space: nowrap; } .ds-stable { background: var(--color-stable-soft, #e7f6ec); color: var(--color-stable, #17723a); } .ds-limited { background: var(--color-limited-soft, #fdf1dc); color: var(--color-limited, #8a5300); } .ds-planned { background: var(--color-planned-soft, #eceff5); color: var(--color-planned, #4a5470); }"
+    },
+    {
+      "name": "Code Block",
+      "kind": "card",
+      "refersTo": "code-block",
+      "description": "The dark figure every source appears on, with a file caption and copy button.",
+      "html": "<figure class=\"ds-code\"><figcaption><span>lib/maplibrex_demo_web/examples/map_example.html.heex</span><button type=\"button\">Copy</button></figcaption><pre><code><span class=\"t-tag\">&lt;.map</span>\n  <span class=\"t-attr\">id</span>=<span class=\"t-str\">\"example-map\"</span>\n  <span class=\"t-attr\">zoom</span>={<span class=\"t-atr\">@zoom</span>}\n<span class=\"t-tag\">/&gt;</span></code></pre></figure>",
+      "css": ".ds-code { margin: 0; overflow: hidden; border: 1px solid var(--color-code-line, #343a4d); border-radius: 8px; background: var(--color-code, #1f2330); color: var(--color-code-ink, #e9e9f2); } .ds-code figcaption { display: flex; align-items: center; justify-content: space-between; height: 40px; padding: 0 6px 0 16px; border-bottom: 1px solid var(--color-code-line, #343a4d); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 0.75rem; color: var(--color-code-muted, #a3a6bd); } .ds-code button { height: 28px; padding: 0 8px; border: 0; border-radius: 6px; background: transparent; color: var(--color-code-muted, #a3a6bd); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); font-size: 0.75rem; font-weight: 700; cursor: pointer; } .ds-code button:hover { background: rgb(255 255 255 / 0.08); color: var(--color-code-ink, #e9e9f2); } .ds-code button:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; } .ds-code pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 0.875rem; line-height: 1.65; font-variant-ligatures: none; } .t-tag { color: var(--color-syntax-module, #8fb8ff); } .t-attr { color: var(--color-syntax-atom, #7fd3c8); } .t-str { color: var(--color-syntax-string, #a8d8a0); } .t-atr { color: var(--color-syntax-attribute, #f0c27f); }"
+    },
+    {
+      "name": "Issue Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "A surface panel explaining why a component is limited, with linked issues.",
+      "html": "<section class=\"ds-panel\"><h2>Why it is limited</h2><p>The documented <code>debug={true}</code> does not turn on debug logging. <a href=\"#\">#21</a></p></section>",
+      "css": ".ds-panel { max-width: 544px; padding: 12px 16px; border: 1px solid var(--color-line, #e3e3ea); border-radius: 8px; background: var(--color-surface, #f4f4f6); font-family: var(--font-sans, Lato, ui-sans-serif, system-ui, sans-serif); font-size: 0.875rem; line-height: 1.25rem; color: var(--color-ink, #1f2330); } .ds-panel h2 { margin: 0; font-size: 0.875rem; font-weight: 700; } .ds-panel p { margin: 6px 0 0; color: var(--color-ink-muted, #4a4a5a); } .ds-panel code { padding: 0.05em 0.3em; border-radius: 4px; background: var(--color-canvas, #ffffff); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 0.875em; color: var(--color-ink, #1f2330); } .ds-panel a { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 0.75rem; font-weight: 600; color: var(--color-accent-ink, #5b3fa6); text-underline-offset: 2px; text-decoration: none; } .ds-panel a:hover { text-decoration: underline; } .ds-panel a:focus-visible { outline: 2px solid var(--color-accent-ink, #5b3fa6); outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Reference That Runs",
+    "overview": "**Creative North Star: \"The Reference That Runs\"**\n\nThe demo is a component reference in the category standard of shadcn/ui and the MapLibre GL JS documentation: a white ground, a cool grey sidebar and top bar divided by one-pixel hairlines, near-black ink with a blue cast, and a single Elixir purple that marks where the reader is and what can be pressed. Nothing on the page competes with the two things a visitor came for, the running map and the code that produced it. The map preview sits directly above its source, and the source is shown on a dark code ground in both themes.\n\nDensity is that of documentation, not marketing: a 60 px top bar, a 280 px family tree, a reading column capped near 66rem with prose held to a 34rem measure, and an \"On this page\" rail on wide screens. Headings are heavy (Lato Black) and short; everything else is quiet. Depth comes from hairlines and a tonal grey surface, not from shadows; the one shadow is reserved for things that float above the page.\n\nLight and dark themes share the same role names: the dark theme redefines the colour roles, so markup never states which theme it is in. The system refuses the full-bleed map under a floating glass panel that the demo had before; a map lives inside a framed preview, in the flow of the page.",
+    "keyCharacteristics": [
+      "One accent, Elixir purple, for the current location and for pressable things only.",
+      "Lato for prose and interface, JetBrains Mono for anything typed as code.",
+      "One-pixel hairlines and a tonal grey surface instead of shadows.",
+      "Dark code blocks in both themes, highlighted on the server.",
+      "Status always as a drawn mark plus a word, on a tint.",
+      "Small, consistent corners: 6 px for controls, 8 px for panels."
+    ],
+    "rules": [
+      {
+        "name": "The Pressable Purple Rule",
+        "body": "The accent marks the current location (sidebar item, top-bar section, tab, rail entry) and things that can be pressed (primary button, pressed choice, link, active map control). It is never decoration, never a heading colour, never a background panel.",
+        "section": "colors"
+      },
+      {
+        "name": "The Role Not Hue Rule",
+        "body": "Markup names roles (`canvas`, `surface`, `ink-muted`, `accent-ink`), never hues. A new colour is a new role defined in both themes; the two dark-theme blocks in the stylesheet stay identical.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mark-and-Word Rule",
+        "body": "A status is always a drawn mark plus its word on its tint (check for stable, triangle for limited, clock for planned). Colour alone never carries a status.",
+        "section": "colors"
+      },
+      {
+        "name": "The Night Code Rule",
+        "body": "Code blocks keep their dark ground in both themes; syntax colours exist only on that ground.",
+        "section": "colors"
+      },
+      {
+        "name": "The Typed-As-Code Rule",
+        "body": "Anything a developer would type (assigns, attributes, events, function names, file paths, versions, issue numbers) is set in JetBrains Mono; prose and interface labels are Lato.",
+        "section": "typography"
+      },
+      {
+        "name": "The As-Typed Rule",
+        "body": "Code, `kbd` and `pre` disable ligatures, so `->` and `=>` read as typed.",
+        "section": "typography"
+      },
+      {
+        "name": "The Heavy Few Rule",
+        "body": "Only page titles and section headings use Lato Black; everything below a heading is 400 or 700.",
+        "section": "typography"
+      },
+      {
+        "name": "The Code Beneath Rule",
+        "body": "An example's map and the code that produces it are adjacent in one column: preview first, source directly below, never in separate pages or side by side.",
+        "section": "layout"
+      },
+      {
+        "name": "The Hairline First Rule",
+        "body": "A resting surface separates itself with a one-pixel line or a tonal step, never a shadow. Shadow means \"floating\", and nothing else.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do reserve the purple for the current location and for pressable things (The Pressable Purple Rule).",
+      "Do name colours by role and define every new role in both themes, keeping the two dark-theme blocks identical.",
+      "Do show every status as its mark plus its word on its tint.",
+      "Do set code, assigns, attributes, events, paths and versions in JetBrains Mono with ligatures off.",
+      "Do place an example's source directly beneath its running map, on the dark code ground.",
+      "Do separate resting surfaces with one-pixel hairlines and the grey surface; keep the overlay shadow for drawers, notices and the map error.",
+      "Do use 6 px corners on controls, 8 px on containers and 4 px on inline elements.",
+      "Do keep prose within the 34rem measure and page content within 66rem.",
+      "Do honour reduced motion: animations and transitions collapse to near zero."
+    ],
+    "donts": [
+      "Don't put a full-bleed map under a floating glass panel; a map lives in a framed preview in the page flow.",
+      "Don't convey a status by colour alone.",
+      "Don't introduce a second accent hue or use the purple as decoration, a heading colour or a panel fill.",
+      "Don't give code blocks a light ground in the light theme, or use syntax colours outside code.",
+      "Don't put shadows on resting cards, panels, tables or code blocks.",
+      "Don't use raw Tailwind palette colours (gray, violet, green) in interface markup; use the role tokens.",
+      "Don't render code with ligatures."
+    ]
+  }
+}
