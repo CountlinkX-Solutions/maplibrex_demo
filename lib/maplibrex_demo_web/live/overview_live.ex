@@ -93,6 +93,12 @@ defmodule MaplibrexDemoWeb.OverviewLive do
       current_path={@current_path}
       query={@query}
       section={:overview}
+      page_sections={[
+        %{id: "install-heading", label: gettext("Install")},
+        %{id: "minimal-heading", label: gettext("A minimal map")},
+        %{id: "families-heading", label: gettext("Components by family")},
+        %{id: "next-heading", label: gettext("Where to go next")}
+      ]}
     >
       <article id="overview">
         <header class="max-w-measure">
