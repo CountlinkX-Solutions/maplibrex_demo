@@ -53,3 +53,11 @@ npm-debug.log
 /.agents/
 /odd/
 /openspec/
+
+# Impeccable design work: the surface brief (.impeccable/surfaces/) is the
+# design record and is committed; mocks, review screenshots and scratch state
+# are generated and stay local.
+/.impeccable/mocks/
+/.impeccable/tmp/
+/.impeccable/review/
+/.impeccable/decision-payload.json
