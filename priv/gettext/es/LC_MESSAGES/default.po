@@ -15,8 +15,8 @@ msgstr "Avanzado"
 #: lib/maplibrex_demo_web/components/layouts.ex:261
 #: lib/maplibrex_demo_web/live/components_live.ex:12
 #: lib/maplibrex_demo_web/live/components_live.ex:33
-#: lib/maplibrex_demo_web/live/overview_live.ex:237
-#: lib/maplibrex_demo_web/live/overview_live.ex:283
+#: lib/maplibrex_demo_web/live/overview_live.ex:239
+#: lib/maplibrex_demo_web/live/overview_live.ex:311
 #, elixir-autogen, elixir-format
 msgid "Components"
 msgstr "Componentes"
@@ -89,7 +89,7 @@ msgstr "Una capa WebGL personalizada, dibujada con tus propios shaders GLSL o co
 msgid "A map control button with an icon or your own content, and an active state."
 msgstr "Un botón de control del mapa con un icono o contenido propio, y un estado activo."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:290
+#: lib/maplibrex_demo_web/live/overview_live.ex:318
 #, elixir-autogen, elixir-format
 msgid "A map whose camera is driven from the server, with client-side commands and its events."
 msgstr "Un mapa cuya cámara se controla desde el servidor, con comandos en el cliente y sus eventos."
@@ -139,7 +139,7 @@ msgstr "Añade teselas de imagen ráster para que las dibuje una capa ráster."
 msgid "Adds vector tiles, from a TileJSON URL or a tile template, for layers to draw."
 msgstr "Añade teselas vectoriales, desde una URL TileJSON o una plantilla de teselas, para que las dibujen las capas."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:267
+#: lib/maplibrex_demo_web/live/overview_live.ex:278
 #, elixir-autogen, elixir-format
 msgid "All families"
 msgstr "Todas las familias"
@@ -260,7 +260,7 @@ msgstr "Dibuja los puntos de una fuente como círculos."
 msgid "Events"
 msgstr "Eventos"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:284
+#: lib/maplibrex_demo_web/live/overview_live.ex:312
 #, elixir-autogen, elixir-format
 msgid "Every component by family, with its attributes, events and status."
 msgstr "Todos los componentes por familia, con sus atributos, eventos y estado."
@@ -270,7 +270,7 @@ msgstr "Todos los componentes por familia, con sus atributos, eventos y estado."
 msgid "Extrudes polygons from a source into 3D shapes, such as buildings."
 msgstr "Extruye polígonos de una fuente en formas 3D, como edificios."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:236
+#: lib/maplibrex_demo_web/live/overview_live.ex:238
 #, elixir-autogen, elixir-format
 msgid "Family"
 msgstr "Familia"
@@ -533,7 +533,7 @@ msgstr "Requiere Elixir 1.15 o posterior y Phoenix LiveView 1.0 o posterior."
 
 #: lib/maplibrex_demo_web/components/layouts.ex:108
 #: lib/maplibrex_demo_web/components/layouts.ex:207
-#: lib/maplibrex_demo_web/live/overview_live.ex:302
+#: lib/maplibrex_demo_web/live/overview_live.ex:330
 #: lib/maplibrex_demo_web/live/roadmap_live.ex:17
 #: lib/maplibrex_demo_web/live/roadmap_live.ex:46
 #, elixir-autogen, elixir-format
@@ -554,7 +554,7 @@ msgstr "Datos de ejemplo"
 
 #: lib/maplibrex_demo_web/components/layouts.ex:105
 #: lib/maplibrex_demo_web/components/layouts.ex:206
-#: lib/maplibrex_demo_web/live/overview_live.ex:297
+#: lib/maplibrex_demo_web/live/overview_live.ex:325
 #: lib/maplibrex_demo_web/live/scenarios_live.ex:12
 #: lib/maplibrex_demo_web/live/scenarios_live.ex:28
 #, elixir-autogen, elixir-format
@@ -603,7 +603,7 @@ msgstr "Ver sus atributos"
 msgid "Set assigns"
 msgstr "Cambiar assigns"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:298
+#: lib/maplibrex_demo_web/live/overview_live.ex:326
 #, elixir-autogen, elixir-format
 msgid "Several components combined into one working map."
 msgstr "Varios componentes combinados en un mapa que funciona."
@@ -708,7 +708,7 @@ msgstr "La librería no describe los atributos de este componente."
 msgid "The library's documentation is not available in this build, so its events cannot be listed."
 msgstr "La documentación de la librería no está disponible en esta compilación, así que no se pueden listar sus eventos."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:288
+#: lib/maplibrex_demo_web/live/overview_live.ex:316
 #, elixir-autogen, elixir-format
 msgid "The map example"
 msgstr "El ejemplo de map"
@@ -793,12 +793,12 @@ msgstr "Versión de la librería MaplibreX que ejecuta esta demo"
 msgid "WebGL particles"
 msgstr "Partículas WebGL"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:303
+#: lib/maplibrex_demo_web/live/overview_live.ex:331
 #, elixir-autogen, elixir-format
 msgid "What is limited or planned, and what the next library release fixes."
 msgstr "Lo que está limitado o planificado, y lo que corrige la próxima versión de la librería."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:279
+#: lib/maplibrex_demo_web/live/overview_live.ex:307
 #, elixir-autogen, elixir-format
 msgid "Where to go next"
 msgstr "Por dónde seguir"
@@ -1359,17 +1359,17 @@ msgstr "El servidor no pudo generar esta página"
 msgid "Ways back"
 msgstr "Formas de volver"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:341
+#: lib/maplibrex_demo_web/live/overview_live.ex:369
 #, elixir-autogen, elixir-format
 msgid "The demo uses the library's main branch, which has nothing unreleased beyond MaplibreX %{hex}, the latest release on Hex."
 msgstr "La demo usa la rama main de la librería, que no tiene nada sin publicar más allá de MaplibreX %{hex}, la última versión publicada en Hex."
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:331
+#: lib/maplibrex_demo_web/live/overview_live.ex:359
 #, elixir-autogen, elixir-format
 msgid "The demo uses the library's main branch; MaplibreX %{hex}, the latest release on Hex, lacks the fixes listed on"
 msgstr "La demo usa la rama main de la librería; MaplibreX %{hex}, la última versión publicada en Hex, no tiene las correcciones que recoge"
 
-#: lib/maplibrex_demo_web/live/overview_live.ex:339
+#: lib/maplibrex_demo_web/live/overview_live.ex:367
 #, elixir-autogen, elixir-format
 msgid "the roadmap"
 msgstr "la hoja de ruta"

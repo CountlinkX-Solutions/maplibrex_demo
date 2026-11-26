@@ -229,13 +229,19 @@ defmodule MaplibrexDemoWeb.OverviewLive do
             {gettext("explains each status that is not stable, with its library issue.")}
           </p>
 
+          <%!-- Below sm the three status columns give way to the same counts,
+               as mark and number, under each family's name. --%>
           <div class="mt-5 overflow-x-auto rounded-panel border border-line">
-            <table class="w-full min-w-[34rem] text-left text-ui tabular-nums">
+            <table id="family-table" class="w-full text-left text-ui tabular-nums">
               <thead class="bg-surface text-label font-bold tracking-[0.06em] text-ink-subtle uppercase">
                 <tr>
                   <th scope="col" class="px-4 py-2.5">{gettext("Family")}</th>
                   <th scope="col" class="px-4 py-2.5 text-right">{gettext("Components")}</th>
-                  <th :for={status <- [:stable, :limited, :planned]} scope="col" class="px-4 py-2.5">
+                  <th
+                    :for={status <- [:stable, :limited, :planned]}
+                    scope="col"
+                    class="hidden px-4 py-2.5 sm:table-cell"
+                  >
                     <span class="inline-flex items-center gap-1.5">
                       <.status_mark status={status} />{status_word(status)}
                     </span>
@@ -251,11 +257,15 @@ defmodule MaplibrexDemoWeb.OverviewLive do
                     >
                       {family.label}
                     </.link>
+                    <.status_summary id={"family-summary-#{family.id}"} counts={family.statuses} />
                   </th>
-                  <td class="px-4 py-2.5 text-right" data-count>{family.count}</td>
+                  <td class="px-4 py-2.5 text-right align-top" data-count>{family.count}</td>
                   <td
                     :for={status <- [:stable, :limited, :planned]}
-                    class={["px-4 py-2.5", family.statuses[status] == 0 && "text-ink-subtle"]}
+                    class={[
+                      "hidden px-4 py-2.5 sm:table-cell",
+                      family.statuses[status] == 0 && "text-ink-subtle"
+                    ]}
                     data-status-count={status}
                   >
                     {family.statuses[status]}
@@ -264,15 +274,33 @@ defmodule MaplibrexDemoWeb.OverviewLive do
               </tbody>
               <tfoot class="border-t border-line-strong font-bold">
                 <tr id="family-row-total">
-                  <th scope="row" class="px-4 py-2.5">{gettext("All families")}</th>
-                  <td class="px-4 py-2.5 text-right">{@total}</td>
-                  <td :for={status <- [:stable, :limited, :planned]} class="px-4 py-2.5">
+                  <th scope="row" class="px-4 py-2.5">
+                    {gettext("All families")}
+                    <.status_summary id="family-summary-total" counts={@totals} />
+                  </th>
+                  <td class="px-4 py-2.5 text-right align-top">{@total}</td>
+                  <td
+                    :for={status <- [:stable, :limited, :planned]}
+                    class="hidden px-4 py-2.5 sm:table-cell"
+                  >
                     {@totals[status]}
                   </td>
                 </tr>
               </tfoot>
             </table>
           </div>
+          <p
+            id="family-legend"
+            aria-hidden="true"
+            class="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-label text-ink-muted sm:hidden"
+          >
+            <span
+              :for={status <- [:stable, :limited, :planned]}
+              class="inline-flex items-center gap-1"
+            >
+              <.status_mark status={status} />{status_word(status)}
+            </span>
+          </p>
         </section>
 
         <section id="next" class="mt-14" aria-labelledby="next-heading">
@@ -344,6 +372,28 @@ defmodule MaplibrexDemoWeb.OverviewLive do
         )}
       <% end %>
     </p>
+    """
+  end
+
+  # A family's status counts as mark and number, for the narrow table. The
+  # word of each status is there for screen readers; the legend under the
+  # table gives it to everyone else.
+  attr :id, :string, required: true
+  attr :counts, :map, required: true
+
+  defp status_summary(assigns) do
+    ~H"""
+    <span id={@id} class="mt-1 flex flex-wrap gap-x-3.5 gap-y-1 font-normal sm:hidden">
+      <span
+        :for={status <- [:stable, :limited, :planned]}
+        data-status-summary={status}
+        class={["inline-flex items-center gap-1", @counts[status] == 0 && "text-ink-subtle"]}
+      >
+        <.status_mark status={status} />
+        <span class="sr-only">{status_word(status)}</span>
+        {@counts[status]}
+      </span>
+    </span>
     """
   end
 
