@@ -14,14 +14,13 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
   alias MaplibrexDemoWeb.{Catalogue, Highlight}
   alias Phoenix.LiveView.JS
 
-  @statuses [:stable, :limited, :planned, :coming]
+  @statuses [:stable, :limited, :planned]
 
   @doc "The word for a status, translated."
   @spec status_word(atom()) :: String.t()
   def status_word(:stable), do: gettext("Stable")
   def status_word(:limited), do: gettext("Limited")
   def status_word(:planned), do: gettext("Planned")
-  def status_word(:coming), do: gettext("Coming")
 
   @doc """
   The mark of a status: a small drawn icon in the status colour.
@@ -41,7 +40,7 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
         name="hero-exclamation-triangle-micro"
         class="size-4 text-limited"
       />
-      <.icon :if={@status in [:planned, :coming]} name="hero-clock-micro" class="size-4 text-planned" />
+      <.icon :if={@status == :planned} name="hero-clock-micro" class="size-4 text-planned" />
     </span>
     """
   end
@@ -70,7 +69,7 @@ defmodule MaplibrexDemoWeb.CatalogueComponents do
 
   defp badge_tint(:stable), do: "bg-stable-soft text-stable"
   defp badge_tint(:limited), do: "bg-limited-soft text-limited"
-  defp badge_tint(status) when status in [:planned, :coming], do: "bg-planned-soft text-planned"
+  defp badge_tint(:planned), do: "bg-planned-soft text-planned"
 
   @doc """
   Says that a scenario draws data generated for the demo, not real

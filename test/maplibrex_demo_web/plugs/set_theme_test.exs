@@ -7,7 +7,7 @@ defmodule MaplibrexDemoWeb.Plugs.SetThemeTest do
 
   defp root(conn) do
     conn
-    |> get(~p"/map")
+    |> get(~p"/components/map")
     |> html_response(200)
     |> LazyHTML.from_document()
   end

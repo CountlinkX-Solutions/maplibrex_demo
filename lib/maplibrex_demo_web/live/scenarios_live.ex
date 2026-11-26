@@ -1,10 +1,7 @@
 defmodule MaplibrexDemoWeb.ScenariosLive do
   @moduledoc """
-  Scenarios: several components combined into one working map.
-
-  Each rebuilt scenario links its page. One that is not rebuilt yet is
-  marked as coming and links the page that shows it today, so nothing that
-  works is hidden.
+  Scenarios: several components combined into one working map, each
+  linking its page at `/scenarios/:id`.
   """
   use MaplibrexDemoWeb, :live_view
 
@@ -41,18 +38,13 @@ defmodule MaplibrexDemoWeb.ScenariosLive do
           <article aria-labelledby={"scenario-#{scenario.id}-heading"}>
             <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
               <h2 id={"scenario-#{scenario.id}-heading"} class="text-heading font-black">
-                <%= if scenario.module do %>
-                  <.link
-                    navigate={~p"/scenarios/#{scenario.id}"}
-                    class="underline-offset-4 hover:text-accent-ink hover:underline"
-                  >
-                    {scenario.title}
-                  </.link>
-                <% else %>
+                <.link
+                  navigate={~p"/scenarios/#{scenario.id}"}
+                  class="underline-offset-4 hover:text-accent-ink hover:underline"
+                >
                   {scenario.title}
-                <% end %>
+                </.link>
               </h2>
-              <.status_badge :if={!scenario.module} status={:coming} />
               <.sample_data_badge :if={scenario.sample_data} />
             </div>
 
@@ -65,23 +57,12 @@ defmodule MaplibrexDemoWeb.ScenariosLive do
             <.component_chips names={scenario.components} class="mt-3" />
 
             <.link
-              :if={scenario.module}
               navigate={~p"/scenarios/#{scenario.id}"}
               class="mt-4 inline-flex items-center gap-1.5 text-ui font-bold text-accent-ink underline-offset-2 hover:underline"
             >
               {gettext("Open the scenario")}
               <.icon name="hero-arrow-right-micro" class="size-4" />
             </.link>
-
-            <a
-              :if={!scenario.module}
-              href={scenario.legacy_path}
-              class="mt-4 inline-flex items-center gap-1.5 text-ui font-bold text-accent-ink underline-offset-2 hover:underline"
-            >
-              {gettext("Open the current page")}
-              <span class="font-mono font-normal text-ink-subtle">{scenario.legacy_path}</span>
-              <.icon name="hero-arrow-right-micro" class="size-4" />
-            </a>
           </article>
         </li>
       </ul>

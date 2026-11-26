@@ -494,9 +494,6 @@ defmodule MaplibrexDemoWeb.Catalogue do
   `sample_data` is true when the scenario draws data generated for the demo
   rather than real measurements. `notes` are library issues the scenario
   depends on, each with a one-sentence note.
-
-  A scenario whose `module` is `nil` has not been rebuilt in the catalogue
-  yet; `legacy_path` is the page that still shows it.
   """
   @spec scenarios() :: [map()]
   def scenarios do
@@ -578,27 +575,27 @@ defmodule MaplibrexDemoWeb.Catalogue do
   end
 
   @doc """
-  Looks a rebuilt scenario up by the id a URL carries.
+  Looks a scenario up by the id a URL carries.
 
   Never converts the string to an atom, so unknown ids cannot grow the atom
   table.
   """
   @spec fetch_scenario(String.t()) :: {:ok, map()} | :error
   def fetch_scenario(id) when is_binary(id) do
-    case Enum.find(scenarios(), &(Atom.to_string(&1.id) == id and &1.module != nil)) do
+    case Enum.find(scenarios(), &(Atom.to_string(&1.id) == id)) do
       nil -> :error
       scenario -> {:ok, scenario}
     end
   end
 
-  @doc "The rebuilt scenarios before and after `id`."
+  @doc "The scenarios before and after `id`."
   @spec scenario_neighbours(atom()) :: {map() | nil, map() | nil}
   def scenario_neighbours(id) when is_atom(id) do
-    rebuilt = Enum.filter(scenarios(), & &1.module)
-    index = Enum.find_index(rebuilt, &(&1.id == id))
+    all = scenarios()
+    index = Enum.find_index(all, &(&1.id == id))
 
-    previous = if index > 0, do: Enum.at(rebuilt, index - 1)
-    {previous, Enum.at(rebuilt, index + 1)}
+    previous = if index > 0, do: Enum.at(all, index - 1)
+    {previous, Enum.at(all, index + 1)}
   end
 
   @doc """

@@ -12,10 +12,6 @@ defmodule MaplibrexDemoWeb.Router do
     plug MaplibrexDemoWeb.Plugs.SetTheme
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
-
   scope "/", MaplibrexDemoWeb do
     pipe_through :browser
 
@@ -31,21 +27,17 @@ defmodule MaplibrexDemoWeb.Router do
       live "/roadmap", RoadmapLive
     end
 
-    # The pages that predate the catalogue. Their content moves into it
-    # component by component, and they are removed once it has.
-    live "/map", MapLive
-    live "/tiles", TilesLive
-    live "/ogc", OgcFeaturesLive
-    live "/deckgl", DeckglLive
-    live "/terrain", TerrainLive
-    live "/heatmap", HeatmapLive
-    live "/buildings", BuildingsLive
-    live "/markers", MarkersLive
-    live "/particles", ParticlesLive
+    # The pages that predate the catalogue, kept as redirects so bookmarks
+    # land where the same thing is shown now. /tiles and /ogc needed a
+    # separate tile server and are gone; they lead to the component index.
+    get "/map", RedirectController, :show, assigns: %{to: "/components/map"}
+    get "/markers", RedirectController, :show, assigns: %{to: "/components/marker"}
+    get "/terrain", RedirectController, :show, assigns: %{to: "/scenarios/terrain_3d"}
+    get "/heatmap", RedirectController, :show, assigns: %{to: "/scenarios/heatmap"}
+    get "/buildings", RedirectController, :show, assigns: %{to: "/scenarios/buildings"}
+    get "/particles", RedirectController, :show, assigns: %{to: "/scenarios/particles"}
+    get "/deckgl", RedirectController, :show, assigns: %{to: "/scenarios/deckgl"}
+    get "/tiles", RedirectController, :show, assigns: %{to: "/components"}
+    get "/ogc", RedirectController, :show, assigns: %{to: "/components"}
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", MaplibrexDemoWeb do
-  #   pipe_through :api
-  # end
 end

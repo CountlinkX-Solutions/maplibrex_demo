@@ -17,7 +17,7 @@ defmodule MaplibrexDemoWeb do
   those modules here.
   """
 
-  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
+  def static_paths, do: ~w(assets fonts favicon.ico robots.txt)
 
   def router do
     quote do
@@ -88,8 +88,6 @@ defmodule MaplibrexDemoWeb do
       import Phoenix.HTML
       # Core UI components
       import MaplibrexDemoWeb.CoreComponents
-      # Shared chrome for the demo pages
-      import MaplibrexDemoWeb.DemoComponents
       # Status marks, code blocks and issue links of the catalogue pages
       import MaplibrexDemoWeb.CatalogueComponents
 
