@@ -148,11 +148,21 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
         control_group: MaplibrexDemoWeb.Examples.ControlGroupExample,
         zoom_range: MaplibrexDemoWeb.Examples.ZoomRangeExample,
         vector_tile_source: MaplibrexDemoWeb.Examples.VectorTileSourceExample,
-        raster_tile_source: MaplibrexDemoWeb.Examples.RasterTileSourceExample
+        raster_tile_source: MaplibrexDemoWeb.Examples.RasterTileSourceExample,
+        image_source: MaplibrexDemoWeb.Examples.ImageSourceExample
       }
 
       for {name, example} <- examples do
         assert Catalogue.fetch!(name).example == example, "#{name} has no example"
+      end
+    end
+
+    test "says why a working component has no example when its status does not" do
+      assert %{example: nil, example_note: note} = Catalogue.fetch!(:video_source)
+      assert note =~ "video"
+
+      for %Component{example: example, example_note: note} <- Catalogue.components(), example do
+        assert note == nil
       end
     end
 
