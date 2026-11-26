@@ -261,6 +261,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :navigation_control,
         family: :controls,
         module: Lib.NavigationControl,
+        example: MaplibrexDemoWeb.Examples.NavigationControlExample,
         summary: gettext("Zoom buttons and a compass."),
         status: :limited,
         issues: [reactive_control]
@@ -269,6 +270,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :scale_control,
         family: :controls,
         module: Lib.ScaleControl,
+        example: MaplibrexDemoWeb.Examples.ScaleControlExample,
         summary: gettext("A scale bar for the current zoom level."),
         status: :limited,
         issues: [reactive_control]
@@ -277,6 +279,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :fullscreen_control,
         family: :controls,
         module: Lib.FullscreenControl,
+        example: MaplibrexDemoWeb.Examples.FullscreenControlExample,
         summary: gettext("A button that shows the map in full screen."),
         status: :limited,
         issues: [reactive_control]

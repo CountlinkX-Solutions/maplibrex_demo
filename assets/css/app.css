@@ -301,6 +301,18 @@
     color: var(--color-syntax-punct);
   }
 
+  /* An example shown in full screen by <.fullscreen_control container_id>:
+     the map takes the height its controls leave. */
+  :fullscreen:has(> [data-example-frame]) {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  :fullscreen > [data-example-frame] {
+    flex: 1 0 var(--spacing-preview);
+  }
+
   /* The navigation drawer of narrow screens slides in from the left. */
   .drawer[open] {
     animation: drawer-in 240ms var(--ease-out-expo);

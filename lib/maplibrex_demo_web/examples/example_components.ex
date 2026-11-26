@@ -14,7 +14,8 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
   @doc """
   The box the map fills, at the preview's height: give the map
   `class="h-full w-full"`. Says the map is loading until MapLibre paints over
-  it, and shows a map error on top.
+  it, and shows a map error on top. When its parent is shown in full screen,
+  it takes the room the controls leave (see `app.css`).
   """
   attr :error, :string, default: nil, doc: "the last map:error message, if any"
   attr :error_id, :string, required: true
@@ -22,7 +23,7 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
 
   def example_frame(assigns) do
     ~H"""
-    <div class="relative h-preview overflow-hidden bg-surface">
+    <div data-example-frame class="relative h-preview overflow-hidden bg-surface">
       <p
         class="absolute inset-0 flex items-center justify-center gap-2 text-ui text-ink-subtle"
         aria-hidden="true"
