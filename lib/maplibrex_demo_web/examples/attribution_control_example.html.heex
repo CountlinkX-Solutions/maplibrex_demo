@@ -1,0 +1,57 @@
+<div id="attribution-control-example">
+  <.example_frame error={@map_error} error_id="example-attribution-map-error">
+    <%!-- attribution_control={false} leaves out the map's own attribution, so
+          the component below is the only one. It still credits every source. --%>
+    <.map
+      id="example-attribution-map"
+      center={[2.3522, 48.8566]}
+      zoom={12}
+      attribution_control={false}
+      style="https://tiles.openfreemap.org/styles/positron"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- MaplibreX reads a control's options only when it mounts (#3). They are
+        part of the id, so new options mount a new control in their place. --%>
+  <.attribution_control
+    id={"example-attribution-#{@position}-#{@compact}-#{@custom}"}
+    map_id="example-attribution-map"
+    position={@position}
+    compact={@compact}
+    custom_attribution={custom_attribution(@custom)}
+  />
+
+  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[auto_1fr]">
+    <.example_group id="example-attribution-positions" label="position" code>
+      <.example_button
+        :for={position <- positions()}
+        id={"example-attribution-position-#{position}"}
+        code
+        pressed={@position == position}
+        phx-click="position"
+        phx-value-position={position}
+      >
+        {position}
+      </.example_button>
+    </.example_group>
+
+    <.example_group id="example-attribution-assigns" label={gettext("Set assigns")}>
+      <.form
+        for={@options}
+        id="example-attribution-options"
+        phx-change="options"
+        class="flex flex-wrap gap-x-6 gap-y-2 py-1.5"
+      >
+        <.example_checkbox field={@options[:compact]} label="compact" />
+        <.example_checkbox field={@options[:custom]} label="custom_attribution" />
+      </.form>
+    </.example_group>
+  </div>
+
+  <.example_readout values={[
+    position: @position,
+    compact: @compact,
+    custom_attribution: custom_attribution(@custom) || "nil"
+  ]} />
+</div>

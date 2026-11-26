@@ -302,6 +302,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :geolocate_control,
         family: :controls,
         module: Lib.GeolocateControl,
+        example: MaplibrexDemoWeb.Examples.GeolocateControlExample,
         summary:
           gettext("A button that centres the map on the user's location, with optional tracking."),
         status: :stable
@@ -310,6 +311,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :attribution_control,
         family: :controls,
         module: Lib.AttributionControl,
+        example: MaplibrexDemoWeb.Examples.AttributionControlExample,
         summary: gettext("Shows the attribution of the map's sources."),
         status: :limited,
         issues: [reactive_control]
