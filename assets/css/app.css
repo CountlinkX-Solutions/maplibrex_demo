@@ -123,7 +123,7 @@
   --spacing-topbar: 3.75rem;
   --spacing-sidebar: 17.5rem;
   --spacing-preview: 22.5rem;
-  --container-measure: 40rem;
+  --container-measure: 34rem;
   --container-page: 66rem;
 
   /* Radii */
@@ -232,6 +232,18 @@
 
   a {
     text-underline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
   }
 
   /* Code is copied, so show it as typed: no "->" or "=>" arrow ligatures. */
