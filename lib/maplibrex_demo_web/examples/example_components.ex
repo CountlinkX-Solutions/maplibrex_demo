@@ -24,12 +24,18 @@ defmodule MaplibrexDemoWeb.Examples.ExampleComponents do
     default: ["tiles.openfreemap.org"],
     doc: "the services the example loads its map data from, named in an error"
 
+  attr :tall, :boolean, default: false, doc: "the taller frame of a scenario, on wide screens"
+
   slot :inner_block, required: true
 
   def example_frame(assigns) do
     ~H"""
-    <div data-example-frame class="relative h-preview overflow-hidden bg-surface">
+    <div
+      data-example-frame
+      class={["relative h-preview overflow-hidden bg-surface", @tall && "sm:h-scenario"]}
+    >
       <p
+        data-map-loading
         class="absolute inset-0 flex items-center justify-center gap-2 text-ui text-ink-subtle"
         aria-hidden="true"
       >

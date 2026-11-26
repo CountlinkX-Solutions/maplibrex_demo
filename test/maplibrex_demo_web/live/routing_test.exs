@@ -9,6 +9,7 @@ defmodule MaplibrexDemoWeb.RoutingTest do
     {"/components/map", "map"},
     {"/components/sky", "sky"},
     {"/scenarios", "Scenarios"},
+    {"/scenarios/terrain_3d", "3D terrain flight"},
     {"/roadmap", "Roadmap"}
   ]
 
@@ -35,5 +36,9 @@ defmodule MaplibrexDemoWeb.RoutingTest do
 
   test "an unknown component is a 404", %{conn: conn} do
     assert_error_sent 404, fn -> get(conn, "/components/no_such_component") end
+  end
+
+  test "an unknown scenario is a 404", %{conn: conn} do
+    assert_error_sent 404, fn -> get(conn, "/scenarios/no_such_scenario") end
   end
 end

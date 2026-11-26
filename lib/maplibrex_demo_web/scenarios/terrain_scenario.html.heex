@@ -1,0 +1,105 @@
+<div id="terrain-scenario">
+  <.example_frame
+    error={@map_error}
+    error_id="scenario-terrain-map-error"
+    hosts={["tiles.openfreemap.org", "tiles.mapterhorn.com"]}
+    tall
+  >
+    <.map
+      id="scenario-terrain-map"
+      center={@start.center}
+      zoom={@start.zoom}
+      pitch={@start.pitch}
+      bearing={@start.bearing}
+      max_pitch={85}
+      style="https://tiles.openfreemap.org/styles/positron"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <.navigation_control
+    id="scenario-terrain-navigation"
+    map_id="scenario-terrain-map"
+    visualize_pitch
+  />
+
+  <%!-- Terrain and hillshading each read their own DEM source: MapLibre
+        warns when one raster-dem source backs both. --%>
+  <.raster_dem_source
+    id="scenario-terrain-dem"
+    map_id="scenario-terrain-map"
+    url="https://tiles.mapterhorn.com/tilejson.json"
+  />
+  <.raster_dem_source
+    id="scenario-hillshade-dem"
+    map_id="scenario-terrain-map"
+    url="https://tiles.mapterhorn.com/tilejson.json"
+  />
+
+  <.hillshade_layer
+    id="scenario-hillshade"
+    map_id="scenario-terrain-map"
+    source_id="scenario-hillshade-dem"
+    paint={
+      %{
+        "hillshade-exaggeration" => 0.7,
+        "hillshade-shadow-color" => "#473b24",
+        "hillshade-highlight-color" => "#fff8e7",
+        "hillshade-illumination-anchor" => "map"
+      }
+    }
+  />
+
+  <.terrain
+    :if={@terrain}
+    map_id="scenario-terrain-map"
+    source_id="scenario-terrain-dem"
+    exaggeration={@exaggeration}
+  />
+
+  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[1fr_auto]">
+    <.example_group id="scenario-terrain-assigns" label={gettext("Set assigns")}>
+      <.form
+        for={@options}
+        id="scenario-terrain-options"
+        phx-change="options"
+        class="grid w-full gap-4 sm:max-w-lg sm:grid-cols-[1fr_auto] sm:items-end"
+      >
+        <.example_range
+          field={@options[:exaggeration]}
+          label="exaggeration"
+          min="0.5"
+          max="3"
+          step="0.1"
+        />
+        <.example_checkbox field={@options[:terrain]} label=":if" />
+      </.form>
+    </.example_group>
+
+    <%!-- Flights run in the browser: fly_to/4 returns a JS command. --%>
+    <.example_group id="scenario-terrain-flights" label={gettext("Run commands")}>
+      <.example_button
+        :for={flight <- flights()}
+        id={"scenario-terrain-fly-#{flight.id}"}
+        phx-click={
+          MapCmd.fly_to("scenario-terrain-map", flight.center, flight.zoom,
+            duration: 4000,
+            pitch: flight.pitch,
+            bearing: flight.bearing
+          )
+        }
+      >
+        {flight.name}
+      </.example_button>
+    </.example_group>
+  </div>
+
+  <%!-- The camera as map:moved reports it, and the terrain's assigns. --%>
+  <.example_readout values={[
+    zoom: @zoom,
+    pitch: @pitch,
+    bearing: @bearing,
+    exaggeration: @exaggeration,
+    terrain: @terrain
+  ]} />
+</div>

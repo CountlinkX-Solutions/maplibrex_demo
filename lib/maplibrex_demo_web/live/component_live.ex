@@ -189,38 +189,20 @@ defmodule MaplibrexDemoWeb.ComponentLive do
         <.attributes_panel attributes={@attributes} />
       </section>
 
-      <nav
-        aria-label={gettext("Previous and next component")}
-        class="mt-16 grid gap-3 border-t border-line pt-6 sm:grid-cols-2"
-      >
-        <.link
-          :if={@previous}
-          id="component-previous"
-          navigate={~p"/components/#{@previous.name}"}
-          class="group rounded-panel border border-line px-4 py-3 hover:border-line-strong hover:bg-surface"
-        >
-          <span class="block text-label text-ink-subtle">{gettext("Previous")}</span>
-          <span class="mt-0.5 flex items-center gap-1.5 font-bold group-hover:text-accent-ink">
-            <.icon name="hero-arrow-left-micro" class="size-4" />{@previous.name}
-          </span>
-        </.link>
-        <.link
-          :if={@next}
-          id="component-next"
-          navigate={~p"/components/#{@next.name}"}
-          class="group rounded-panel border border-line px-4 py-3 text-right hover:border-line-strong hover:bg-surface sm:col-start-2"
-        >
-          <span class="block text-label text-ink-subtle">{gettext("Next")}</span>
-          <span class="mt-0.5 flex items-center justify-end gap-1.5 font-bold group-hover:text-accent-ink">
-            {@next.name}<.icon name="hero-arrow-right-micro" class="size-4" />
-          </span>
-        </.link>
-      </nav>
+      <.pager
+        id="component"
+        label={gettext("Previous and next component")}
+        previous={page_link(@previous)}
+        next={page_link(@next)}
+      />
     </Layouts.app>
     """
   end
 
   defp tabs, do: @tabs
+
+  defp page_link(nil), do: nil
+  defp page_link(component), do: %{name: component.name, path: ~p"/components/#{component.name}"}
 
   defp tab_path(component, :preview), do: ~p"/components/#{component.name}"
   defp tab_path(component, tab), do: ~p"/components/#{component.name}?#{[tab: tab]}"

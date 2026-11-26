@@ -488,26 +488,36 @@ defmodule MaplibrexDemoWeb.Catalogue do
   end
 
   @doc """
-  The scenarios that combine several components.
+  The scenarios that combine several components, each a page at
+  `/scenarios/:id` that runs `module` above its source.
 
-  None has been rebuilt in the catalogue yet, so each is `:coming` and points
-  at the page that still shows it (`legacy_path`). `sample_data` is true when
-  that page draws generated data rather than real measurements.
+  `sample_data` is true when the scenario draws data generated for the demo
+  rather than real measurements. `notes` are library issues the scenario
+  depends on, each with a one-sentence note.
+
+  A scenario whose `module` is `nil` has not been rebuilt in the catalogue
+  yet; `legacy_path` is the page that still shows it.
   """
   @spec scenarios() :: [map()]
   def scenarios do
     [
       %{
         id: :terrain_3d,
-        title: gettext("3D terrain"),
+        title: gettext("3D terrain flight"),
         summary:
           gettext(
-            "Elevation from a public DEM drawn as hillshading and 3D terrain, with the exaggeration set from the server."
+            "Hillshading and 3D terrain from a public elevation service, with the exaggeration set from the server and camera flights between mountain ranges."
           ),
-        components: [:map, :raster_dem_source, :hillshade_layer, :terrain, :navigation_control],
+        components: [
+          :map,
+          :raster_dem_source,
+          :hillshade_layer,
+          :terrain,
+          :navigation_control
+        ],
         sample_data: false,
-        status: :coming,
-        legacy_path: "/terrain"
+        module: MaplibrexDemoWeb.Scenarios.TerrainScenario,
+        notes: []
       },
       %{
         id: :heatmap,
@@ -516,7 +526,8 @@ defmodule MaplibrexDemoWeb.Catalogue do
           gettext("A heatmap whose radius, intensity and opacity are set from the server."),
         components: [:map, :geojson_layer, :navigation_control],
         sample_data: true,
-        status: :coming,
+        module: nil,
+        notes: [],
         legacy_path: "/heatmap"
       },
       %{
@@ -528,7 +539,8 @@ defmodule MaplibrexDemoWeb.Catalogue do
           ),
         components: [:map, :geojson_layer, :navigation_control],
         sample_data: true,
-        status: :coming,
+        module: nil,
+        notes: [],
         legacy_path: "/buildings"
       },
       %{
@@ -538,7 +550,8 @@ defmodule MaplibrexDemoWeb.Catalogue do
           gettext("Animated particles drawn by a custom WebGL layer with its own shaders."),
         components: [:map, :custom_layer, :navigation_control],
         sample_data: false,
-        status: :coming,
+        module: nil,
+        notes: [],
         legacy_path: "/particles"
       },
       %{
@@ -547,10 +560,35 @@ defmodule MaplibrexDemoWeb.Catalogue do
         summary: gettext("deck.gl arc, hexagon and scatterplot layers drawn over the map."),
         components: [:map, :deckgl_layer, :navigation_control],
         sample_data: true,
-        status: :coming,
+        module: nil,
+        notes: [],
         legacy_path: "/deckgl"
       }
     ]
+  end
+
+  @doc """
+  Looks a rebuilt scenario up by the id a URL carries.
+
+  Never converts the string to an atom, so unknown ids cannot grow the atom
+  table.
+  """
+  @spec fetch_scenario(String.t()) :: {:ok, map()} | :error
+  def fetch_scenario(id) when is_binary(id) do
+    case Enum.find(scenarios(), &(Atom.to_string(&1.id) == id and &1.module != nil)) do
+      nil -> :error
+      scenario -> {:ok, scenario}
+    end
+  end
+
+  @doc "The rebuilt scenarios before and after `id`."
+  @spec scenario_neighbours(atom()) :: {map() | nil, map() | nil}
+  def scenario_neighbours(id) when is_atom(id) do
+    rebuilt = Enum.filter(scenarios(), & &1.module)
+    index = Enum.find_index(rebuilt, &(&1.id == id))
+
+    previous = if index > 0, do: Enum.at(rebuilt, index - 1)
+    {previous, Enum.at(rebuilt, index + 1)}
   end
 
   @doc """
