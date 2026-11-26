@@ -547,12 +547,13 @@ defmodule MaplibrexDemoWeb.Catalogue do
         id: :particles,
         title: gettext("WebGL particles"),
         summary:
-          gettext("Animated particles drawn by a custom WebGL layer with its own shaders."),
+          gettext(
+            "1,000 particles drawn by a custom WebGL layer with its own shaders, whose colour, speed, turbulence and direction are uniforms set from the server."
+          ),
         components: [:map, :custom_layer, :navigation_control],
         sample_data: false,
-        module: nil,
-        notes: [],
-        legacy_path: "/particles"
+        module: MaplibrexDemoWeb.Scenarios.ParticlesScenario,
+        notes: []
       },
       %{
         id: :deckgl,

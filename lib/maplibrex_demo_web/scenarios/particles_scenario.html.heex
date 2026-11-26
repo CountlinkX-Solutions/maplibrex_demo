@@ -1,0 +1,102 @@
+<div id="particles-scenario">
+  <.example_frame error={@map_error} error_id="scenario-particles-map-error" tall>
+    <.map
+      id="scenario-particles-map"
+      center={[0, 20]}
+      zoom={1.6}
+      style="https://tiles.openfreemap.org/styles/dark"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <.navigation_control id="scenario-particles-navigation" map_id="scenario-particles-map" />
+
+  <%!-- The shaders are strings. The uniforms here are the ones the layer
+        mounts with; later changes are pushed (see the module). --%>
+  <.custom_layer
+    id="scenario-particles-layer"
+    map_id="scenario-particles-map"
+    vertex_shader={vertex_shader()}
+    fragment_shader={fragment_shader()}
+    uniforms={@uniforms}
+  />
+
+  <div class="space-y-4 border-t border-line px-4 py-4">
+    <div class="grid gap-x-8 gap-y-4 lg:grid-cols-[auto_1fr]">
+      <.example_group id="scenario-particles-presets" label="preset">
+        <.example_button
+          :for={preset <- presets()}
+          id={"scenario-particles-preset-#{preset}"}
+          code
+          pressed={@preset == preset}
+          phx-click="preset"
+          phx-value-preset={preset}
+        >
+          {preset}
+        </.example_button>
+      </.example_group>
+
+      <.example_group id="scenario-particles-colors" label="u_color">
+        <.example_button
+          :for={{name, color} <- colors()}
+          id={"scenario-particles-color-#{name}"}
+          code
+          pressed={@color == color}
+          phx-click="color"
+          phx-value-color={name}
+        >
+          <.example_swatch color={css_color(color)} />{inspect(color)}
+        </.example_button>
+      </.example_group>
+    </div>
+
+    <.form
+      for={@options}
+      id="scenario-particles-options"
+      phx-change="options"
+      class="grid gap-4 sm:grid-cols-3 lg:grid-cols-5"
+    >
+      <.example_range field={@options[:speed]} label="speed" min="0" max="5" step="0.1" />
+      <.example_range
+        field={@options[:turbulence]}
+        label="turbulence"
+        min="0"
+        max="1"
+        step="0.05"
+      />
+      <%!-- A compass bearing: the labels sit at 0, 90, 180, 270 and 360. --%>
+      <div>
+        <.example_range
+          field={@options[:direction]}
+          label="direction"
+          min="0"
+          max="360"
+          step="15"
+        />
+        <p
+          id="scenario-particles-direction-labels"
+          class="mt-0.5 flex justify-between px-0.5 font-mono text-label text-ink-subtle"
+          aria-hidden="true"
+        >
+          <span>N</span><span>E</span><span>S</span><span>W</span><span>N</span>
+        </p>
+      </div>
+      <.example_range
+        field={@options[:point_size]}
+        label="point_size"
+        min="1"
+        max="10"
+        step="0.5"
+      />
+      <.example_range field={@options[:opacity]} label="opacity" min="0" max="1" step="0.05" />
+    </.form>
+  </div>
+
+  <.example_readout values={[
+    preset: @preset,
+    speed: @speed,
+    turbulence: @turbulence,
+    direction: "#{@direction}°",
+    point_size: @point_size
+  ]} />
+</div>
