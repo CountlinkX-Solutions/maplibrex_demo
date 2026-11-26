@@ -282,11 +282,11 @@ defmodule MaplibrexDemoWeb.CataloguePagesTest do
       refute has_element?(view, "#roadmap-family-layers #roadmap-item-circle_layer")
     end
 
-    test "shows what the merged, unpublished release fixes, with its issues", %{conn: conn} do
+    test "shows what the release published on Hex fixes, with its issues", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/roadmap")
 
       assert has_element?(view, "#next-release-heading", "0.2.0")
-      assert has_element?(view, ~s(#next-release-state[data-state="merged"]))
+      assert has_element?(view, ~s(#next-release-state[data-state="published"]))
 
       for %{issues: issues} <- Catalogue.next_release().items, number <- issues do
         assert has_element?(view, ~s(#next-release a[href$="/issues/#{number}"]))
