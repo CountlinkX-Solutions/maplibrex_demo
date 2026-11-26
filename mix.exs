@@ -119,14 +119,18 @@ defmodule MaplibrexDemo.MixProject do
     end
   end
 
+  # The demo follows the library's main branch, not a Hex release: its
+  # catalogue documents what main does. mix.lock holds the commit; move it
+  # with `mix deps.update maplibrex`, run without MAPLIBREX_PATH.
+  #
   # Point at a local checkout while developing the library and the demo side by
-  # side; fall back to the published repository otherwise.
+  # side:
   #
   #     MAPLIBREX_PATH=../maplibrex mix deps.get
   #
   defp maplibrex_dep do
     case System.get_env("MAPLIBREX_PATH") do
-      nil -> {:maplibrex, github: "CountlinkX-Solutions/maplibrex"}
+      nil -> {:maplibrex, github: "CountlinkX-Solutions/maplibrex", branch: "main"}
       path -> {:maplibrex, path: path}
     end
   end
