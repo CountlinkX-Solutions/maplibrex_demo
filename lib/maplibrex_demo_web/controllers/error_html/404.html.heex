@@ -1,0 +1,14 @@
+<.error_page title={gettext("Page not found")} conn={assigns[:conn]}>
+  <p>
+    <.rich_text text={
+      gettext("Nothing in this demo lives at `%{path}`.", path: request_path(assigns[:conn]))
+    } />
+    <.rich_text text={
+      gettext(
+        "A component's page is named after it, such as `/components/map`; the component index lists them all."
+      )
+    } />
+  </p>
+  <:action href={~p"/components"}>{gettext("Browse the components")}</:action>
+  <:action href={~p"/"}>{gettext("Go to the overview")}</:action>
+</.error_page>
