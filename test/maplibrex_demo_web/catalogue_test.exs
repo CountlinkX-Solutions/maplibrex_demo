@@ -320,15 +320,13 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
 
   describe "hex_requirement/1" do
     test "allows the release's minor version and later ones" do
-      assert Catalogue.hex_requirement("0.2.0") == "~> 0.2"
-      assert Catalogue.hex_requirement("0.3.1") == "~> 0.3"
-      assert Catalogue.hex_requirement("1.4.2") == "~> 1.4"
+      assert Catalogue.hex_requirement("0.2.0") == "~> 0.2.0"
+      assert Catalogue.hex_requirement("0.3.1") == "~> 0.3.1"
+      assert Catalogue.hex_requirement("1.4.2") == "~> 1.4.2"
     end
 
     test "is derived from the Hex release by default" do
-      %Version{major: major, minor: minor} = Version.parse!(Catalogue.hex_release())
-
-      assert Catalogue.hex_requirement() == "~> #{major}.#{minor}"
+      assert Catalogue.hex_requirement() == "~> #{Catalogue.hex_release()}"
     end
   end
 

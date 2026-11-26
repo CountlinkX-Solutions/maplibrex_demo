@@ -12,7 +12,7 @@ It runs locally; there is no public deployment.
 
 ## Coverage
 
-At the time of writing (library `main` at `5658aef`), the catalogue lists all
+At the time of writing (MaplibreX 0.2.1, library `main` at `c84b7f9`), the catalogue lists all
 32 components of `MaplibreX.Components`:
 
 - 27 have an interactive example of their own.
@@ -20,7 +20,7 @@ At the time of writing (library `main` at `5658aef`), the catalogue lists all
 - `sky` (planned, #14), `terrain_control` (limited, #19) and `video_source`
   (no openly licensed video lines up with four points on a map) have no
   running example.
-- Statuses: 13 stable, 18 limited, 1 planned.
+- Statuses: 15 stable, 16 limited, 1 planned.
 
 These numbers are computed from the catalogue, and the app shows the current
 ones on `/` and `/roadmap`; trust the app over this list.
