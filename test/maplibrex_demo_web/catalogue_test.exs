@@ -138,6 +138,16 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       end
     end
 
+    test "the components whose examples came with the 0.2.0 statuses have them" do
+      examples = %{
+        popup: MaplibrexDemoWeb.Examples.PopupExample
+      }
+
+      for {name, example} <- examples do
+        assert Catalogue.fetch!(name).example == example, "#{name} has no example"
+      end
+    end
+
     test "every example is a LiveView with its source on hand" do
       for %Component{example: example} <- Catalogue.components(), example do
         assert Code.ensure_loaded?(example)
