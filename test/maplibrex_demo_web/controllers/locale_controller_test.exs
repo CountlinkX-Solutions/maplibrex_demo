@@ -38,6 +38,22 @@ defmodule MaplibrexDemoWeb.LocaleControllerTest do
     assert has_element?(view, "#sidebar-family-markers-label", "Marcadores y popups")
   end
 
+  test "translates the scenarios and the examples' own copy", %{conn: conn} do
+    conn = get(conn, ~p"/locale?#{[locale: "es", return_to: "/scenarios/heatmap"]}")
+
+    {:ok, view, _html} = conn |> recycle() |> live(~p"/scenarios/heatmap")
+
+    assert has_element?(view, "#scenario-title", "Mapa de calor de sismos simulados")
+    assert has_element?(view, "#scenario-sample-data", "Datos de ejemplo")
+
+    {:ok, example, _html} =
+      live_isolated(build_conn(), MaplibrexDemoWeb.Examples.MarkerExample,
+        session: %{"locale" => "es"}
+      )
+
+    assert has_element?(example, "#example-marker-add", "Añadir en el centro")
+  end
+
   for target <- ["//example.com/x", "https://example.com/x", "components"] do
     test "refuses to return to #{target}", %{conn: conn} do
       conn = get(conn, ~p"/locale?#{[locale: "es", return_to: unquote(target)]}")
