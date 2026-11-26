@@ -1,0 +1,80 @@
+<div id="symbol-layer-example">
+  <.example_frame error={@map_error} error_id="example-symbol-map-error">
+    <.map
+      id="example-symbol-map"
+      center={[16.3695, 48.2065]}
+      zoom={15.5}
+      style="https://tiles.openfreemap.org/styles/positron"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- OpenFreeMap's TileJSON: OpenStreetMap in the OpenMapTiles schema. --%>
+  <.vector_tile_source
+    id="example-symbol-osm"
+    map_id="example-symbol-map"
+    url="https://tiles.openfreemap.org/planet"
+  />
+
+  <.symbol_layer
+    id="example-symbol-labels"
+    map_id="example-symbol-map"
+    source_id="example-symbol-osm"
+    source_layer="poi"
+    layout={layout(@field, @size)}
+    paint={%{"text-color" => @color, "text-halo-color" => "#ffffff", "text-halo-width" => 1.5}}
+  />
+
+  <div class="space-y-3 border-t border-line px-4 py-4">
+    <div class="grid gap-x-8 gap-y-4 lg:grid-cols-[auto_1fr]">
+      <.example_group id="example-symbol-fields" label="text-field" code>
+        <.example_button
+          :for={field <- fields()}
+          id={"example-symbol-field-#{field}"}
+          code
+          pressed={@field == field}
+          phx-click="field"
+          phx-value-field={field}
+        >
+          ["get", "{field}"]
+        </.example_button>
+      </.example_group>
+
+      <.example_group id="example-symbol-assigns" label={gettext("Set assigns")}>
+        <.example_button
+          :for={{name, hex} <- colors()}
+          id={"example-symbol-color-#{name}"}
+          code
+          pressed={@color == hex}
+          phx-click="color"
+          phx-value-color={hex}
+        >
+          <.example_swatch color={hex} />{hex}
+        </.example_button>
+      </.example_group>
+    </div>
+
+    <.form
+      for={@options}
+      id="example-symbol-options"
+      phx-change="options"
+      class="w-full sm:max-w-xs"
+    >
+      <.example_range field={@options[:size]} label="text-size" min="9" max="22" />
+    </.form>
+
+    <.example_note id="example-symbol-data" icon="hero-cursor-arrow-rays-micro">
+      {gettext(
+        "Points of interest in Vienna from OpenStreetMap, in OpenFreeMap's tiles. Click a label."
+      )}
+    </.example_note>
+  </div>
+
+  <%!-- layer:feature_clicked sets selected. --%>
+  <.example_readout values={[
+    field: @field,
+    size: @size,
+    color: @color,
+    selected: @selected || "—"
+  ]} />
+</div>

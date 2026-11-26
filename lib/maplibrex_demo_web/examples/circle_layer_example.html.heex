@@ -1,0 +1,70 @@
+<div id="circle-layer-example">
+  <.example_frame
+    error={@map_error}
+    error_id="example-circle-map-error"
+    hosts={["tiles.openfreemap.org", "demotiles.maplibre.org"]}
+  >
+    <.map
+      id="example-circle-map"
+      center={[15, 25]}
+      zoom={1.3}
+      style="https://tiles.openfreemap.org/styles/positron"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- MapLibre's demo tiles: a point per country in the "centroids" layer. --%>
+  <.vector_tile_source
+    id="example-circle-countries"
+    map_id="example-circle-map"
+    tiles={["https://demotiles.maplibre.org/tiles/{z}/{x}/{y}.pbf"]}
+    max_zoom={6}
+    attribution="Natural Earth, MapLibre demo tiles"
+  />
+
+  <.circle_layer
+    id="example-circle-layer"
+    map_id="example-circle-map"
+    source_id="example-circle-countries"
+    source_layer="centroids"
+    paint={
+      %{
+        "circle-color" => @color,
+        "circle-radius" => @radius,
+        "circle-stroke-color" => "#ffffff",
+        "circle-stroke-width" => 1.5
+      }
+    }
+  />
+
+  <div class="space-y-3 border-t border-line px-4 py-4">
+    <.example_group id="example-circle-assigns" label={gettext("Set assigns")}>
+      <.example_button
+        :for={{name, hex} <- colors()}
+        id={"example-circle-color-#{name}"}
+        code
+        pressed={@color == hex}
+        phx-click="color"
+        phx-value-color={hex}
+      >
+        <.example_swatch color={hex} />{hex}
+      </.example_button>
+
+      <.form
+        for={@options}
+        id="example-circle-options"
+        phx-change="options"
+        class="w-full pt-2 sm:max-w-xs"
+      >
+        <.example_range field={@options[:radius]} label="circle-radius" min="2" max="14" />
+      </.form>
+    </.example_group>
+
+    <.example_note id="example-circle-data" icon="hero-cursor-arrow-rays-micro">
+      {gettext("A point per country, from MapLibre's demo tiles. Click one.")}
+    </.example_note>
+  </div>
+
+  <%!-- layer:feature_clicked sets selected. --%>
+  <.example_readout values={[color: @color, radius: @radius, selected: @selected || "—"]} />
+</div>

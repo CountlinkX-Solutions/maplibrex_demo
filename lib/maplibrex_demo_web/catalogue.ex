@@ -160,6 +160,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :circle_layer,
         family: :layers,
         module: Lib.CircleLayer,
+        example: MaplibrexDemoWeb.Examples.CircleLayerExample,
         summary: gettext("Draws points from a source as circles."),
         status: :stable
       },
@@ -167,6 +168,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :line_layer,
         family: :layers,
         module: Lib.LineLayer,
+        example: MaplibrexDemoWeb.Examples.LineLayerExample,
         summary: gettext("Draws lines from a source, such as roads, routes or boundaries."),
         status: :stable
       },
@@ -174,6 +176,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :fill_layer,
         family: :layers,
         module: Lib.FillLayer,
+        example: MaplibrexDemoWeb.Examples.FillLayerExample,
         summary: gettext("Fills polygons from a source."),
         status: :stable
       },
@@ -181,6 +184,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :symbol_layer,
         family: :layers,
         module: Lib.SymbolLayer,
+        example: MaplibrexDemoWeb.Examples.SymbolLayerExample,
         summary: gettext("Places icons and text labels from a source."),
         status: :stable
       },

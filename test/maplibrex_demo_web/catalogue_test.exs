@@ -149,7 +149,11 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
         zoom_range: MaplibrexDemoWeb.Examples.ZoomRangeExample,
         vector_tile_source: MaplibrexDemoWeb.Examples.VectorTileSourceExample,
         raster_tile_source: MaplibrexDemoWeb.Examples.RasterTileSourceExample,
-        image_source: MaplibrexDemoWeb.Examples.ImageSourceExample
+        image_source: MaplibrexDemoWeb.Examples.ImageSourceExample,
+        circle_layer: MaplibrexDemoWeb.Examples.CircleLayerExample,
+        line_layer: MaplibrexDemoWeb.Examples.LineLayerExample,
+        fill_layer: MaplibrexDemoWeb.Examples.FillLayerExample,
+        symbol_layer: MaplibrexDemoWeb.Examples.SymbolLayerExample
       }
 
       for {name, example} <- examples do
