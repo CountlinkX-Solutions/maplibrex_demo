@@ -8,6 +8,20 @@ defmodule MaplibrexDemo.LibraryCheckoutTest do
 
   defp project, do: Mix.Project.get!()
 
+  describe "mix.lock" do
+    # The demo follows the library's main branch; `mix deps.update maplibrex`
+    # (run without MAPLIBREX_PATH) moves it to main's latest commit.
+    test "locks MaplibreX to a commit of its main branch" do
+      {lock, _binding} = Code.eval_file(Path.expand("../../mix.lock", __DIR__))
+
+      assert {:git, "https://github.com/CountlinkX-Solutions/maplibrex.git", sha, opts} =
+               lock[:maplibrex]
+
+      assert sha =~ ~r/\A[0-9a-f]{40}\z/
+      assert opts[:branch] == "main"
+    end
+  end
+
   describe "maplibrex_checkout/0" do
     test "is the checkout Mix compiles the :maplibrex dependency from" do
       assert project().maplibrex_checkout() == Mix.Project.deps_paths()[:maplibrex]
