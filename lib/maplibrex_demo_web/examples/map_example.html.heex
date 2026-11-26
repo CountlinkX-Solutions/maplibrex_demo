@@ -1,0 +1,92 @@
+<div id="map-example">
+  <.example_frame error={@map_error} error_id="example-map-error">
+    <.map
+      id="example-map"
+      center={@center}
+      zoom={@zoom}
+      pitch={@pitch}
+      bearing={@bearing}
+      style="https://tiles.openfreemap.org/styles/liberty"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <div class="grid gap-x-8 gap-y-4 border-t border-line px-4 py-4 lg:grid-cols-[1fr_auto]">
+    <%!-- Assigns: each control changes an assign on the server; the map follows. --%>
+    <.example_group id="example-assigns" label={gettext("Set assigns")}>
+      <.example_button
+        :for={{id, name} <- places()}
+        id={"example-place-#{id}"}
+        phx-click="go"
+        phx-value-place={id}
+      >
+        {name}
+      </.example_button>
+
+      <.form
+        for={@camera}
+        id="example-camera"
+        phx-change="camera"
+        class="grid w-full grid-cols-3 gap-4 pt-2"
+      >
+        <.input
+          field={@camera[:zoom]}
+          type="range"
+          label="zoom"
+          min="1"
+          max="18"
+          step="0.25"
+          wrapper_class="font-mono text-label text-ink-subtle"
+          class="mt-1 block w-full accent-accent"
+        />
+        <.input
+          field={@camera[:pitch]}
+          type="range"
+          label="pitch"
+          min="0"
+          max="60"
+          wrapper_class="font-mono text-label text-ink-subtle"
+          class="mt-1 block w-full accent-accent"
+        />
+        <.input
+          field={@camera[:bearing]}
+          type="range"
+          label="bearing"
+          min="-180"
+          max="180"
+          wrapper_class="font-mono text-label text-ink-subtle"
+          class="mt-1 block w-full accent-accent"
+        />
+      </.form>
+    </.example_group>
+
+    <%!-- Commands: JS structs that run in the browser, with no round trip. --%>
+    <.example_group id="example-commands" label={gettext("Run commands")}>
+      <.example_button id="example-zoom-in" code phx-click={MapCmd.zoom_in("example-map")}>
+        zoom_in
+      </.example_button>
+      <.example_button id="example-zoom-out" code phx-click={MapCmd.zoom_out("example-map")}>
+        zoom_out
+      </.example_button>
+      <.example_button id="example-reset-north" code phx-click={MapCmd.reset_north("example-map")}>
+        reset_north
+      </.example_button>
+      <.example_button
+        id="example-fly-home"
+        code
+        phx-click={MapCmd.fly_to("example-map", @home.center, @home.zoom, duration: 2000)}
+      >
+        fly_to
+      </.example_button>
+    </.example_group>
+  </div>
+
+  <%!-- The assigns as they are now: map:moved and map:clicked keep them current. --%>
+  <.example_readout values={[
+    center: lng_lat(@center),
+    zoom: @zoom,
+    pitch: @pitch,
+    bearing: @bearing,
+    last_click: lng_lat(@last_click)
+  ]} />
+</div>

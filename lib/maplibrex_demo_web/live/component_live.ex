@@ -19,6 +19,7 @@ defmodule MaplibrexDemoWeb.ComponentLive do
   use MaplibrexDemoWeb, :live_view
 
   alias MaplibrexDemoWeb.{Catalogue, LibraryDocs, NotFoundError}
+  alias MaplibrexDemoWeb.Examples.Sources
 
   @tabs [:preview, :heex, :events, :attributes]
 
@@ -35,6 +36,11 @@ defmodule MaplibrexDemoWeb.ComponentLive do
          |> assign(:next, next)
          |> assign(:attributes, LibraryDocs.attributes(component))
          |> assign(:events, LibraryDocs.events(component))
+         |> assign(
+           :sources,
+           if(component.example, do: Sources.files(component.example), else: [])
+         )
+         |> assign(:payloads, %{})
          |> assign(:page_title, Atom.to_string(component.name))}
 
       :error ->
@@ -49,6 +55,13 @@ defmodule MaplibrexDemoWeb.ComponentLive do
 
   defp parse_tab(tab) do
     Enum.find(@tabs, :preview, &(Atom.to_string(&1) == tab))
+  end
+
+  # Sent by MaplibrexDemoWeb.Examples.Plumbing for every library event the
+  # running example receives.
+  @impl true
+  def handle_info({:example_event, event, payload}, socket) do
+    {:noreply, update(socket, :payloads, &Map.put(&1, event, payload))}
   end
 
   @impl true
@@ -98,7 +111,7 @@ defmodule MaplibrexDemoWeb.ComponentLive do
           patch={tab_path(@component, tab)}
           aria-current={@tab == tab && "page"}
           class={[
-            "-mb-px inline-flex shrink-0 items-center gap-1.5 border-b-2 px-4 py-2.5 text-ui font-bold",
+            "-mb-px inline-flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-2.5 text-ui font-bold sm:px-4",
             if(@tab == tab,
               do: "border-accent-ink text-accent-ink",
               else: "border-transparent text-ink-subtle hover:text-ink"
@@ -108,7 +121,7 @@ defmodule MaplibrexDemoWeb.ComponentLive do
           {tab_label(tab)}
           <span
             :if={count = tab_count(tab, assigns)}
-            class="rounded-[4px] bg-surface px-1.5 text-label text-ink-subtle tabular-nums"
+            class="hidden rounded-[4px] bg-surface px-1.5 text-label text-ink-subtle tabular-nums sm:inline"
           >
             {count}
           </span>
@@ -116,17 +129,55 @@ defmodule MaplibrexDemoWeb.ComponentLive do
       </nav>
 
       <section id="panel-preview" hidden={@tab != :preview} aria-labelledby="tab-preview">
-        <.example_coming component={@component} />
+        <%= if @component.example do %>
+          <div class="overflow-hidden rounded-b-panel border border-t-0 border-line bg-canvas">
+            {live_render(@socket, @component.example,
+              id: "example-#{@component.name}-live",
+              session: %{"locale" => @locale}
+            )}
+          </div>
+          <.code_block
+            :for={file <- @sources}
+            :if={file.language == :heex}
+            id="preview-source"
+            code={file.source}
+            html={file.html}
+            language={:heex}
+            title={file.path}
+            max_height="max-h-[30rem]"
+            class="mt-[18px]"
+          />
+        <% else %>
+          <.example_coming component={@component} />
+        <% end %>
       </section>
 
       <section :if={@tab == :heex} id="panel-heex" aria-labelledby="tab-heex" class="pt-6">
-        <.empty_panel id="source-empty" icon="hero-code-bracket">
-          {gettext("This component has no example yet, so there is no source to show.")}
-        </.empty_panel>
+        <%= if @sources == [] do %>
+          <.empty_panel id="source-empty" icon="hero-code-bracket">
+            {gettext("This component has no example yet, so there is no source to show.")}
+          </.empty_panel>
+        <% else %>
+          <p class="max-w-measure text-body text-ink-muted">
+            {gettext(
+              "The example's template and LiveView, read from the files that run in the preview."
+            )}
+          </p>
+          <div class="mt-5 space-y-6">
+            <.code_block
+              :for={file <- @sources}
+              id={"source-#{String.replace(file.name, ".", "-")}"}
+              code={file.source}
+              html={file.html}
+              language={file.language}
+              title={file.path}
+            />
+          </div>
+        <% end %>
       </section>
 
       <section :if={@tab == :events} id="panel-events" aria-labelledby="tab-events" class="pt-6">
-        <.events_panel events={@events} />
+        <.events_panel events={@events} example?={@component.example != nil} payloads={@payloads} />
       </section>
 
       <section
@@ -236,6 +287,8 @@ defmodule MaplibrexDemoWeb.ComponentLive do
   end
 
   attr :events, :any, required: true
+  attr :example?, :boolean, default: false
+  attr :payloads, :map, default: %{}
 
   defp events_panel(assigns) do
     ~H"""
@@ -257,11 +310,36 @@ defmodule MaplibrexDemoWeb.ComponentLive do
           {gettext(
             "The events this component sends to the LiveView, as the library documents them. Each arrives in handle_event/3."
           )}
+          <span :if={@example?}>
+            {gettext(
+              "Use the preview; the last payload of each event the example receives appears here."
+            )}
+          </span>
         </p>
         <ul class="mt-5 divide-y divide-line border-y border-line">
           <li :for={event <- events} id={"event-#{event_slug(event.name)}"} class="py-3.5">
             <p class="font-mono text-ui font-semibold">{event.name}</p>
             <p class="mt-0.5 text-ui text-ink-muted"><.rich_text text={event.doc} /></p>
+            <%= if @example? do %>
+              <%= case Map.fetch(@payloads, event.name) do %>
+                <% {:ok, payload} -> %>
+                  <.code_block
+                    id={"payload-#{event_slug(event.name)}"}
+                    code={inspect(payload, pretty: true, limit: :infinity)}
+                    language={:elixir}
+                    title={gettext("Last payload received")}
+                    class="mt-2.5 max-w-measure"
+                  />
+                <% :error -> %>
+                  <p
+                    id={"payload-#{event_slug(event.name)}-waiting"}
+                    class="mt-1.5 inline-flex items-center gap-1.5 text-label text-ink-subtle"
+                  >
+                    <.icon name="hero-clock-micro" class="size-3.5" />
+                    {gettext("Not received yet.")}
+                  </p>
+              <% end %>
+            <% end %>
           </li>
         </ul>
     <% end %>

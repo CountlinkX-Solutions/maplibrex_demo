@@ -305,6 +305,14 @@
   }
 }
 
+/* An assign the example just changed: a tint that fades out. */
+@keyframes assign-changed {
+  from {
+    background-color: var(--color-accent-soft);
+    color: var(--color-accent-ink);
+  }
+}
+
 @keyframes backdrop-in {
   from {
     opacity: 0;
