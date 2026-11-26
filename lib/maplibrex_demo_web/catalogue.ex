@@ -335,6 +335,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :control,
         family: :controls,
         module: Lib.Control,
+        example: MaplibrexDemoWeb.Examples.ControlExample,
         summary: gettext("Places your own HEEx content in a corner of the map as a control."),
         status: :limited,
         issues: [reactive_custom_control]
@@ -343,6 +344,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :control_button,
         family: :controls,
         module: Lib.ControlButton,
+        example: MaplibrexDemoWeb.Examples.ControlButtonExample,
         summary:
           gettext("A map control button with an icon or your own content, and an active state."),
         status: :stable
@@ -351,6 +353,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :control_group,
         family: :controls,
         module: Lib.ControlGroup,
+        example: MaplibrexDemoWeb.Examples.ControlGroupExample,
         summary: gettext("Groups several controls into one map control."),
         status: :limited,
         issues: [reactive_custom_control]
@@ -359,6 +362,7 @@ defmodule MaplibrexDemoWeb.Catalogue do
         name: :zoom_range,
         family: :controls,
         module: Lib.ZoomRange,
+        example: MaplibrexDemoWeb.Examples.ZoomRangeExample,
         summary: gettext("Shows its content only between a minimum and a maximum zoom level."),
         status: :limited,
         issues: [

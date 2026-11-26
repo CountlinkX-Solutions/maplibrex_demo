@@ -1,0 +1,38 @@
+<div id="control-button-example">
+  <.example_frame error={@map_error} error_id="example-control-button-map-error">
+    <.map
+      id="example-control-button-map"
+      center={[2.1734, 41.3851]}
+      zoom={15}
+      pitch={@pitch}
+      bearing={-20}
+      style="https://tiles.openfreemap.org/styles/liberty"
+      class="h-full w-full"
+    />
+  </.example_frame>
+
+  <%!-- phx-click is passed on to the button on the map; active adds the
+        maplibregl-ctrl-active class, which this app styles. --%>
+  <.control_button
+    id="example-control-button-tilt"
+    map_id="example-control-button-map"
+    position="top-left"
+    tooltip={tooltip(@tilted)}
+    active={@tilted}
+    class="grid! place-items-center"
+    phx-click="tilt"
+  >
+    <.icon name="hero-cube-transparent" class="size-5" />
+  </.control_button>
+
+  <div class="border-t border-line px-4 py-4">
+    <.example_note id="example-control-button-hint" icon="hero-cursor-arrow-rays-micro">
+      {gettext(
+        "Press the button in the map's top-left corner: each press reaches handle_event/3, which tilts or flattens the map."
+      )}
+    </.example_note>
+  </div>
+
+  <%!-- map:moved keeps pitch current when the map is tilted by hand. --%>
+  <.example_readout values={[tilted: @tilted, pitch: @pitch, presses: @presses]} />
+</div>

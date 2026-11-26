@@ -142,7 +142,11 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       examples = %{
         popup: MaplibrexDemoWeb.Examples.PopupExample,
         attribution_control: MaplibrexDemoWeb.Examples.AttributionControlExample,
-        geolocate_control: MaplibrexDemoWeb.Examples.GeolocateControlExample
+        geolocate_control: MaplibrexDemoWeb.Examples.GeolocateControlExample,
+        control: MaplibrexDemoWeb.Examples.ControlExample,
+        control_button: MaplibrexDemoWeb.Examples.ControlButtonExample,
+        control_group: MaplibrexDemoWeb.Examples.ControlGroupExample,
+        zoom_range: MaplibrexDemoWeb.Examples.ZoomRangeExample
       }
 
       for {name, example} <- examples do
