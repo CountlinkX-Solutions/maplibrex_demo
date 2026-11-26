@@ -11,7 +11,7 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/maplibrex_demo_web/catalogue.ex:509
+#: lib/maplibrex_demo_web/catalogue.ex:499
 #, elixir-autogen, elixir-format
 msgid "Advanced"
 msgstr ""
@@ -32,7 +32,7 @@ msgstr ""
 msgid "High"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:505
+#: lib/maplibrex_demo_web/catalogue.ex:495
 #, elixir-autogen, elixir-format
 msgid "Layers"
 msgstr ""
@@ -60,37 +60,37 @@ msgid_plural "%{count} components"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:508
+#: lib/maplibrex_demo_web/catalogue.ex:498
 #, elixir-autogen, elixir-format
 msgid "3D"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:83
+#: lib/maplibrex_demo_web/catalogue.ex:75
 #, elixir-autogen, elixir-format
 msgid "A MapLibre GL JS map whose center, zoom, pitch, bearing and style follow the LiveView's assigns."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:334
+#: lib/maplibrex_demo_web/catalogue.ex:324
 #, elixir-autogen, elixir-format
 msgid "A button that centres the map on the user's location, with optional tracking."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:324
+#: lib/maplibrex_demo_web/catalogue.ex:314
 #, elixir-autogen, elixir-format
 msgid "A button that shows the map in full screen."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:358
+#: lib/maplibrex_demo_web/catalogue.ex:348
 #, elixir-autogen, elixir-format
 msgid "A button that turns 3D terrain on and off."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:468
+#: lib/maplibrex_demo_web/catalogue.ex:458
 #, elixir-autogen, elixir-format
 msgid "A custom WebGL layer drawn with your own GLSL shaders or a built-in preset."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:384
+#: lib/maplibrex_demo_web/catalogue.ex:374
 #, elixir-autogen, elixir-format
 msgid "A map control button with an icon or your own content, and an active state."
 msgstr ""
@@ -105,7 +105,7 @@ msgstr ""
 msgid "A map, a navigation control and one marker per city. When the visitor pans or zooms, map:moved updates the assigns."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:111
+#: lib/maplibrex_demo_web/catalogue.ex:103
 #, elixir-autogen, elixir-format
 msgid "A marker at a coordinate, with an optional popup and dragging that reports the new position."
 msgstr ""
@@ -116,12 +116,12 @@ msgstr ""
 msgid "A minimal map"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:133
+#: lib/maplibrex_demo_web/catalogue.ex:125
 #, elixir-autogen, elixir-format
 msgid "A popup with text or HTML content, placed at a coordinate."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:315
+#: lib/maplibrex_demo_web/catalogue.ex:305
 #, elixir-autogen, elixir-format
 msgid "A scale bar for the current zoom level."
 msgstr ""
@@ -131,17 +131,17 @@ msgstr ""
 msgid "Add the dependency to mix.exs"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:275
+#: lib/maplibrex_demo_web/catalogue.ex:267
 #, elixir-autogen, elixir-format
 msgid "Adds elevation tiles for hillshading and 3D terrain."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:261
+#: lib/maplibrex_demo_web/catalogue.ex:253
 #, elixir-autogen, elixir-format
 msgid "Adds raster image tiles for a raster layer to draw."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:251
+#: lib/maplibrex_demo_web/catalogue.ex:243
 #, elixir-autogen, elixir-format
 msgid "Adds vector tiles, from a TileJSON URL or a tile template, for layers to draw."
 msgstr ""
@@ -213,7 +213,7 @@ msgstr ""
 msgid "Components by family"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:725
+#: lib/maplibrex_demo_web/catalogue.ex:715
 #, elixir-autogen, elixir-format
 msgid "Components placed inside `<.map>` update like the ones placed next to it."
 msgstr ""
@@ -223,7 +223,7 @@ msgstr ""
 msgid "Connection lost"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:507
+#: lib/maplibrex_demo_web/catalogue.ex:497
 #, elixir-autogen, elixir-format
 msgid "Controls"
 msgstr ""
@@ -248,17 +248,17 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:158
+#: lib/maplibrex_demo_web/catalogue.ex:150
 #, elixir-autogen, elixir-format
 msgid "Draws GeoJSON data as a fill, line, circle, symbol, heatmap or fill-extrusion layer, with optional clustering and feature events."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:184
+#: lib/maplibrex_demo_web/catalogue.ex:176
 #, elixir-autogen, elixir-format
 msgid "Draws lines from a source, such as roads, routes or boundaries."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:176
+#: lib/maplibrex_demo_web/catalogue.ex:168
 #, elixir-autogen, elixir-format
 msgid "Draws points from a source as circles."
 msgstr ""
@@ -273,7 +273,7 @@ msgstr ""
 msgid "Every component by family, with its attributes, events and status."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:216
+#: lib/maplibrex_demo_web/catalogue.ex:208
 #, elixir-autogen, elixir-format
 msgid "Extrudes polygons from a source into 3D shapes, such as buildings."
 msgstr ""
@@ -283,7 +283,7 @@ msgstr ""
 msgid "Family"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:192
+#: lib/maplibrex_demo_web/catalogue.ex:184
 #, elixir-autogen, elixir-format
 msgid "Fills polygons from a source."
 msgstr ""
@@ -293,7 +293,7 @@ msgstr ""
 msgid "Generated from the component's definition in the library, so it always matches the version this demo runs."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:392
+#: lib/maplibrex_demo_web/catalogue.ex:382
 #, elixir-autogen, elixir-format
 msgid "Groups several controls into one map control."
 msgstr ""
@@ -319,7 +319,7 @@ msgstr ""
 msgid "Install MapLibre GL JS"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:441
+#: lib/maplibrex_demo_web/catalogue.ex:431
 #, elixir-autogen, elixir-format
 msgid "It adds a layer type that MapLibre does not have, so no sky appears. The fix changes its attributes."
 msgstr ""
@@ -365,7 +365,7 @@ msgstr ""
 msgid "Madrid"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:503
+#: lib/maplibrex_demo_web/catalogue.ex:493
 #, elixir-autogen, elixir-format
 msgid "Map"
 msgstr ""
@@ -380,12 +380,12 @@ msgstr ""
 msgid "MaplibreX does not bundle MapLibre GL JS; your application owns its version. MaplibreX supports maplibre-gl 5 and 6, except deckgl_layer, which needs 5."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:504
+#: lib/maplibrex_demo_web/catalogue.ex:494
 #, elixir-autogen, elixir-format
 msgid "Markers & popups"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:436
+#: lib/maplibrex_demo_web/catalogue.ex:426
 #, elixir-autogen, elixir-format
 msgid "Meant to add an atmospheric sky to 3D views; it cannot render yet."
 msgstr ""
@@ -395,7 +395,7 @@ msgstr ""
 msgid "Nairobi"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:459
+#: lib/maplibrex_demo_web/catalogue.ex:449
 #, elixir-autogen, elixir-format
 msgid "Needs maplibre-gl 5; version 6 is not supported yet."
 msgstr ""
@@ -451,27 +451,27 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:224
+#: lib/maplibrex_demo_web/catalogue.ex:216
 #, elixir-autogen, elixir-format
 msgid "Paints the map background with a colour or a pattern."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:291
+#: lib/maplibrex_demo_web/catalogue.ex:282
 #, elixir-autogen, elixir-format
 msgid "Places a video at four coordinates for a raster layer to draw."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:283
+#: lib/maplibrex_demo_web/catalogue.ex:275
 #, elixir-autogen, elixir-format
 msgid "Places an image at four coordinates for a raster layer to draw."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:200
+#: lib/maplibrex_demo_web/catalogue.ex:192
 #, elixir-autogen, elixir-format
 msgid "Places icons and text labels from a source."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:374
+#: lib/maplibrex_demo_web/catalogue.ex:364
 #, elixir-autogen, elixir-format
 msgid "Places your own HEEx content in a corner of the map as a control."
 msgstr ""
@@ -516,17 +516,17 @@ msgstr ""
 msgid "Register the hooks"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:729
+#: lib/maplibrex_demo_web/catalogue.ex:719
 #, elixir-autogen, elixir-format
 msgid "Removing a source together with its layers leaves nothing on the map."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:429
+#: lib/maplibrex_demo_web/catalogue.ex:419
 #, elixir-autogen, elixir-format
 msgid "Renders 3D terrain from a raster DEM source, with adjustable exaggeration."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:454
+#: lib/maplibrex_demo_web/catalogue.ex:444
 #, elixir-autogen, elixir-format
 msgid "Renders a deck.gl layer over the map; deck.gl is loaded the first time one mounts."
 msgstr ""
@@ -618,27 +618,27 @@ msgstr ""
 msgid "Several components combined into one working map."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:232
+#: lib/maplibrex_demo_web/catalogue.ex:224
 #, elixir-autogen, elixir-format
 msgid "Shades relief from a raster DEM source."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:410
+#: lib/maplibrex_demo_web/catalogue.ex:400
 #, elixir-autogen, elixir-format
 msgid "Shows its content only between a minimum and a maximum zoom level."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:240
+#: lib/maplibrex_demo_web/catalogue.ex:232
 #, elixir-autogen, elixir-format
 msgid "Shows raster tiles, an image or a video from a source."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:350
+#: lib/maplibrex_demo_web/catalogue.ex:340
 #, elixir-autogen, elixir-format
 msgid "Shows the attribution of the map's sources."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:208
+#: lib/maplibrex_demo_web/catalogue.ex:200
 #, elixir-autogen, elixir-format
 msgid "Shows the density of points from a source as a heatmap."
 msgstr ""
@@ -653,12 +653,12 @@ msgstr ""
 msgid "Slots"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:506
+#: lib/maplibrex_demo_web/catalogue.ex:496
 #, elixir-autogen, elixir-format
 msgid "Sources"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:713
+#: lib/maplibrex_demo_web/catalogue.ex:703
 #, elixir-autogen, elixir-format
 msgid "Sources, layers and terrain survive a change of map style."
 msgstr ""
@@ -679,17 +679,17 @@ msgstr ""
 msgid "The %{count} components of MaplibreX %{version}, in the families the library groups them in. Each page lists the component's attributes and events, and runs its example when there is one."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:144
+#: lib/maplibrex_demo_web/catalogue.ex:136
 #, elixir-autogen, elixir-format
 msgid "The JS helpers `open/1`, `close/1`, `toggle/1` and `set_location/2` do nothing unless the server echoes them back."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:165
+#: lib/maplibrex_demo_web/catalogue.ex:157
 #, elixir-autogen, elixir-format
 msgid "The JS helpers such as `set_paint_property/3`, `set_data/2`, `show/1` and `hide/1` do nothing unless the server echoes them back."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:88
+#: lib/maplibrex_demo_web/catalogue.ex:80
 #, elixir-autogen, elixir-format
 msgid "The documented `debug={true}` does not turn on debug logging."
 msgstr ""
@@ -794,7 +794,7 @@ msgstr ""
 msgid "Version of the MaplibreX library this demo runs"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:626
+#: lib/maplibrex_demo_web/catalogue.ex:616
 #, elixir-autogen, elixir-format
 msgid "WebGL particles"
 msgstr ""
@@ -815,7 +815,7 @@ msgstr ""
 msgid "Why it is planned"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:363
+#: lib/maplibrex_demo_web/catalogue.ex:353
 #, elixir-autogen, elixir-format
 msgid "With `enabled={true}` at mount it fails before the style has loaded, and removing it leaves terrain on."
 msgstr ""
@@ -830,22 +830,22 @@ msgstr ""
 msgid "Works, but an open issue documents a part of its behaviour that does not."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:306
+#: lib/maplibrex_demo_web/catalogue.ex:296
 #, elixir-autogen, elixir-format
 msgid "Zoom buttons and a compass."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:460
+#: lib/maplibrex_demo_web/catalogue.ex:450
 #, elixir-autogen, elixir-format
 msgid "`before_id` is accepted but has no effect."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:733
+#: lib/maplibrex_demo_web/catalogue.ex:723
 #, elixir-autogen, elixir-format
 msgid "`layer:source_loaded` is sent once the layer's source has loaded."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:638
+#: lib/maplibrex_demo_web/catalogue.ex:628
 #, elixir-autogen, elixir-format
 msgid "deck.gl layers"
 msgstr ""
@@ -870,12 +870,12 @@ msgstr ""
 msgid "required"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:628
+#: lib/maplibrex_demo_web/catalogue.ex:618
 #, elixir-autogen, elixir-format
 msgid "1,000 particles drawn by a custom WebGL layer with its own shaders, whose colour, speed, turbulence and direction are uniforms set from the server."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:584
+#: lib/maplibrex_demo_web/catalogue.ex:574
 #, elixir-autogen, elixir-format
 msgid "3D terrain flight"
 msgstr ""
@@ -885,7 +885,7 @@ msgstr ""
 msgid "A scenario combines several components into one working map, with the code that produces it."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:616
+#: lib/maplibrex_demo_web/catalogue.ex:606
 #, elixir-autogen, elixir-format
 msgid "A synthetic grid of blocks extruded in 3D, whose height, opacity and colours are set from the server. They are not real buildings."
 msgstr ""
@@ -925,17 +925,17 @@ msgstr ""
 msgid "Drag me to a new place."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:602
+#: lib/maplibrex_demo_web/catalogue.ex:592
 #, elixir-autogen, elixir-format
 msgid "Earthquake-style heatmap"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:614
+#: lib/maplibrex_demo_web/catalogue.ex:604
 #, elixir-autogen, elixir-format
 msgid "Extruded buildings"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:586
+#: lib/maplibrex_demo_web/catalogue.ex:576
 #, elixir-autogen, elixir-format
 msgid "Hillshading and 3D terrain from a public elevation service, with the exaggeration set from the server and camera flights between mountain ranges."
 msgstr ""
@@ -1000,7 +1000,7 @@ msgstr ""
 msgid "Sample data: twelve points placed on a ring for this example. Click one."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:604
+#: lib/maplibrex_demo_web/catalogue.ex:594
 #, elixir-autogen, elixir-format
 msgid "Sample points around six seismic zones of the United States, drawn as a heatmap whose radius, intensity and opacity are set from the server."
 msgstr ""
@@ -1015,7 +1015,7 @@ msgstr ""
 msgid "What it depends on"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:640
+#: lib/maplibrex_demo_web/catalogue.ex:630
 #, elixir-autogen, elixir-format
 msgid "deck.gl arc, hexagon and scatterplot layers drawn over the map from sample data, one at a time, with clicks coming back to the server."
 msgstr ""
@@ -1025,42 +1025,42 @@ msgstr ""
 msgid "deck.gl is loaded the first time a layer mounts. It needs maplibre-gl 5, which this demo pins."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:649
+#: lib/maplibrex_demo_web/catalogue.ex:639
 #, elixir-autogen, elixir-format
 msgid "deck.gl needs maplibre-gl 5, which this demo pins; MaplibreX does not support it on maplibre-gl 6 yet."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:718
+#: lib/maplibrex_demo_web/catalogue.ex:708
 #, elixir-autogen, elixir-format
 msgid "A layer, source or terrain appears whatever its place in the template and whenever it mounts."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:122
+#: lib/maplibrex_demo_web/catalogue.ex:114
 #, elixir-autogen, elixir-format
 msgid "A popup cannot be added, removed or emptied after mount, only changed to another non-empty text."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:415
+#: lib/maplibrex_demo_web/catalogue.ex:405
 #, elixir-autogen, elixir-format
 msgid "After `min` or `max` changes, zooming still uses the range it was mounted with."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:477
+#: lib/maplibrex_demo_web/catalogue.ex:467
 #, elixir-autogen, elixir-format
 msgid "After a change of map style it is drawn under the basemap."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:97
+#: lib/maplibrex_demo_web/catalogue.ex:89
 #, elixir-autogen, elixir-format
 msgid "Changes to `bounds`, `max_bounds`, the zoom and pitch limits, `interactive` or `attribution_control` after mount are not applied."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:73
+#: lib/maplibrex_demo_web/catalogue.ex:65
 #, elixir-autogen, elixir-format
 msgid "Changes to `position` or `class` after mount are not applied."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:473
+#: lib/maplibrex_demo_web/catalogue.ex:463
 #, elixir-autogen, elixir-format
 msgid "Changes to `uniforms` and its other attributes after mount never reach the browser."
 msgstr ""
@@ -1071,12 +1071,12 @@ msgstr ""
 msgid "Fixed in %{version}"
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:118
+#: lib/maplibrex_demo_web/catalogue.ex:110
 #, elixir-autogen, elixir-format
 msgid "Its popup opens on top of the marker instead of above it."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:707
+#: lib/maplibrex_demo_web/catalogue.ex:697
 #, elixir-autogen, elixir-format
 msgid "Layers, sources and terrain apply changes to their assigns after mount. Controls do not yet."
 msgstr ""
@@ -1086,17 +1086,12 @@ msgstr ""
 msgid "MaplibreX %{version} reworks how layers, sources and terrain join and leave the map. It is merged on the library's main branch but not yet published on Hex, and no release date has been announced. This demo follows main, so the statuses above already include these fixes."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:266
+#: lib/maplibrex_demo_web/catalogue.ex:258
 #, elixir-autogen, elixir-format
 msgid "The documented `tms` attribute has no effect; `scheme=\"tms\"` works."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:67
-#, elixir-autogen, elixir-format
-msgid "The events its documentation lists are never sent; `source:added`, `source:error` and `source:removed` arrive instead."
-msgstr ""
-
-#: lib/maplibrex_demo_web/catalogue.ex:91
+#: lib/maplibrex_demo_web/catalogue.ex:83
 #, elixir-autogen, elixir-format
 msgid "Without `center`, `zoom` or `style`, the defaults configured for the library are not used."
 msgstr ""
@@ -1291,27 +1286,27 @@ msgstr ""
 msgid "Points of interest in central Paris from OpenStreetMap, in OpenFreeMap's tiles: shops, cafés, museums and the like."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:295
+#: lib/maplibrex_demo_web/catalogue.ex:285
 #, elixir-autogen, elixir-format
 msgid "No openly licensed video could be found that is hosted to stay available and whose picture lines up with four points on a map."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:397
+#: lib/maplibrex_demo_web/catalogue.ex:387
 #, elixir-autogen, elixir-format
 msgid "A `<.control_button>` placed inside it is added to the map as a separate control; plain buttons work."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:138
+#: lib/maplibrex_demo_web/catalogue.ex:130
 #, elixir-autogen, elixir-format
 msgid "Without an `anchor`, the default `\"auto\"` makes MapLibre throw at mount, and the popup then stops following its assigns."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:401
+#: lib/maplibrex_demo_web/catalogue.ex:391
 #, elixir-autogen, elixir-format
 msgid "`orientation=\"horizontal\"` has no effect."
 msgstr ""
 
-#: lib/maplibrex_demo_web/catalogue.ex:339
+#: lib/maplibrex_demo_web/catalogue.ex:329
 #, elixir-autogen, elixir-format
 msgid "`show_user_heading` hides the location dot instead of showing the heading, the options are fixed at mount, and `geolocate:user_location_updated` reports the map's centre."
 msgstr ""

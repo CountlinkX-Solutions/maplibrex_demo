@@ -62,8 +62,7 @@ defmodule MaplibrexDemoWeb.Examples.ImageSourceExample do
     {:noreply, assign(socket, :playing, playing)}
   end
 
-  # Events from the source. Its documentation lists source:loaded, which is
-  # never sent (#28); source:added says the image is on the map.
+  # Events from the source: source:added says the image is on the map.
 
   def handle_event("source:added", _payload, socket) do
     {:noreply, assign(socket, :status, "added")}

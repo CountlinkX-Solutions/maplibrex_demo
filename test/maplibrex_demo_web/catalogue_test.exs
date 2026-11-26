@@ -63,7 +63,7 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       end
     end
 
-    # Statuses on the library's main branch (0.2.0, published on Hex),
+    # Statuses on the library's main branch (0.2.1, published on Hex),
     # derived from its open issues.
     @limited %{
       map: [21, 25, 26],
@@ -71,8 +71,6 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       popup: [37, 22],
       geojson_layer: [22],
       raster_tile_source: [24],
-      image_source: [28],
-      video_source: [28],
       navigation_control: [3],
       scale_control: [3],
       fullscreen_control: [3],
@@ -107,8 +105,16 @@ defmodule MaplibrexDemoWeb.CatalogueTest do
       end
     end
 
+    # 0.2.1 fixed the part of #28 about these two: their docs now list the
+    # events their hooks send. The rest of #28 is about marker's docs.
+    test "marks stable the image and video sources, whose events 0.2.1 documents" do
+      for name <- [:image_source, :video_source] do
+        assert %{status: :stable, issues: []} = Catalogue.fetch!(name)
+      end
+    end
+
     test "cites no issue the library has closed" do
-      closed = [2, 4, 5, 6, 7, 8, 9, 12, 15, 16, 17, 18, 20]
+      closed = [2, 4, 5, 6, 7, 8, 9, 12, 15, 16, 17, 18, 20, 23, 41, 42, 46, 48, 49, 50]
 
       for component <- Catalogue.components(), %{number: number} <- component.issues do
         refute number in closed, "#{component.name} cites closed issue ##{number}"

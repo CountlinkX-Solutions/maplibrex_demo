@@ -65,10 +65,28 @@ defmodule MaplibrexDemoWeb.ComponentTabsTest do
       end
     end
 
+    test "lists the events an image source sends, as 0.2.1 documents them", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/components/image_source?tab=events")
+
+      assert has_element?(view, "#event-source-added")
+      assert has_element?(view, "#event-source-error")
+      refute has_element?(view, "#event-source-loaded")
+    end
+
     test "says when a component sends no events", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/components/scale_control?tab=events")
 
       assert has_element?(view, "#events-empty")
+    end
+  end
+
+  describe "HEEx tab" do
+    test "shows an example source that cites no fault 0.2.1 fixed", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/components/image_source?tab=heex")
+
+      source = "#source-image_source_example-ex"
+      assert has_element?(view, source, "source:added")
+      refute has_element?(view, source, "#28")
     end
   end
 
